@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMC 10 四大模块思维导图（含练习示例 · AoPS 真题检索 · 可标记掌握）</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --ink:#26303d; --muted:#6b7785; --line:#c5cdd8;
+    --easy:#1fae6b; --mid:#e8a512; --hard:#e0483c;
+    --primary:#4f6df5;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:32px 18px 70px;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5;
+  }
+  .page-head{ text-align:center; margin-bottom:14px; }
+  .page-head h1{ font-size:26px; margin:0 0 6px; letter-spacing:1px; }
+  .page-head p{ margin:0; color:var(--muted); font-size:14px; }
+
+  .legend{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin:16px 0 8px; font-size:13px; color:var(--muted); }
+  .legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .dot{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+
+  .diff-legend{
+    display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+    margin:6px auto 14px; font-size:13px; background:#fff; max-width:680px;
+    padding:12px 18px; border-radius:12px; box-shadow:0 3px 12px rgba(40,60,90,.06);
+  }
+  .diff-legend b{ display:inline-flex; align-items:center; gap:6px; font-weight:600; }
+  .badge{ font-size:11px; padding:1px 7px; border-radius:20px; color:#fff; font-weight:700; }
+  .b-easy{ background:var(--easy); }
+  .b-mid{ background:var(--mid); }
+  .b-hard{ background:var(--hard); }
+
+  .masterbar{
+    display:flex; gap:14px; align-items:center; justify-content:center; flex-wrap:wrap;
+    margin:0 auto 26px; max-width:760px; background:#fff; padding:11px 20px;
+    border-radius:12px; box-shadow:0 3px 12px rgba(40,60,90,.06); font-size:14px;
+  }
+  .masterbar .score{ font-weight:700; color:var(--easy); }
+  .masterbar button{
+    border:1px solid #d7dde6; background:#f3f6fa; color:#55606d; border-radius:8px;
+    padding:4px 12px; cursor:pointer; font-size:12.5px;
+  }
+  .masterbar button:hover{ background:#e9eef5; }
+  .masterbar .hint{ color:var(--muted); font-size:12px; }
+
+  .map-card{
+    background:#fff; border-radius:16px; padding:30px 22px 30px;
+    margin:0 auto 40px; max-width:1120px;
+    box-shadow:0 6px 24px rgba(40,60,90,.08);
+    overflow-x:auto;
+  }
+  .map-title{ text-align:center; font-size:20px; font-weight:700; margin:0 0 4px; }
+  .map-sub{ text-align:center; color:var(--muted); font-size:13px; margin:0 0 8px; }
+  .map-shape{ text-align:center; font-size:12.5px; margin:0 auto 24px; max-width:780px; color:#55606d; background:#f7f9fc; padding:8px 14px; border-radius:8px; }
+  .map-shape b{ color:var(--ink); }
+
+  .mm{ text-align:center; min-width:980px; }
+  .mm-root{
+    display:inline-block; color:#fff; padding:12px 26px; border-radius:14px;
+    font-size:19px; font-weight:700; box-shadow:0 4px 14px rgba(0,0,0,.12);
+  }
+  .mm-conn-v{ width:3px; height:24px; margin:0 auto; background:var(--line); }
+  .mm-branches{
+    display:flex; justify-content:center; gap:18px; flex-wrap:nowrap;
+    position:relative; padding-top:24px;
+  }
+  .mm-branches::before{
+    content:""; position:absolute; top:0; left:8%; right:8%;
+    height:3px; background:var(--line);
+  }
+  .mm-branch{
+    flex:1 1 176px; max-width:200px; min-width:176px; text-align:left; position:relative;
+  }
+  .mm-branch::before{
+    content:""; position:absolute; top:-24px; left:50%; width:3px; height:24px;
+    background:var(--line); transform:translateX(-50%);
+  }
+  .mm-branch-title{
+    color:#fff; padding:9px 8px; border-radius:9px; font-weight:700; font-size:14px;
+    text-align:center; margin-bottom:8px;
+  }
+  
+  .mm-leaves { list-style:none; padding:0; margin:0; }
+  .mm-leaves li { margin-bottom:8px; position:relative; }
+  
+  /* 🛠️ 已修正：justify-content 拼写错误 */
+  .node-row {
+    font-size:12.5px; padding:8px 10px; border:1px solid #eef1f5; border-radius:7px;
+    background:#fafbfd; color:#34404e;
+    display:flex; align-items:center; justify-content:space-between; gap:6px;
+    border-left-width:4px; border-left-style:solid;
+    cursor:pointer; transition:all .2s ease; user-select:none;
+  }
+  .node-row:hover { background:#eef3fb; transform: translateY(-1px); }
+  .node-row .txt { flex:1; font-weight: 500; }
+  .node-row .lv { font-size:10px; padding:1px 6px; border-radius:20px; color:#fff; font-weight:700; flex:none; }
+
+  .lv-easy .node-row { border-left-color:var(--easy); }
+  .lv-mid .node-row  { border-left-color:var(--mid); }
+  .lv-hard .node-row { border-left-color:var(--hard); }
+  .lv-easy .lv { background:var(--easy); }
+  .lv-mid  .lv { background:var(--mid); }
+  .lv-hard .lv { background:var(--hard); }
+
+  .prob-toggle {
+    border:none; background:#eef2f8; color:#4f6df5; width:22px; height:22px;
+    border-radius:60%; cursor:pointer; font-size:11px; display:inline-flex; 
+    align-items:center; justify-content:center; transition: all 0.2s; flex:none; margin-right:2px;
+  }
+  .prob-toggle:hover { background:#e0e8f5; transform: scale(1.1); }
+  .prob-toggle.open { background:#4f6df5; color:#fff; transform: rotate(180deg); }
+
+  .prob-panel {
+    margin-top: 5px; background: #ffffff; border: 1px solid #dbe2ec;
+    border-radius: 8px; padding: 14px; box-shadow: 0 4px 14px rgba(40,60,90,0.08);
+    text-align: left; display: none; transition: all 0.3s ease;
+    border-top: 3px solid #4f6df5;
+  }
+  .prob-panel.show { display: block; animation: slideDown 0.2s ease-out; }
+  
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header { font-size: 11px; color: #8a99ad; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+  .prob-q { font-size: 13px; color: #2c3742; line-height: 1.6; background: #f8fafc; padding: 10px; border-radius: 6px; border-left: 3px solid #cbd5e1; margin-bottom: 12px; }
+  
+  .prob-tip { font-size: 11.5px; color: #6d421a; background: #fffbeb; border: 1px dashed #fcd34d; padding: 8px 10px; border-radius: 6px; margin-bottom: 12px; }
+  
+  .prob-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+  .btn-aops {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    background: #4f6df5; color: #fff !important; text-decoration: none; font-size: 12px;
+    font-weight: 600; padding: 7px 12px; border-radius: 6px; text-align: center; transition: background 0.2s;
+  }
+  .btn-aops:hover { background: #3b57db; text-decoration: none; }
+  
+  .btn-sub-link {
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #55606d !important; text-decoration: none; font-size: 11px;
+    background: #f1f5f9; padding: 5px; border-radius: 4px; text-align: center;
+  }
+  .btn-sub-link:hover { background: #e2e8f0; }
+
+  li.done .node-row {
+    background:#e6f8ef; box-shadow:inset 0 0 0 1px var(--easy); border-left-color:var(--easy);
+  }
+  li.done .node-row .txt { color:#1c7a4d; font-weight: 600; }
+  li.done .node-row .txt::before { content:"✓ "; color:var(--easy); font-weight:900; }
+
+  .t-algebra  .mm-root{ background:linear-gradient(135deg,#4f6df5,#6b4ff5); }
+  .t-algebra  .mm-branch-title{ background:#5b78f0; }
+  .t-geometry .mm-root{ background:linear-gradient(135deg,#16a085,#1fae6b); }
+  .t-geometry .mm-branch-title{ background:#1aa86f; }
+  .t-number  .mm-root{ background:linear-gradient(135deg,#e8890c,#f0a429); }
+  .t-number  .mm-branch-title{ background:#e8920f; }
+  .t-combo   .mm-root{ background:linear-gradient(135deg,#8e44ad,#b14fd6); }
+  .t-combo   .mm-branch-title{ background:#9b4fc4; }
+
+  .foot{ text-align:center; color:var(--muted); font-size:12px; margin-top:20px; line-height: 1.8; }
+  @media print{
+    body{ background:#fff; }
+    .map-card{ box-shadow:none; break-after:page; }
+    .masterbar,.prob-toggle,.mm-leaves li{cursor:default;}
+    .prob-panel{ display:none!important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>AMC 10 四大模块思维导图</h1>
+  <p>知识地图 + 难度地图 + 练习示例 · 可点击标记掌握 · 家长 / 老师 / 孩子共用</p>
+</div>
+<div class="legend">
+  <span><i class="dot" style="background:#5b78f0"></i>代数（40-50%）</span>
+  <span><i class="dot" style="background:#1aa86f"></i>几何（30-40%）</span>
+  <span><i class="dot" style="background:#e8920f"></i>数论（10-20%）</span>
+  <span><i class="dot" style="background:#9b4fc4"></i>组合（10-20%）</span>
+</div>
+<div class="diff-legend">
+  <b><span class="badge b-easy">基础</span> 第 1–15 题 · 保分区</b>
+  <b><span class="badge b-mid">进阶</span> 第 11–20 题 · 拉分区</b>
+  <b><span class="badge b-hard">压轴</span> 第 21–25 题 · 决胜区</b>
+</div>
+
+<div class="masterbar">
+  <span>🎯 已掌握 <span class="score" id="cnt">0</span> / <span id="tot">0</span> 个知识点</span>
+  <span class="hint">点击文本行 = 标记掌握（绿✓）· 点击 📖 = 展开/收起核心示例与 AoPS 检索方案</span>
+  <button id="reset">重置进度</button>
+</div>
+
+<div id="maps"></div>
+
+<div class="foot">
+  用法说明：<b style="color:var(--easy)">🟢 基础</b>务必零失误保分 · <b style="color:var(--mid)">🟡 进阶</b>决定能否晋级 AIME · <b style="color:var(--hard)">🔴 压轴</b>冲击全球前 1% 的关键区。<br>
+  点击知识点名称可直接切换掌握状态（刷新自动缓存）；点击右侧 📖 图标，可在下方无损展开<b>自编精选示例</b>与 <b>AoPS Wiki 对应词条的高阶检索</b>。<br>
+  <b>提示：</b>📖 内的示例为帮助理解考点的自编练习，非某年特定真题；检索按钮直达 AoPS Wiki 站内搜索，点开即是该考点的真实历年真题与解析。
+</div>
+
+<script src="amc10_data.js"></script>
+<script>
+var LV_LABEL = { easy:"基础", mid:"进阶", hard:"压轴" };
+var AOPS_SEARCH = "https://artofproblemsolving.com/wiki/index.php?title=Special:Search&search=";
+var AOPS_HUB = "https://artofproblemsolving.com/wiki/index.php/AMC_10_Problems_and_Solutions";
+
+var maps = document.getElementById('maps');
+MODULES.forEach(function(mod){
+  var card = document.createElement('div');
+  card.className = 'map-card t-' + mod.color;
+  var html = '';
+  html += '<div class="map-title">'+mod.title+'</div>';
+  html += '<div class="map-sub">'+mod.sub+'</div>';
+  html += '<div class="map-shape">难度分布：'+mod.shape+'</div>';
+  html += '<div class="mm"><div class="mm-root">'+mod.title.split(' ')[0]+'</div><div class="mm-conn-v"></div><div class="mm-branches">';
+  mod.branches.forEach(function(br){
+    html += '<div class="mm-branch"><div class="mm-branch-title">'+br.title+'</div><ul class="mm-leaves">';
+    br.leaves.forEach(function(lf){
+      html += '<li class="lv-'+lf.lv+'">' +
+                '<div class="node-row">' +
+                  '<span class="txt">'+lf.t+'</span>' +
+                  '<button class="prob-toggle" title="展开练习示例与真题检索">📖</button>' +
+                  '<span class="lv">'+LV_LABEL[lf.lv]+'</span>' +
+                '</div>' +
+              '</li>';
+    });
+    html += '</ul></div>';
+  });
+  html += '</div></div>';
+  card.innerHTML = html;
+  maps.appendChild(card);
+});
+
+/* ---------- 交互：标记掌握 + 练习示例独立面板扩展 ---------- */
+(function(){
+  var KEY='amc10_mastered_v4';
+  var mastered;
+  try{ mastered=new Set(JSON.parse(localStorage.getItem(KEY)||'[]')); }
+  catch(e){ mastered=new Set(); }
+  
+  var leaves=[].slice.call(document.querySelectorAll('.mm-leaves li'));
+  var cnt=document.getElementById('cnt');
+  var tot=document.getElementById('tot');
+  tot.textContent=leaves.length;
+
+  function escapeHtml(s){ return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+
+  leaves.forEach(function(li){
+    var txtSpan = li.querySelector('.txt');
+    var t = txtSpan.textContent.trim();
+    
+    var data=null;
+    outer:
+    for(var mi=0; mi<MODULES.length; mi++){
+      for(var bi=0; bi<MODULES[mi].branches.length; bi++){
+        for(var li2=0; li2<MODULES[mi].branches[bi].leaves.length; li2++){
+          if(MODULES[mi].branches[bi].leaves[li2].t===t){ data=MODULES[mi].branches[bi].leaves[li2]; break outer; }
+        }
+      }
+    }
+
+    var toggleBtn = li.querySelector('.prob-toggle');
+
+    if(data){
+      var panel = document.createElement('div');
+      panel.className = 'prob-panel';
+      var searchUrl = AOPS_SEARCH + encodeURIComponent('AMC 10 ' + data.kw);
+      
+      var tipText = "💡 <b>解题策略：</b>AMC 10中此类题型强调速算与定式。做题时注意观察特值法或边界条件，避免掉入出题人的陷阱。";
+      if(data.lv === 'hard') tipText = "🔥 <b>决胜思考：</b>压轴级考点。通常需要结合两种以上的工具（如数论结合代数变形）。建议优先寻找对称性，或者从小规模数据归纳规律。";
+
+      panel.innerHTML =
+        '<div class="panel-header">📝 核心训练示例</div>' +
+        '<div class="prob-q">' + escapeHtml(data.ex) + '</div>' +
+        '<div class="prob-tip">' + tipText + '</div>' +
+        '<div class="prob-actions">' +
+          '<a class="btn-aops" href="' + searchUrl + '" target="_blank" rel="noopener">🔍 到 AoPS Wiki 检索「' + escapeHtml(data.kw) + '」高频真题 ↗</a>' +
+          '<a class="btn-sub-link" href="' + AOPS_HUB + '" target="_blank" rel="noopener">🔗 进入 Art of Problem Solving 官方历年真题库</a>' +
+        '</div>';
+      
+      li.appendChild(panel);
+
+      // 🛠️ 已重构：改为「全局互斥折叠」，体验更佳
+      toggleBtn.addEventListener('click', function(e){
+        e.stopPropagation(); 
+        var isOpen = panel.classList.contains('show');
+        
+        // 关闭全网页所有已经打开的面板，防止页面无限拉长
+        document.querySelectorAll('.prob-panel').forEach(function(p){ p.classList.remove('show'); });
+        document.querySelectorAll('.prob-toggle').forEach(function(b){ b.classList.remove('open'); });
+
+        if(!isOpen) {
+          panel.classList.add('show');
+          toggleBtn.classList.add('open');
+        }
+      });
+    } else {
+      // 🛠️ 增强安全性：如果 js 配置文件里漏掉或写错了这个考点，隐藏无响应的 📖 按钮
+      if(toggleBtn) toggleBtn.style.display = 'none';
+    }
+
+    if(mastered.has(t)) li.classList.add('done');
+
+    var row = li.querySelector('.node-row');
+    row.addEventListener('click', function(e){
+      if(e.target.closest('.prob-toggle')) return;
+      if(mastered.has(t)){ 
+        mastered.delete(t); 
+        li.classList.remove('done'); 
+      } else { 
+        mastered.add(t); 
+        li.classList.add('done'); 
+      }
+      try{ localStorage.setItem(KEY,JSON.stringify([].slice.call(mastered))); }catch(err){}
+      cnt.textContent = mastered.size;
+    });
+  });
+
+  cnt.textContent = mastered.size;
+
+  var reset=document.getElementById('reset');
+  if(reset) reset.addEventListener('click',function(){
+    mastered.clear();
+    leaves.forEach(function(l){ l.classList.remove('done'); });
+    try{ localStorage.setItem(KEY,JSON.stringify([])); }catch(err){}
+    cnt.textContent = 0;
+  });
+})();
+</script>
+
+</body>
+</html>
