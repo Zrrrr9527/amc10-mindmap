@@ -3,7 +3,6 @@
 > 🧠 Knowledge map + difficulty map + interactive progress tracking for AMC 10.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?style=flat-square&logo=github)](https://zrrrr9527.github.io/amc10-mindmap/)
-[![Mirror](https://img.shields.io/badge/Mirror-CloudStudio-orange?style=flat-square)](https://8d6ef495036e42299f84a2501f2773c2.app.codebuddy.work)
 [![License](https://img.shields.io/badge/License-Personal%20%26%20Non--commercial-green?style=flat-square)](./README.md)
 
 一个可交互的网页思维导图，覆盖 **AMC 10 四大模块：代数 / 几何 / 数论 / 组合**。每个知识点标注难度（基础 / 进阶 / 压轴），并配练习示例与 AoPS 真题检索入口，供学生、家长与老师共同推进备考。
@@ -12,11 +11,8 @@
 
 ## 🌐 在线体验
 
-**推荐：** GitHub Pages 官方镜像（无需登录，稳定）：
+**在线体验（GitHub Pages 官方镜像，无需登录）：**
 https://zrrrr9527.github.io/amc10-mindmap/
-
-备用体验：
-https://8d6ef495036e42299f84a2501f2773c2.app.codebuddy.work
 
 ## ✨ 为什么用这个？
 
