@@ -32,7 +32,8 @@ var MODULES = [
         { t: "因式定理 Factor Theorem", lv: "mid", ex: "If x−2 is a factor of x³−3x²+ax−2, what is a?", kw: "Factor Theorem" },
         { t: "余数定理 Remainder Theorem", lv: "mid", ex: "What is the remainder when x³ − 2x + 1 is divided by x − 1?", kw: "Remainder Theorem" },
         { t: "多项式因式分解 Polynomial Factorization", lv: "hard", ex: "Factor x⁴ − 16 completely over the reals.", kw: "polynomial factorization" },
-        { t: "根与系数综合 Roots & Coefficients (Vieta)", lv: "hard", ex: "The cubic x³ − 6x² + 11x − 6 has roots a, b, c. Find the product abc.", kw: "roots of polynomial Vieta" }
+        { t: "根与系数综合 Roots & Coefficients (Vieta)", lv: "hard", ex: "The cubic x³ − 6x² + 11x − 6 has roots a, b, c. Find the product abc.", kw: "roots of polynomial Vieta" },
+        { t: "有理根定理 Rational Root Theorem", lv: "mid", ex: "List all possible rational roots of 2x³ − x² − 5x + 2 = 0, then test to find one actual rational root.", kw: "Rational Root Theorem" }
       ]},
       { title: "解题技巧", leaves: [
         { t: "代入验证法 Guess-and-Check / Substitution", lv: "easy", ex: "Which of 0, 1, 2, 3 is a solution to x² − 3x + 2 = 0?", kw: "guess and check" },
@@ -53,7 +54,8 @@ var MODULES = [
         { t: "勾股定理 Pythagorean Theorem", lv: "easy", ex: "A right triangle has legs 5 and 12. What is the hypotenuse?", kw: "Pythagorean theorem" },
         { t: "相似三角形 Similar Triangles", lv: "mid", ex: "Two similar triangles have side ratio 1:3. If the smaller has area 4, what is the larger's area?", kw: "similar triangles" },
         { t: "圆（圆周角/弦切角） Circles (Inscribed / Tangent-Chord Angles)", lv: "mid", ex: "In a circle, an inscribed angle subtends an arc of 80°. What is the angle measure?", kw: "inscribed angle" },
-        { t: "正余弦 / 三角法（特殊角·建系） Law of Sines/Cosines (Special Angles · Coordinates)", lv: "hard", ex: "In triangle ABC, AB=5, AC=7, angle A=60°. Use the Law of Cosines to find BC.", kw: "Law of Cosines" }
+        { t: "正余弦 / 三角法（特殊角·建系） Law of Sines/Cosines (Special Angles · Coordinates)", lv: "hard", ex: "In triangle ABC, AB=5, AC=7, angle A=60°. Use the Law of Cosines to find BC.", kw: "Law of Cosines" },
+        { t: "常见全等结构（翻折/辅助线） Common Congruence Structures (Folding / Auxiliary Lines)", lv: "mid", ex: "In isosceles triangle ABC with AB = AC, the bisector from A meets BC at D. Why are triangles ABD and ACD congruent, and what is BD if BC = 10?", kw: "triangle congruence auxiliary line" }
       ]},
       { title: "坐标几何", leaves: [
         { t: "距离 / 中点公式 Distance / Midpoint Formulas", lv: "easy", ex: "What is the distance between (1,2) and (4,6)?", kw: "distance formula" },
@@ -97,7 +99,8 @@ var MODULES = [
         { t: "整除规则 Divisibility Rules", lv: "easy", ex: "Which of 2, 3, 5, 9 divides 144?", kw: "divisibility rules" },
         { t: "模运算 Modular Arithmetic", lv: "mid", ex: "What is 17 mod 5?", kw: "modular arithmetic" },
         { t: "同余方程 Congruences", lv: "hard", ex: "Find the remainder when 2¹⁰ is divided by 3.", kw: "congruence" },
-        { t: "余数性质 Remainder Properties", lv: "mid", ex: "A number leaves remainder 1 when divided by 2 and by 3. What is the smallest such positive number?", kw: "remainder" }
+        { t: "余数性质 Remainder Properties", lv: "mid", ex: "A number leaves remainder 1 when divided by 2 and by 3. What is the smallest such positive number?", kw: "remainder" },
+        { t: "不定方程 Diophantine Equations", lv: "mid", ex: "Find all non-negative integer solutions to 2x + 3y = 12.", kw: "Diophantine equation" }
       ]},
       { title: "数的表示", leaves: [
         { t: "进制转换 Base Conversion", lv: "mid", ex: "What is the decimal value of the binary number 1011?", kw: "base conversion" },
