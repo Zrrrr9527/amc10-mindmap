@@ -148,11 +148,28 @@
   }
   .btn-sub-link:hover { background: #e2e8f0; }
 
-  li.done .node-row {
-    background:#e6f8ef; box-shadow:inset 0 0 0 1px var(--easy); border-left-color:var(--easy);
+  .node-row .stage{
+    flex:none; width:20px; height:20px; border-radius:5px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; color:#fff; background:#cbd5e1;
   }
-  li.done .node-row .txt { color:#1c7a4d; font-weight: 600; }
-  li.done .node-row .txt::before { content:"✓ "; color:var(--easy); font-weight:900; }
+  .stage[data-stage="1"]{ background:#3b82f6; }
+  .stage[data-stage="2"]{ background:#f59e0b; }
+  .stage[data-stage="3"]{ background:#1fae6b; }
+
+  li.s1 .node-row{ background:#eef4ff; border-left-color:#3b82f6; }
+  li.s2 .node-row{ background:#fff5e6; border-left-color:#f59e0b; }
+  li.s3 .node-row{ background:#e6f8ef; border-left-color:#1fae6b; box-shadow:inset 0 0 0 1px #1fae6b; }
+  li.s1 .node-row .txt, li.s2 .node-row .txt, li.s3 .node-row .txt{ font-weight:600; }
+  li.s3 .node-row .txt::before{ content:"✓ "; color:#1fae6b; font-weight:900; }
+
+  .stage-legend{
+    display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+    margin:0 auto 26px; font-size:13px; background:#fff; max-width:760px;
+    padding:11px 18px; border-radius:12px; box-shadow:0 3px 12px rgba(40,60,90,.06);
+  }
+  .stage-legend b{ display:inline-flex; align-items:center; gap:6px; font-weight:600; }
+  .stage-legend .chip{ width:20px; height:20px; border-radius:5px; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; }
 
   .t-algebra  .mm-root{ background:linear-gradient(135deg,#4f6df5,#6b4ff5); }
   .t-algebra  .mm-branch-title{ background:#5b78f0; }
@@ -176,7 +193,7 @@
 
 <div class="page-head">
   <h1>AMC 10 四大模块思维导图</h1>
-  <p>知识地图 + 难度地图 + 练习示例 · 可点击标记掌握 · 家长 / 老师 / 孩子共用</p>
+  <p>知识地图 + 难度地图 + 练习示例 · 可点击标记三级掌握 · 家长 / 老师 / 孩子共用</p>
 </div>
 <div class="legend">
   <span><i class="dot" style="background:#5b78f0"></i>代数（40-50%）</span>
@@ -189,10 +206,15 @@
   <b><span class="badge b-mid">进阶</span> 第 11–20 题 · 拉分区</b>
   <b><span class="badge b-hard">压轴</span> 第 21–25 题 · 决胜区</b>
 </div>
+<div class="stage-legend">
+  <b><span class="chip" style="background:#3b82f6">学</span> 已学习 · 看懂概念与例题</b>
+  <b><span class="chip" style="background:#f59e0b">练</span> 已操练 · 自己动手做过题</b>
+  <b><span class="chip" style="background:#1fae6b">掌</span> 已掌握 · 限时独立做对</b>
+</div>
 
 <div class="masterbar">
-  <span>🎯 已掌握 <span class="score" id="cnt">0</span> / <span id="tot">0</span> 个知识点</span>
-  <span class="hint">点击文本行 = 标记掌握（绿✓）· 点击 📖 = 展开/收起核心示例与 AoPS 检索方案</span>
+  <span>🎯 进度：<b style="color:#3b82f6">已学习 <span id="cnt1">0</span></b> · <b style="color:#f59e0b">已操练 <span id="cnt2">0</span></b> · <b style="color:#1fae6b">已掌握 <span id="cnt3">0</span></b> <span style="color:var(--muted)">/ 共 <span id="tot">0</span></span></span>
+  <span class="hint">点击文本行 = 循环切换 已学习 → 已操练 → 已掌握（再点取消）</span>
   <button id="reset">重置进度</button>
 </div>
 
@@ -200,7 +222,7 @@
 
 <div class="foot">
   用法说明：<b style="color:var(--easy)">🟢 基础</b>务必零失误保分 · <b style="color:var(--mid)">🟡 进阶</b>决定能否晋级 AIME · <b style="color:var(--hard)">🔴 压轴</b>冲击全球前 1% 的关键区。<br>
-  点击知识点名称可直接切换掌握状态（刷新自动缓存）；点击右侧 📖 图标，可在下方无损展开<b>自编精选示例</b>与 <b>AoPS Wiki 对应词条的高阶检索</b>。<br>
+  点击知识点名称可循环切换 <b style="color:#3b82f6">已学习</b> → <b style="color:#f59e0b">已操练</b> → <b style="color:#1fae6b">已掌握</b>（再点取消，进度自动缓存）；点击右侧 📖 图标，可在下方无损展开<b>自编精选示例</b>与 <b>AoPS Wiki 对应词条的高阶检索</b>。<br>
   <b>提示：</b>📖 内的示例为帮助理解考点的自编练习，非某年特定真题；检索按钮直达 AoPS Wiki 站内搜索，点开即是该考点的真实历年真题与解析。
 </div>
 
@@ -223,7 +245,8 @@ MODULES.forEach(function(mod){
     html += '<div class="mm-branch"><div class="mm-branch-title">'+br.title+'</div><ul class="mm-leaves">';
     br.leaves.forEach(function(lf){
       html += '<li class="lv-'+lf.lv+'">' +
-                '<div class="node-row">' +
+                '<div class="node-row" title="点击切换：已学习 → 已操练 → 已掌握">' +
+                  '<span class="stage" data-stage="0">·</span>' +
                   '<span class="txt">'+lf.t+'</span>' +
                   '<button class="prob-toggle" title="展开练习示例与真题检索">📖</button>' +
                   '<span class="lv">'+LV_LABEL[lf.lv]+'</span>' +
@@ -237,24 +260,35 @@ MODULES.forEach(function(mod){
   maps.appendChild(card);
 });
 
-/* ---------- 交互：标记掌握 + 练习示例独立面板扩展 ---------- */
+/* ---------- 交互：三级掌握标记 + 练习示例独立面板 ---------- */
 (function(){
-  var KEY='amc10_mastered_v4';
-  var mastered;
-  try{ mastered=new Set(JSON.parse(localStorage.getItem(KEY)||'[]')); }
-  catch(e){ mastered=new Set(); }
-  
+  var KEY='amc10_mastered_v5';
+  var STAGE_LABEL=['', '已学习', '已操练', '已掌握'];
+  var STAGE_CHAR =['·', '学', '练', '掌'];
+  var levels; // Map<text, 1|2|3>
+  try{ levels=new Map(Object.entries(JSON.parse(localStorage.getItem(KEY)||'{}'))); }
+  catch(e){ levels=new Map(); }
+
   var leaves=[].slice.call(document.querySelectorAll('.mm-leaves li'));
-  var cnt=document.getElementById('cnt');
   var tot=document.getElementById('tot');
+  var cnt1=document.getElementById('cnt1');
+  var cnt2=document.getElementById('cnt2');
+  var cnt3=document.getElementById('cnt3');
   tot.textContent=leaves.length;
 
   function escapeHtml(s){ return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
 
+  function recount(){
+    var c1=0,c2=0,c3=0;
+    levels.forEach(function(v){ if(v===1)c1++; else if(v===2)c2++; else if(v===3)c3++; });
+    cnt1.textContent=c1; cnt2.textContent=c2; cnt3.textContent=c3;
+  }
+
   leaves.forEach(function(li){
     var txtSpan = li.querySelector('.txt');
+    var stageSpan = li.querySelector('.stage');
     var t = txtSpan.textContent.trim();
-    
+
     var data=null;
     outer:
     for(var mi=0; mi<MODULES.length; mi++){
@@ -271,7 +305,7 @@ MODULES.forEach(function(mod){
       var panel = document.createElement('div');
       panel.className = 'prob-panel';
       var searchUrl = AOPS_SEARCH + encodeURIComponent('AMC 10 ' + data.kw);
-      
+
       var tipText = "💡 <b>解题策略：</b>AMC 10中此类题型强调速算与定式。做题时注意观察特值法或边界条件，避免掉入出题人的陷阱。";
       if(data.lv === 'hard') tipText = "🔥 <b>决胜思考：</b>压轴级考点。通常需要结合两种以上的工具（如数论结合代数变形）。建议优先寻找对称性，或者从小规模数据归纳规律。";
 
@@ -283,53 +317,57 @@ MODULES.forEach(function(mod){
           '<a class="btn-aops" href="' + searchUrl + '" target="_blank" rel="noopener">🔍 到 AoPS Wiki 检索「' + escapeHtml(data.kw) + '」高频真题 ↗</a>' +
           '<a class="btn-sub-link" href="' + AOPS_HUB + '" target="_blank" rel="noopener">🔗 进入 Art of Problem Solving 官方历年真题库</a>' +
         '</div>';
-      
+
       li.appendChild(panel);
 
-      // 🛠️ 已重构：改为「全局互斥折叠」，体验更佳
+      // 全局互斥折叠，防止页面无限拉长
       toggleBtn.addEventListener('click', function(e){
-        e.stopPropagation(); 
+        e.stopPropagation();
         var isOpen = panel.classList.contains('show');
-        
-        // 关闭全网页所有已经打开的面板，防止页面无限拉长
         document.querySelectorAll('.prob-panel').forEach(function(p){ p.classList.remove('show'); });
         document.querySelectorAll('.prob-toggle').forEach(function(b){ b.classList.remove('open'); });
-
         if(!isOpen) {
           panel.classList.add('show');
           toggleBtn.classList.add('open');
         }
       });
     } else {
-      // 🛠️ 增强安全性：如果 js 配置文件里漏掉或写错了这个考点，隐藏无响应的 📖 按钮
+      // 数据失配时隐藏无响应的 📖 按钮
       if(toggleBtn) toggleBtn.style.display = 'none';
     }
 
-    if(mastered.has(t)) li.classList.add('done');
+    // 初始化当前 tier 显示
+    function paint(stage){
+      stageSpan.setAttribute('data-stage', stage);
+      stageSpan.textContent = STAGE_CHAR[stage];
+      stageSpan.title = stage ? STAGE_LABEL[stage] : '未标记';
+      li.classList.remove('s1','s2','s3');
+      if(stage) li.classList.add('s'+stage);
+    }
+    paint(levels.get(t) || 0);
 
     var row = li.querySelector('.node-row');
     row.addEventListener('click', function(e){
       if(e.target.closest('.prob-toggle')) return;
-      if(mastered.has(t)){ 
-        mastered.delete(t); 
-        li.classList.remove('done'); 
-      } else { 
-        mastered.add(t); 
-        li.classList.add('done'); 
-      }
-      try{ localStorage.setItem(KEY,JSON.stringify([].slice.call(mastered))); }catch(err){}
-      cnt.textContent = mastered.size;
+      var next = ((levels.get(t)||0) + 1) % 4; // 0→1→2→3→0
+      if(next===0) levels.delete(t); else levels.set(t, next);
+      paint(next);
+      try{ localStorage.setItem(KEY, JSON.stringify(Object.fromEntries(levels))); }catch(err){}
+      recount();
     });
   });
 
-  cnt.textContent = mastered.size;
+  recount();
 
   var reset=document.getElementById('reset');
   if(reset) reset.addEventListener('click',function(){
-    mastered.clear();
-    leaves.forEach(function(l){ l.classList.remove('done'); });
-    try{ localStorage.setItem(KEY,JSON.stringify([])); }catch(err){}
-    cnt.textContent = 0;
+    levels.clear();
+    leaves.forEach(function(l){
+      l.classList.remove('s1','s2','s3');
+      var s=l.querySelector('.stage'); if(s){ s.setAttribute('data-stage','0'); s.textContent='·'; s.title='未标记'; }
+    });
+    try{ localStorage.setItem(KEY,JSON.stringify({})); }catch(err){}
+    recount();
   });
 })();
 </script>
