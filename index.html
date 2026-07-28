@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AMC 10 四大模块思维导图（含练习示例 · AoPS 真题检索 · 可标记掌握）</title>
+<!-- KaTeX 数学公式渲染（练习示例中的公式）；加载失败时自动退回纯文本 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
 <style>
   :root{
     --bg:#f5f7fb; --ink:#26303d; --muted:#6b7785; --line:#c5cdd8;
@@ -369,6 +373,30 @@ MODULES.forEach(function(mod){
     try{ localStorage.setItem(KEY,JSON.stringify({})); }catch(err){}
     recount();
   });
+})();
+
+/* ---------- KaTeX 公式渲染（练习示例）---------- */
+(function(){
+  function renderMath(){
+    var panels = document.querySelectorAll('.prob-q');
+    if (window.renderMathInElement) {
+      panels.forEach(function(el){
+        try{
+          renderMathInElement(el, {
+            delimiters: [{ left: '\\(', right: '\\)', display: false }],
+            throwOnError: false
+          });
+        }catch(e){}
+      });
+    } else {
+      /* CDN 加载失败兜底：去掉定界符，退回纯文本，保证可读 */
+      panels.forEach(function(el){
+        el.textContent = el.textContent.replace(/\\\(|\\\)/g, '');
+      });
+    }
+  }
+  if (document.readyState === 'complete') { renderMath(); }
+  else { window.addEventListener('load', renderMath); }
 })();
 </script>
 
