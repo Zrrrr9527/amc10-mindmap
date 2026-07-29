@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMC10 第3课预习单 · 直线与圆</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --line:#e5e9f0;
+    --blue:#2563eb; --blue-d:#1e3a8a; --blue-bg:#eef4ff;
+    --amber-bg:#fff8e6; --amber-line:#f4e2a8; --amber-ink:#8a5a00;
+    --green-bg:#ecfdf3; --green-line:#b7ebc8; --green-ink:#1a7f47;
+    --red-ink:#b4471a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#eef2f7; color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Segoe UI",system-ui,sans-serif;
+    line-height:1.6; padding:22px 12px;
+  }
+  .sheet{
+    max-width:860px; margin:0 auto; background:#fff;
+    border-radius:18px; overflow:hidden;
+    box-shadow:0 10px 30px rgba(30,58,138,.10);
+  }
+  /* header */
+  .head{
+    position:relative; padding:30px 34px 26px;
+    background:linear-gradient(135deg,var(--blue-d),var(--blue));
+    color:#fff;
+  }
+  .head .tag{
+    display:inline-block; font-size:12px; letter-spacing:2px;
+    background:rgba(255,255,255,.18); padding:4px 12px; border-radius:999px; margin-bottom:10px;
+  }
+  .head h1{ margin:0; font-size:24px; letter-spacing:.5px; }
+  .head .sub{ margin:8px 0 0; font-size:13.5px; opacity:.92; }
+  .print-btn{
+    position:absolute; top:26px; right:26px;
+    background:#fff; color:var(--blue-d); border:none; cursor:pointer;
+    font-size:13px; font-weight:600; padding:8px 14px; border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+  }
+  .print-btn:hover{ background:#f0f4ff; }
+  /* main */
+  main{ padding:24px 34px 30px; }
+  .intro{
+    background:var(--blue-bg); border:1px solid #d6e4ff; border-radius:12px;
+    padding:14px 16px; font-size:14px; color:#243b6b;
+  }
+  .intro b{ color:var(--blue-d); }
+  .step{ display:flex; gap:16px; margin-top:22px; }
+  .num{
+    flex:0 0 38px; height:38px; border-radius:50%;
+    background:var(--blue); color:#fff; font-size:18px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 10px rgba(37,99,235,.3);
+  }
+  .step .body{ flex:1; min-width:0; }
+  .step h2{ margin:6px 0 8px; font-size:16.5px; color:var(--blue-d); }
+  ul{ margin:6px 0 0; padding-left:20px; }
+  li{ margin:4px 0; font-size:14px; }
+  li b{ color:#111827; }
+  .warn{
+    margin-top:10px; font-size:13px; color:var(--red-ink);
+    background:#fdf1ec; border-left:4px solid #e8723f; border-radius:0 8px 8px 0;
+    padding:9px 12px;
+  }
+  .formula{ color:var(--blue-d); font-weight:600; }
+  /* questions */
+  .q{
+    background:#f8fafc; border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; margin:10px 0; font-size:14px;
+  }
+  .q .qn{
+    display:inline-flex; width:24px; height:24px; border-radius:7px;
+    background:#e0ecff; color:var(--blue-d); font-weight:700; font-size:13px;
+    align-items:center; justify-content:center; margin-right:9px; vertical-align:1px;
+  }
+  /* answers */
+  .answers{
+    margin-top:24px; background:var(--amber-bg); border:1px solid var(--amber-line);
+    border-radius:12px; padding:16px 18px;
+  }
+  .answers h2{ margin:0 0 10px; font-size:16px; color:var(--amber-ink); }
+  .answers ol{ margin:0; padding-left:22px; }
+  .answers li{ font-size:13.5px; margin:6px 0; color:#5b4a16; }
+  .answers code{ background:#fff; border:1px solid #ecd9a0; border-radius:5px; padding:0 5px; }
+  /* goals */
+  .goals{
+    margin-top:22px; background:var(--green-bg); border:1px solid var(--green-line);
+    border-radius:12px; padding:14px 18px;
+  }
+  .goals h2{ margin:0 0 8px; font-size:16px; color:var(--green-ink); }
+  .goals li{ font-size:13.5px; color:#1c5e3a; }
+  footer{ text-align:center; color:var(--muted); font-size:12px; padding:14px 0 4px; }
+  @media (max-width:560px){
+    .head{padding:24px 20px} .head h1{font-size:20px} main{padding:20px 18px}
+    .print-btn{position:static;display:block;margin-top:14px;width:100%}
+  }
+  @media print{
+    body{background:#fff;padding:0}
+    .sheet{box-shadow:none;border-radius:0;max-width:none}
+    .print-btn{display:none}
+  }
+</style>
+</head>
+<body>
+  <div class="sheet">
+    <header class="head">
+      <button class="print-btn" onclick="window.print()">🖨 打印 / 存 PDF</button>
+      <div class="tag">课前预习</div>
+      <h1>AMC 10 第 3 课 · 课前预习单</h1>
+      <p class="sub">直线与圆（Lines &amp; Circles） ｜ 2026-07-30 周四 19:00–20:30 ｜ 约 50–60 分钟</p>
+    </header>
+
+    <main>
+      <div class="intro">
+        <b>怎么用这份单子：</b>不刷题，抓三件事 ——
+        <b>①</b> 复习第 2 课的斜率 / 直线（15 min）→
+        <b>②</b> 预习截距和圆的标准方程（25 min）→
+        <b>③</b> 动手做 5 道小题检验真懂没懂（20 min）。
+        做完即可，卡住先标记，上课带着问题听。
+      </div>
+
+      <!-- 步骤 1 -->
+      <section class="step">
+        <div class="num">1</div>
+        <div class="body">
+          <h2>复习第 2 课（15 min）· 确保地基稳</h2>
+          <ul>
+            <li>斜率公式：<span class="formula">m = (y₂ − y₁) / (x₂ − x₁)</span></li>
+            <li>一次函数：<span class="formula">y = kx + b</span>（k = 斜率，b = y 轴截距）</li>
+            <li>平行 ⇒ 斜率相等；垂直 ⇒ 斜率乘积 = −1</li>
+          </ul>
+          <div class="warn">⚠ 佳琪薄弱点：独立把文字条件翻译成数学关系。复习时专门练：“点在 x 轴上 → y = 0”“直线平行 → 斜率相等”这类翻译。</div>
+        </div>
+      </section>
+
+      <!-- 步骤 2 -->
+      <section class="step">
+        <div class="num">2</div>
+        <div class="body">
+          <h2>预习新概念（25 min）· 明天要讲的</h2>
+          <ul>
+            <li>截距：x 轴截距（令 y = 0）、y 轴截距（令 x = 0）</li>
+            <li>直线方程几种形式：斜截式 <span class="formula">y = mx + b</span> ｜ 点斜式 <span class="formula">y − y₁ = m(x − x₁)</span> ｜ 一般式 <span class="formula">Ax + By = C</span></li>
+            <li>圆的标准方程：<span class="formula">(x − h)² + (y − k)² = r²</span>，圆心 (h, k)、半径 r</li>
+            <li>直线与圆的位置关系（用圆心到直线的距离 d 判断）：<br>
+              d &lt; r → 相交（2 个交点）｜ d = r → 相切（1 个交点）｜ d &gt; r → 相离</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 步骤 3 -->
+      <section class="step">
+        <div class="num">3</div>
+        <div class="body">
+          <h2>动手做 5 道小题（20 min）</h2>
+          <div class="q"><span class="qn">1</span>过点 (2,3)、(4,7) 的直线，求斜率和方程。</div>
+          <div class="q"><span class="qn">2</span>直线 <code>y = 2x + 1</code> 与 <code>y = −½ x + 3</code> 是否垂直？为什么？</div>
+          <div class="q"><span class="qn">3</span>圆心 (1,−2)、半径 4 的圆，写出方程。</div>
+          <div class="q"><span class="qn">4</span>点 (3,4) 是否在圆 <code>x² + y² = 25</code> 上？代入验证。</div>
+          <div class="q"><span class="qn">5</span>直线 <code>y = x + 1</code> 与圆 <code>(x − 1)² + (y − 2)² = 5</code> 是相交 / 相切 / 相离？（提示：算圆心到直线的距离）</div>
+        </div>
+      </section>
+
+      <!-- 答案 -->
+      <div class="answers">
+        <h2>答案与提示</h2>
+        <ol>
+          <li>斜率 m = (7−3)/(4−2) = 2；方程 y − 3 = 2(x − 2) → <b>y = 2x − 1</b>。</li>
+          <li>是。斜率 2 与 −½ 乘积 = −1，故垂直。</li>
+          <li><code>(x − 1)² + (y + 2)² = 16</code>。（注意 y 坐标是 −2，故 y − (−2) = y + 2）</li>
+          <li>3² + 4² = 9 + 16 = 25 = r²，所以点在圆上。</li>
+          <li>圆心 (1,2) 到直线 y = x + 1（即 x − y + 1 = 0）的距离 d = |1 − 2 + 1| / √(1²+(−1)²) = 0/√2 = 0 &lt; √5，故直线与圆<b>相交</b>（且过圆心）。</li>
+        </ol>
+      </div>
+
+      <!-- 目标 -->
+      <div class="goals">
+        <h2>上课小目标（给佳琪）</h2>
+        <ul>
+          <li>老师讲“圆方程”时，能马上说出圆心和半径；</li>
+          <li>遇到“点在直线上 / 圆外”这类条件，能主动写成方程代入；</li>
+          <li>把“图形观察”和“代数计算”两边对照看，不只会算不画、或只画不算。</li>
+        </ul>
+      </div>
+
+      <footer>AMC 10 备考 · 第 3 课预习单 · 直线与圆</footer>
+    </main>
+  </div>
+</body>
+</html>
