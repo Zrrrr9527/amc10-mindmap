@@ -50,6 +50,8 @@
   .chips{ display:flex; flex-wrap:wrap; gap:8px; }
   .chip{ font-size:12px; padding:5px 11px; border-radius:20px; background:#eef2f8; color:#34404e; }
   .chip.red{ background:#fdeaea; color:#a32d2d; font-weight:600; }
+  .sub-h{ font-size:12.5px; font-weight:700; color:#3a5bd0; margin:11px 0 7px; }
+  .sub-h:first-of-type{ margin-top:4px; }
   .cols3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
   .col-h{ font-size:13px; font-weight:700; color:#b5790a; margin:0 0 6px; }
   .col .chip{ display:block; margin-bottom:6px; border-radius:8px; }
@@ -137,11 +139,25 @@
 
 <!-- ① 公理 -->
 <div class="band band1">
-  <div class="band-h">① 公理 Axioms</div>
-  <div class="band-role">认知起点，不占课时 ≈15min · 让佳琪“信得过体系”即可</div>
+  <div class="band-h">① 公理 Axioms（欧几里得《几何原本》全集）</div>
+  <div class="band-role">认知起点，不占课时 ≈15min · 让佳琪“信得过体系”——这 5 公设 + 5 公理，是几何全部推论的真正根</div>
+
+  <div class="sub-h">五大公设 Postulates（几何专用 · 只管图形）</div>
   <div class="chips">
-    <span class="chip">经过两点有且只有一条直线</span>
-    <span class="chip">平行公理（线外一点 ∥ 唯一定线）</span>
+    <span class="chip">1. 由任意一点到任意一点可作一直线</span>
+    <span class="chip">2. 一条有限直线可无限延长</span>
+    <span class="chip">3. 以任意点为心、任意距为半径可作圆</span>
+    <span class="chip">4. 凡直角皆相等</span>
+    <span class="chip">5. 平行公设：一直线截两线，若同侧内角和＜两直角，则两线无限延长后在该侧相交</span>
+  </div>
+
+  <div class="sub-h">五条公理 Common Notions（通用逻辑 · 量的一般规则）</div>
+  <div class="chips">
+    <span class="chip">1. 等于同量的量，彼此相等</span>
+    <span class="chip">2. 等量加等量，其和相等</span>
+    <span class="chip">3. 等量减等量，其差相等</span>
+    <span class="chip">4. 能彼此重合的事物相等</span>
+    <span class="chip">5. 整体大于部分</span>
   </div>
 </div>
 
