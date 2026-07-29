@@ -48,30 +48,17 @@ var MODULES = [
   {
     key: "geometry", color: "geometry",
     title: "几何 Geometry",
-    sub: "占比约 30%–40% · 强调逻辑与空间想象",
+    sub: "占比约 30%–40% · 阶段二（课 5–8 几何基础）· 平面几何为核心块",
     shape: "难度分布：<b>偏中→难</b>。基础面积/勾股能进前 10 题；正余弦/三角法、圆幂、托勒密、梅涅劳斯几乎只出现在 21–25 的难题中。",
     branches: [
-      { title: "三角形 Triangle", leaves: [
+      { title: "平面几何", sub: "阶段二·课 5–8 几何基础核心", leaves: [
         { t: "三角形面积 / 全等 Triangle Area / Congruence", lv: "easy", ex: "A right triangle has legs \\(3\\) and \\(4\\). What is its area?", kw: "triangle area" },
         { t: "勾股定理 Pythagorean Theorem", lv: "easy", ex: "A right triangle has legs \\(5\\) and \\(12\\). What is the hypotenuse?", kw: "Pythagorean theorem" },
         { t: "相似三角形 Similar Triangles", lv: "mid", ex: "Two similar triangles have side ratio \\(1:3\\). If the smaller has area \\(4\\), what is the larger's area?", kw: "similar triangles" },
+        { t: "圆（圆周角 / 弦切角） Circles (Inscribed / Tangent-Chord Angles)", lv: "mid", ex: "In a circle, an inscribed angle subtends an arc of \\(80^\\circ\\). What is the angle measure? (What if it subtends a diameter?)", kw: "inscribed angle" },
         { t: "正余弦 / 三角法（特殊角·建系） Law of Sines/Cosines (Special Angles · Coordinates)", lv: "hard", ex: "In triangle \\(ABC\\), \\(AB=5\\), \\(AC=7\\), \\(\\angle A=60^\\circ\\). Use the Law of Cosines to find \\(BC\\).", kw: "Law of Cosines" },
         { t: "常见全等结构（翻折/辅助线） Common Congruence Structures (Folding / Auxiliary Lines)", lv: "mid", ex: "In isosceles triangle \\(ABC\\) with \\(AB = AC\\), the bisector from \\(A\\) meets \\(BC\\) at \\(D\\). Why are triangles \\(ABD\\) and \\(ACD\\) congruent, and what is \\(BD\\) if \\(BC = 10\\)?", kw: "triangle congruence auxiliary line" },
-        { t: "角平分线定理 Angle Bisector Theorem", lv: "mid", ex: "In triangle \\(ABC\\), the bisector of \\(\\angle A\\) meets \\(BC\\) at \\(D\\). If \\(AB=6\\), \\(AC=9\\), and \\(BC=10\\), what is \\(BD\\)? (Hint: \\(BD:DC = AB:AC\\).)", kw: "angle bisector theorem" },
-        { t: "三角形的心（内/外/重/垂） Triangle Centers", lv: "mid", ex: "In any triangle, the three medians meet at the centroid \\(G\\), which divides each median in a \\(2:1\\) ratio. If a median from \\(A\\) has length \\(9\\) and meets \\(BC\\) at \\(M\\), what is \\(AG\\)?", kw: "centroid triangle" },
-        { t: "斯特瓦尔特定理 Stewart's Theorem", lv: "hard", ex: "In triangle \\(ABC\\), \\(AB=5\\), \\(AC=7\\), \\(BC=8\\). Point \\(D\\) lies on \\(BC\\) with \\(BD=3\\) and \\(DC=5\\). Use Stewart's theorem to find \\(AD\\).", kw: "Stewart's theorem" },
-        { t: "海伦公式 Heron's Formula", lv: "mid", ex: "A triangle has sides \\(13, 14, 15\\). Use Heron's formula to find its area.", kw: "Heron's formula" }
-      ]},
-      { title: "圆 Circles", leaves: [
-        { t: "圆周角定理（含直径对直角） Inscribed Angle Theorem (incl. Thales)", lv: "mid", ex: "In a circle, an inscribed angle subtends an arc of \\(80^\\circ\\). What is the angle measure? (What if it subtends a diameter?)", kw: "inscribed angle" },
-        { t: "弦切角定理 Tangent-Chord Angle", lv: "mid", ex: "A tangent and a chord meet at a point on a circle, enclosing an arc of \\(100^\\circ\\). What is the tangent-chord angle?", kw: "tangent chord angle" },
-        { t: "圆幂定理 Power of a Point", lv: "hard", ex: "Two chords \\(AB\\) and \\(CD\\) intersect at \\(P\\) inside a circle, with \\(PA=2\\), \\(PB=6\\), \\(PC=3\\). Find \\(PD\\). (Also: for a tangent \\(PT\\) and secant \\(PAB\\), \\(PT^2 = PA\\cdot PB\\).)", kw: "Power of a Point" },
-        { t: "切线与切线长 Tangents & Tangent Lengths", lv: "mid", ex: "From an external point \\(P\\), two tangents touch a circle at \\(A\\) and \\(B\\). If \\(PA = 5\\), what is \\(PB\\), and what can you say about \\(PA\\) and \\(PB\\)?", kw: "tangent length circle" }
-      ]},
-      { title: "四边形与多边形 Quadrilaterals & Polygons", leaves: [
-        { t: "平行四边形的性质 Parallelogram Properties", lv: "mid", ex: "A parallelogram has base \\(8\\) and height \\(5\\). What is its area?", kw: "parallelogram area" },
-        { t: "梯形与面积 Trapezoids & Area", lv: "mid", ex: "A trapezoid has bases \\(6\\) and \\(10\\) and height \\(4\\). What is its area?", kw: "trapezoid area" },
-        { t: "多边形内角和 Polygon Angle Sums", lv: "easy", ex: "A convex polygon has \\(9\\) sides. What is the sum of its interior angles?", kw: "polygon interior angle sum" }
+        { t: "角平分线定理 Angle Bisector Theorem", lv: "mid", ex: "In triangle \\(ABC\\), the bisector of \\(\\angle A\\) meets \\(BC\\) at \\(D\\). If \\(AB=6\\), \\(AC=9\\), and \\(BC=10\\), what is \\(BD\\)? (Hint: \\(BD:DC = AB:AC\\).)", kw: "angle bisector theorem" }
       ]},
       { title: "坐标几何", leaves: [
         { t: "距离 / 中点公式 Distance / Midpoint Formulas", lv: "easy", ex: "What is the distance between \\((1,2)\\) and \\((4,6)\\)?", kw: "distance formula" },
@@ -85,7 +72,8 @@ var MODULES = [
         { t: "折叠与展开 Folding & Nets", lv: "hard", ex: "A net of a cube is folded. If opposite faces sum to \\(7\\) and the top shows \\(1\\), what is the bottom?", kw: "cube net" },
         { t: "空间想象 Spatial Visualization", lv: "hard", ex: "Two opposite vertices of a unit cube are joined by a space diagonal. What is its length?", kw: "space diagonal cube" }
       ]},
-      { title: "高级定理", leaves: [
+      { title: "高级定理", sub: "压轴区·课 8+ 进阶", leaves: [
+        { t: "圆幂定理 Power of a Point", lv: "hard", ex: "Two chords \\(AB\\) and \\(CD\\) intersect at \\(P\\) inside a circle, with \\(PA=2\\), \\(PB=6\\), \\(PC=3\\). Find \\(PD\\). (Also: for a tangent \\(PT\\) and secant \\(PAB\\), \\(PT^2 = PA\\cdot PB\\).)", kw: "Power of a Point" },
         { t: "托勒密定理 Ptolemy's Theorem", lv: "hard", ex: "A cyclic quadrilateral is a square of side \\(1\\). By Ptolemy's theorem, what is its diagonal?", kw: "Ptolemy's theorem" },
         { t: "梅涅劳斯 / 塞瓦 Menelaus / Ceva's Theorems", lv: "hard", ex: "In triangle \\(ABC\\), cevians from each vertex meet the opposite sides and are concurrent. State Ceva's product condition on the three segment ratios.", kw: "Ceva's theorem" },
         { t: "相似比与面积比 Similarity & Area Ratios", lv: "mid", ex: "If two similar figures have linear ratio \\(2:5\\), what is the ratio of their areas?", kw: "area ratio similar" }
