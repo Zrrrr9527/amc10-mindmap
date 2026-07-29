@@ -20,9 +20,11 @@ var MODULES = [
       ]},
       { title: "函数", leaves: [
         { t: "一次 / 线性函数 Linear Functions", lv: "easy", ex: "A line passes through \\((1,2)\\) and \\((3,8)\\). What is its slope?", kw: "linear function slope" },
+        { t: "正 / 反比例 Direct / Inverse Proportions", lv: "easy", ex: "If \\(y\\) is directly proportional to \\(x\\) and \\(y=12\\) when \\(x=3\\), what is \\(y\\) when \\(x=5\\)? (Inverse: if \\(y\\) is inversely proportional to \\(x\\) and \\(y=4\\) at \\(x=2\\), what is \\(y\\) at \\(x=8\\?)", kw: "direct inverse proportion" },
         { t: "二次函数 / 抛物线 Quadratic Functions / Parabolas", lv: "mid", ex: "The parabola \\(y = x^2 - 4x + 3\\) has vertex \\((h,k)\\). Find \\(h + k\\).", kw: "parabola vertex" },
         { t: "指数与对数函数 Exponential & Logarithmic Functions", lv: "mid", ex: "Solve \\(3^{2x} = 27^{\\,x-1}\\). What is \\(x\\)?", kw: "exponential equation" },
-        { t: "图像变换与复合 Transformations & Composition", lv: "hard", ex: "If \\(f(x)=x^2\\) and \\(g(x)=x+1\\), what is \\(f(g(2))\\)?", kw: "function composition" }
+        { t: "图像变换与复合 Transformations & Composition", lv: "hard", ex: "If \\(f(x)=x^2\\) and \\(g(x)=x+1\\), what is \\(f(g(2))\\)?", kw: "function composition" },
+        { t: "绝对值函数 Absolute Value Functions", lv: "mid", ex: "The function \\(f(x)=|x-2|\\) has a V-shaped graph. At which point is its vertex, and what is \\(f(-1)+f(5)\\)?", kw: "absolute value function" }
       ]},
       { title: "数列与级数", leaves: [
         { t: "等差数列 Arithmetic Sequences", lv: "easy", ex: "In the arithmetic sequence \\(3, 7, 11, \\dots\\), what is the 10th term?", kw: "arithmetic sequence" },
