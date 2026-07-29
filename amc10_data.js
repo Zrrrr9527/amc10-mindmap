@@ -57,7 +57,14 @@ var MODULES = [
         { t: "相似三角形 Similar Triangles", lv: "mid", ex: "Two similar triangles have side ratio \\(1:3\\). If the smaller has area \\(4\\), what is the larger's area?", kw: "similar triangles" },
         { t: "圆（圆周角/弦切角） Circles (Inscribed / Tangent-Chord Angles)", lv: "mid", ex: "In a circle, an inscribed angle subtends an arc of \\(80^\\circ\\). What is the angle measure?", kw: "inscribed angle" },
         { t: "正余弦 / 三角法（特殊角·建系） Law of Sines/Cosines (Special Angles · Coordinates)", lv: "hard", ex: "In triangle \\(ABC\\), \\(AB=5\\), \\(AC=7\\), \\(\\angle A=60^\\circ\\). Use the Law of Cosines to find \\(BC\\).", kw: "Law of Cosines" },
-        { t: "常见全等结构（翻折/辅助线） Common Congruence Structures (Folding / Auxiliary Lines)", lv: "mid", ex: "In isosceles triangle \\(ABC\\) with \\(AB = AC\\), the bisector from \\(A\\) meets \\(BC\\) at \\(D\\). Why are triangles \\(ABD\\) and \\(ACD\\) congruent, and what is \\(BD\\) if \\(BC = 10\\)?", kw: "triangle congruence auxiliary line" }
+        { t: "常见全等结构（翻折/辅助线） Common Congruence Structures (Folding / Auxiliary Lines)", lv: "mid", ex: "In isosceles triangle \\(ABC\\) with \\(AB = AC\\), the bisector from \\(A\\) meets \\(BC\\) at \\(D\\). Why are triangles \\(ABD\\) and \\(ACD\\) congruent, and what is \\(BD\\) if \\(BC = 10\\)?", kw: "triangle congruence auxiliary line" },
+        { t: "角平分线定理 Angle Bisector Theorem", lv: "mid", ex: "In triangle \\(ABC\\), the bisector of \\(\\angle A\\) meets \\(BC\\) at \\(D\\). If \\(AB=6\\), \\(AC=9\\), and \\(BC=10\\), what is \\(BD\\)? (Hint: \\(BD:DC = AB:AC\\).)", kw: "angle bisector theorem" },
+        { t: "平行四边形的性质 Parallelogram Properties", lv: "mid", ex: "A parallelogram has base \\(8\\) and height \\(5\\). What is its area?", kw: "parallelogram area" },
+        { t: "梯形与面积 Trapezoids & Area", lv: "mid", ex: "A trapezoid has bases \\(6\\) and \\(10\\) and height \\(4\\). What is its area?", kw: "trapezoid area" },
+        { t: "多边形内角和 Polygon Angle Sums", lv: "easy", ex: "A convex polygon has \\(9\\) sides. What is the sum of its interior angles?", kw: "polygon interior angle sum" },
+        { t: "三角形的心（内/外/重/垂） Triangle Centers", lv: "mid", ex: "In any triangle, the three medians meet at the centroid \\(G\\), which divides each median in a \\(2:1\\) ratio. If a median from \\(A\\) has length \\(9\\) and meets \\(BC\\) at \\(M\\), what is \\(AG\\)?", kw: "centroid triangle" },
+        { t: "斯特瓦尔特定理 Stewart's Theorem", lv: "hard", ex: "In triangle \\(ABC\\), \\(AB=5\\), \\(AC=7\\), \\(BC=8\\). Point \\(D\\) lies on \\(BC\\) with \\(BD=3\\) and \\(DC=5\\). Use Stewart's theorem to find \\(AD\\).", kw: "Stewart's theorem" },
+        { t: "海伦公式 Heron's Formula", lv: "mid", ex: "A triangle has sides \\(13, 14, 15\\). Use Heron's formula to find its area.", kw: "Heron's formula" }
       ]},
       { title: "坐标几何", leaves: [
         { t: "距离 / 中点公式 Distance / Midpoint Formulas", lv: "easy", ex: "What is the distance between \\((1,2)\\) and \\((4,6)\\)?", kw: "distance formula" },
@@ -81,7 +88,8 @@ var MODULES = [
         { t: "辅助线构造 Auxiliary Line Construction", lv: "mid", ex: "To find the height of an equilateral triangle of side \\(2\\), drop an altitude. What is the height?", kw: "altitude construction" },
         { t: "坐标法 Coordinate Method", lv: "mid", ex: "Place a triangle with vertices at \\((0,0),(4,0),(0,3)\\). What is its area using coordinates?", kw: "coordinate method geometry" },
         { t: "面积法 Area Method", lv: "hard", ex: "A triangle has base \\(6\\) and area \\(12\\). What is its height?", kw: "area method" },
-        { t: "旋转 / 对称 Rotation / Symmetry", lv: "hard", ex: "Rotating the point \\((1,0)\\) by \\(90^\\circ\\) counterclockwise about the origin gives which point?", kw: "rotation symmetry" }
+        { t: "旋转 / 对称 Rotation / Symmetry", lv: "hard", ex: "Rotating the point \\((1,0)\\) by \\(90^\\circ\\) counterclockwise about the origin gives which point?", kw: "rotation symmetry" },
+        { t: "质点法 Mass Points", lv: "mid", ex: "In triangle \\(ABC\\), \\(D\\) is on \\(BC\\) with \\(BD:DC = 2:3\\), and \\(E\\) is on \\(AC\\) with \\(CE:EA = 1:2\\). Cevians \\(AD\\) and \\(BE\\) intersect at \\(P\\). Use mass points to find the ratio \\(AP:PD\\).", kw: "mass points" }
       ]}
     ]
   },

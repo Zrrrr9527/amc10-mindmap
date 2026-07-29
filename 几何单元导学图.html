@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMC 10 几何单元导学图（四层结构 · 三级掌握）</title>
+<!-- KaTeX 数学公式渲染（练习示例中的公式）；加载失败时自动退回纯文本 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --bg:#f5f7fb; --ink:#26303d; --muted:#6b7785; --line:#c5cdd8;
+    --easy:#1fae6b; --mid:#e8a512; --hard:#e0483c; --primary:#4f6df5;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:28px 16px 70px;
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5;
+  }
+  .page-head{ text-align:center; margin-bottom:6px; }
+  .page-head h1{ font-size:24px; margin:0 0 6px; letter-spacing:.5px; }
+  .page-head p{ margin:0; color:var(--muted); font-size:13.5px; }
+
+  .stage-legend{
+    display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+    margin:16px auto; font-size:13px; background:#fff; max-width:760px;
+    padding:11px 18px; border-radius:12px; box-shadow:0 3px 12px rgba(40,60,90,.06);
+  }
+  .stage-legend b{ display:inline-flex; align-items:center; gap:6px; font-weight:600; }
+  .stage-legend .chip{ width:20px; height:20px; border-radius:5px; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; }
+
+  .sec-h{ text-align:center; font-size:18px; font-weight:700; margin:30px 0 14px; color:#1f3a5f; }
+  .sec-sub{ text-align:center; color:var(--muted); font-size:12.5px; margin:-8px 0 16px; }
+
+  /* ---- 四层概念地图 ---- */
+  .band{
+    background:#fff; border-radius:12px; padding:14px 18px; margin:0 auto 14px;
+    max-width:920px; box-shadow:0 3px 12px rgba(40,60,90,.06); border-left:6px solid var(--line);
+  }
+  .band1{ border-left-color:#4f6df5; }
+  .band2{ border-left-color:#1fae6b; }
+  .band3{ border-left-color:#e8a512; }
+  .band4{ border-left-color:#8e44ad; }
+  .band-h{ font-size:15px; font-weight:700; margin:0 0 2px; }
+  .band1 .band-h{ color:#3a5bd0; } .band2 .band-h{ color:#1a8f5c; }
+  .band3 .band-h{ color:#b5790a; } .band4 .band-h{ color:#7a3a9a; }
+  .band-role{ font-size:12px; color:var(--muted); margin:0 0 10px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ font-size:12px; padding:5px 11px; border-radius:20px; background:#eef2f8; color:#34404e; }
+  .chip.red{ background:#fdeaea; color:#a32d2d; font-weight:600; }
+  .cols3{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .col-h{ font-size:13px; font-weight:700; color:#b5790a; margin:0 0 6px; }
+  .col .chip{ display:block; margin-bottom:6px; border-radius:8px; }
+
+  .note{ background:#fdf3ef; border:1px solid #f0c9b8; border-radius:12px; padding:14px 18px; max-width:920px; margin:0 auto 8px; }
+  .note-h{ font-size:14px; font-weight:700; color:#b00020; margin:0 0 8px; }
+  .note ul{ margin:0; padding-left:18px; font-size:12.5px; color:#501313; line-height:1.75; }
+
+  /* ---- 掌握清单 ---- */
+  .masterbar{
+    display:flex; gap:14px; align-items:center; justify-content:center; flex-wrap:wrap;
+    margin:0 auto 18px; max-width:920px; background:#fff; padding:11px 20px;
+    border-radius:12px; box-shadow:0 3px 12px rgba(40,60,90,.06); font-size:14px;
+  }
+  .masterbar .hint{ color:var(--muted); font-size:12px; }
+  .masterbar button{ border:1px solid #d7dde6; background:#f3f6fa; color:#55606d; border-radius:8px; padding:4px 12px; cursor:pointer; font-size:12.5px; }
+  .masterbar button:hover{ background:#e9eef5; }
+
+  .geo-card{ background:#fff; border-radius:14px; padding:18px 20px; margin:0 auto 22px; max-width:920px; box-shadow:0 4px 18px rgba(40,60,90,.07); }
+  .geo-card-h{ font-size:15px; font-weight:700; margin:0 0 10px; color:#1aa86f; }
+
+  .mm-leaves{ list-style:none; padding:0; margin:0; }
+  .mm-leaves li{ margin-bottom:8px; position:relative; }
+  .node-row{
+    font-size:12.5px; padding:8px 10px; border:1px solid #eef1f5; border-radius:7px;
+    background:#fafbfd; color:#34404e; display:flex; align-items:center; justify-content:space-between; gap:6px;
+    border-left-width:4px; border-left-style:solid; cursor:pointer; transition:all .2s ease; user-select:none;
+  }
+  .node-row:hover{ background:#eef3fb; transform:translateY(-1px); }
+  .node-row .txt{ flex:1; font-weight:500; }
+  .node-row .lv{ font-size:10px; padding:1px 6px; border-radius:20px; color:#fff; font-weight:700; flex:none; }
+  .lv-easy .node-row{ border-left-color:var(--easy); } .lv-easy .lv{ background:var(--easy); }
+  .lv-mid  .node-row{ border-left-color:var(--mid); }  .lv-mid  .lv{ background:var(--mid); }
+  .lv-hard .node-row{ border-left-color:var(--hard); } .lv-hard .lv{ background:var(--hard); }
+
+  .prob-toggle{ border:none; background:#eef2f8; color:#4f6df5; width:22px; height:22px; border-radius:60%; cursor:pointer; font-size:11px; display:inline-flex; align-items:center; justify-content:center; transition:all .2s; flex:none; margin-right:2px; }
+  .prob-toggle:hover{ background:#e0e8f5; transform:scale(1.1); }
+  .prob-toggle.open{ background:#4f6df5; color:#fff; transform:rotate(180deg); }
+
+  .prob-panel{ margin-top:5px; background:#fff; border:1px solid #dbe2ec; border-radius:8px; padding:14px; box-shadow:0 4px 14px rgba(40,60,90,.08); text-align:left; display:none; border-top:3px solid #4f6df5; }
+  .prob-panel.show{ display:block; animation:slideDown .2s ease-out; }
+  @keyframes slideDown{ from{opacity:0; transform:translateY(-5px);} to{opacity:1; transform:translateY(0);} }
+  .panel-header{ font-size:11px; color:#8a99ad; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; font-weight:700; }
+  .prob-q{ font-size:13px; color:#2c3742; line-height:1.6; background:#f8fafc; padding:10px; border-radius:6px; border-left:3px solid #cbd5e1; margin-bottom:12px; }
+  .prob-tip{ font-size:11.5px; color:#6d421a; background:#fffbeb; border:1px dashed #fcd34d; padding:8px 10px; border-radius:6px; margin-bottom:12px; }
+  .prob-actions{ display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+  .btn-aops{ display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#4f6df5; color:#fff!important; text-decoration:none; font-size:12px; font-weight:600; padding:7px 12px; border-radius:6px; text-align:center; }
+  .btn-aops:hover{ background:#3b57db; text-decoration:none; }
+  .btn-sub-link{ display:inline-flex; align-items:center; justify-content:center; color:#55606d!important; text-decoration:none; font-size:11px; background:#f1f5f9; padding:5px; border-radius:4px; text-align:center; }
+  .btn-sub-link:hover{ background:#e2e8f0; }
+
+  .node-row .stage{ flex:none; width:20px; height:20px; border-radius:5px; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; background:#cbd5e1; }
+  .stage[data-stage="1"]{ background:#3b82f6; }
+  .stage[data-stage="2"]{ background:#f59e0b; }
+  .stage[data-stage="3"]{ background:#1fae6b; }
+  li.s1 .node-row{ background:#eef4ff; border-left-color:#3b82f6; }
+  li.s2 .node-row{ background:#fff5e6; border-left-color:#f59e0b; }
+  li.s3 .node-row{ background:#e6f8ef; border-left-color:#1fae6b; box-shadow:inset 0 0 0 1px #1fae6b; }
+  li.s1 .node-row .txt, li.s2 .node-row .txt, li.s3 .node-row .txt{ font-weight:600; }
+  li.s3 .node-row .txt::before{ content:"✓ "; color:#1fae6b; font-weight:900; }
+
+  .foot{ text-align:center; color:var(--muted); font-size:12px; margin-top:22px; line-height:1.9; }
+  .foot a{ color:var(--primary); text-decoration:none; font-weight:600; }
+  .foot a:hover{ text-decoration:underline; }
+  .back-btn{ display:inline-block; margin:4px 6px; padding:7px 16px; background:var(--primary); color:#fff!important; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; }
+  .back-btn:hover{ background:#3b57db; }
+  @media print{ body{ background:#fff; } .band,.geo-card{ box-shadow:none; } .prob-toggle,.mm-leaves li{ cursor:default; } .prob-panel{ display:none!important; } }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>AMC 10 几何单元导学图</h1>
+  <p>从公理到解题工具的四层结构（IronBuddy 纠偏版） · 课前地图 + 三级掌握清单</p>
+</div>
+
+<div class="stage-legend">
+  <b><span class="chip" style="background:#3b82f6">学</span> 已学习 · 看懂概念与例题</b>
+  <b><span class="chip" style="background:#f59e0b">练</span> 已操练 · 自己动手做过题</b>
+  <b><span class="chip" style="background:#1fae6b">掌</span> 已掌握 · 限时独立做对</b>
+</div>
+
+<div class="sec-h">一、几何四层结构（心智模型）</div>
+<div class="sec-sub">先看这张「地图」建立框架，再到底部逐条打勾。公理层只做认知铺垫，不占课时。</div>
+
+<!-- ① 公理 -->
+<div class="band band1">
+  <div class="band-h">① 公理 Axioms</div>
+  <div class="band-role">认知起点，不占课时 ≈15min · 让佳琪“信得过体系”即可</div>
+  <div class="chips">
+    <span class="chip">经过两点有且只有一条直线</span>
+    <span class="chip">平行公理（线外一点 ∥ 唯一定线）</span>
+  </div>
+</div>
+
+<!-- ② 基础定理 -->
+<div class="band band2">
+  <div class="band-h">② 基础定理 Basic Theorems</div>
+  <div class="band-role">由公理直接推出，角度 / 边长计算的地基</div>
+  <div class="chips">
+    <span class="chip">三角形内角和 180°</span>
+    <span class="chip">勾股定理 a²+b²=c²</span>
+    <span class="chip">全等 SSS·SAS·ASA·AAS·HL</span>
+  </div>
+</div>
+
+<!-- ③ 核心模块 -->
+<div class="band band3">
+  <div class="band-h">③ 核心模块 Core Modules</div>
+  <div class="band-role">AMC 10 几何主体 · 相似三角形是最常用利器</div>
+  <div class="cols3">
+    <div class="col">
+      <div class="col-h">三角形</div>
+      <span class="chip">相似 AA/SAS/SSS（最高频）</span>
+      <span class="chip">角平分线定理</span>
+      <span class="chip">中线·高线·角平分线</span>
+      <span class="chip">三角形的心（内/外/重/垂）</span>
+    </div>
+    <div class="col">
+      <div class="col-h">圆</div>
+      <span class="chip">圆周角 + 直径对直角</span>
+      <span class="chip">弦切角定理</span>
+      <span class="chip">圆幂（相交弦·切割线）</span>
+      <span class="chip">圆内接四边形</span>
+    </div>
+    <div class="col">
+      <div class="col-h">四边形·多边形</div>
+      <span class="chip">平行四边形性质</span>
+      <span class="chip">矩形·菱形·正方形</span>
+      <span class="chip">梯形与面积</span>
+      <span class="chip">多边形内角和</span>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 解题工具 -->
+<div class="band band4">
+  <div class="band-h">④ 解题工具 Tools — 必须螺旋穿插，别放最后</div>
+  <div class="band-role">学一块内容立刻配 1–2 个工具练，AMC 10 一题就混着用</div>
+  <div class="chips">
+    <span class="chip">解析几何（距离·斜率）</span>
+    <span class="chip">几何变换（平移·旋转·对称）</span>
+    <span class="chip">面积法</span>
+    <span class="chip">辅助线构造</span>
+    <span class="chip">质点法 Mass Points</span>
+    <span class="chip">Stewart 定理</span>
+    <span class="chip red">三角函数（正弦·余弦）［原框架漏了］</span>
+    <span class="chip red">梅涅劳斯 / 塞瓦［原框架漏了］</span>
+  </div>
+</div>
+
+<!-- 纠偏 -->
+<div class="note">
+  <div class="note-h">⚒️ IronBuddy 纠偏 / 补充</div>
+  <ul>
+    <li>原框架漏了 AMC 10 真高频：<b>三角函数（正弦/余弦）</b>、<b>梅涅劳斯 / 塞瓦</b>——下方清单里都有，别弱化。</li>
+    <li>“五心”权重过高 → 已降级为 4 条实用事实（内心+半周长·外心·重心 2:1·垂心），见「三角形的心」。</li>
+    <li>已补：角平分线定理、四边形与多边形、质点法、Stewart、Heron 公式。</li>
+    <li>公理层零备考 ROI，15min 即过；工具层要螺旋穿插（学一块配 1–2 工具练）。</li>
+    <li>适配佳琪：逻辑强→爱“从公理推下”的叙事；但 AMC 10 限时，须补<b>识别图形配置 + 计算速度</b>。</li>
+  </ul>
+</div>
+
+<div class="sec-h">二、几何知识点掌握清单</div>
+<div class="sec-sub">点击知识点行 = 循环切换 已学习 → 已操练 → 已掌握（再点取消）。进度与《AMC 10 四大模块思维导图》在同一浏览器内互通。</div>
+
+<div class="masterbar">
+  <span>🎯 进度：<b style="color:#3b82f6">已学习 <span id="cnt1">0</span></b> · <b style="color:#f59e0b">已操练 <span id="cnt2">0</span></b> · <b style="color:#1fae6b">已掌握 <span id="cnt3">0</span></b> <span style="color:var(--muted)">/ 共 <span id="tot">0</span></span></span>
+  <span class="hint">点击文本行切换掌握度 · 📖 看示例与真题</span>
+  <button id="reset">重置进度</button>
+</div>
+
+<div id="geoMaps"></div>
+
+<div class="foot">
+  <a class="back-btn" href="index.html">打开完整四大模块思维导图 ↗</a>
+  <br>💡 清单里的示例为帮助理解考点的自编练习，非某年特定真题；📖 检索按钮直达 AoPS Wiki 站内搜索，点开即真实历年真题与解析。<br>
+  📌 本页进度与《四大模块思维导图》共用同一浏览器缓存（键 <code>amc10_mastered_v5</code>），在电脑 / 平板上用同一浏览器打开即可延续。
+</div>
+
+<script src="amc10_data.js"></script>
+<script>
+var LV_LABEL = { easy:"基础", mid:"进阶", hard:"压轴" };
+var AOPS_SEARCH = "https://artofproblemsolving.com/wiki/index.php?title=Special:Search&search=";
+var AOPS_HUB = "https://artofproblemsolving.com/wiki/index.php/AMC_10_Problems_and_Solutions";
+
+/* ---------- 渲染几何模块（按 branch 成卡）---------- */
+var geo = MODULES.filter(function(m){ return m.key === 'geometry'; })[0];
+var geoMaps = document.getElementById('geoMaps');
+geo.branches.forEach(function(br){
+  var card = document.createElement('div');
+  card.className = 'geo-card';
+  var h = document.createElement('div');
+  h.className = 'geo-card-h';
+  h.textContent = br.title;
+  card.appendChild(h);
+  var ul = document.createElement('ul');
+  ul.className = 'mm-leaves';
+  br.leaves.forEach(function(lf){
+    var li = document.createElement('li');
+    li.className = 'lv-' + lf.lv;
+    li.innerHTML =
+      '<div class="node-row" title="点击切换：已学习 → 已操练 → 已掌握">' +
+        '<span class="stage" data-stage="0">·</span>' +
+        '<span class="txt">' + lf.t + '</span>' +
+        '<button class="prob-toggle" title="展开练习示例与真题检索">📖</button>' +
+        '<span class="lv">' + LV_LABEL[lf.lv] + '</span>' +
+      '</div>';
+    ul.appendChild(li);
+
+    var panel = document.createElement('div');
+    panel.className = 'prob-panel';
+    var searchUrl = AOPS_SEARCH + encodeURIComponent('AMC 10 ' + lf.kw);
+    var tipText = "💡 解题策略：AMC 10 中此类题型强调速算与定式。做题时注意观察特值法或边界条件，避免掉进出题人陷阱。";
+    if (lf.lv === 'hard') tipText = "🔥 决胜思考：压轴级考点。通常需要结合两种以上工具。建议优先寻找对称性，或从小规模数据归纳规律。";
+    panel.innerHTML =
+      '<div class="panel-header">📝 核心训练示例</div>' +
+      '<div class="prob-q">' + escapeHtml(lf.ex) + '</div>' +
+      '<div class="prob-tip">' + tipText + '</div>' +
+      '<div class="prob-actions">' +
+        '<a class="btn-aops" href="' + searchUrl + '" target="_blank" rel="noopener">🔍 到 AoPS Wiki 检索「' + escapeHtml(lf.kw) + '」高频真题 ↗</a>' +
+        '<a class="btn-sub-link" href="' + AOPS_HUB + '" target="_blank" rel="noopener">🔗 进入 Art of Problem Solving 官方历年真题库</a>' +
+      '</div>';
+    li.appendChild(panel);
+  });
+  card.appendChild(ul);
+  geoMaps.appendChild(card);
+});
+
+/* ---------- 交互：三级掌握标记 ---------- */
+(function(){
+  var KEY = 'amc10_mastered_v5';
+  var STAGE_LABEL = ['', '已学习', '已操练', '已掌握'];
+  var STAGE_CHAR  = ['·', '学', '练', '掌'];
+  var levels;
+  try { levels = new Map(Object.entries(JSON.parse(localStorage.getItem(KEY) || '{}'))); }
+  catch (e) { levels = new Map(); }
+
+  var leaves = [].slice.call(document.querySelectorAll('#geoMaps .mm-leaves li'));
+  var tot  = document.getElementById('tot');
+  var cnt1 = document.getElementById('cnt1');
+  var cnt2 = document.getElementById('cnt2');
+  var cnt3 = document.getElementById('cnt3');
+  tot.textContent = leaves.length;
+
+  function escapeHtml(s){ return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+  function recount(){
+    var c1=0, c2=0, c3=0;
+    levels.forEach(function(v){ if(v===1)c1++; else if(v===2)c2++; else if(v===3)c3++; });
+    cnt1.textContent = c1; cnt2.textContent = c2; cnt3.textContent = c3;
+  }
+
+  leaves.forEach(function(li){
+    var txtSpan = li.querySelector('.txt');
+    var stageSpan = li.querySelector('.stage');
+    var t = txtSpan.textContent.trim();
+    var toggleBtn = li.querySelector('.prob-toggle');
+    var panel = li.querySelector('.prob-panel');
+
+    toggleBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var isOpen = panel.classList.contains('show');
+      document.querySelectorAll('#geoMaps .prob-panel').forEach(function(p){ p.classList.remove('show'); });
+      document.querySelectorAll('#geoMaps .prob-toggle').forEach(function(b){ b.classList.remove('open'); });
+      if (!isOpen) { panel.classList.add('show'); toggleBtn.classList.add('open'); }
+    });
+
+    function paint(stage){
+      stageSpan.setAttribute('data-stage', stage);
+      stageSpan.textContent = STAGE_CHAR[stage];
+      stageSpan.title = stage ? STAGE_LABEL[stage] : '未标记';
+      li.classList.remove('s1','s2','s3');
+      if (stage) li.classList.add('s' + stage);
+    }
+    paint(levels.get(t) || 0);
+
+    var row = li.querySelector('.node-row');
+    row.addEventListener('click', function(e){
+      if (e.target.closest('.prob-toggle')) return;
+      var next = ((levels.get(t) || 0) + 1) % 4; // 0→1→2→3→0
+      if (next === 0) levels.delete(t); else levels.set(t, next);
+      paint(next);
+      try { localStorage.setItem(KEY, JSON.stringify(Object.fromEntries(levels))); } catch (err) {}
+      recount();
+    });
+  });
+
+  recount();
+
+  var reset = document.getElementById('reset');
+  if (reset) reset.addEventListener('click', function(){
+    levels.clear();
+    leaves.forEach(function(l){
+      l.classList.remove('s1','s2','s3');
+      var s = l.querySelector('.stage');
+      if (s) { s.setAttribute('data-stage','0'); s.textContent='·'; s.title='未标记'; }
+    });
+    try { localStorage.setItem(KEY, JSON.stringify({})); } catch (err) {}
+    recount();
+  });
+})();
+
+/* ---------- KaTeX 公式渲染（练习示例）---------- */
+(function(){
+  function renderMath(){
+    var panels = document.querySelectorAll('#geoMaps .prob-q');
+    if (window.renderMathInElement) {
+      panels.forEach(function(el){
+        try { renderMathInElement(el, { delimiters:[{ left:'\\(', right:'\\)', display:false }], throwOnError:false }); } catch(e){}
+      });
+    } else {
+      panels.forEach(function(el){ el.textContent = el.textContent.replace(/\\\(|\\\)/g, ''); });
+    }
+  }
+  if (document.readyState === 'complete') renderMath();
+  else window.addEventListener('load', renderMath);
+})();
+</script>
+</body>
+</html>
