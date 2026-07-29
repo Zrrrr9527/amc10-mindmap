@@ -56,6 +56,27 @@
   .col-h{ font-size:13px; font-weight:700; color:#b5790a; margin:0 0 6px; }
   .col .chip{ display:block; margin-bottom:6px; border-radius:8px; }
 
+  /* ---- 公理层：直译 + 白话 + 编号 ---- */
+  .ax-list{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:4px; }
+  .ax-item{ display:flex; gap:9px; align-items:flex-start; background:#f4f7fc; border:1px solid #e2e8f2; border-radius:8px; padding:7px 10px; }
+  .ax-badge{ flex:none; min-width:28px; height:22px; padding:0 6px; border-radius:6px; background:#3a5bd0; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
+  .ax-badge.ax-c{ background:#1a8f5c; }
+  .ax-text{ flex:1; min-width:0; }
+  .ax-orig{ font-size:11.5px; color:#3a4660; font-style:italic; line-height:1.45; }
+  .ax-plain{ font-size:12.5px; color:#34404e; margin-top:2px; }
+  .ax-legend{ font-size:11.5px; color:var(--muted); margin:10px 0 2px; background:#eef3fb; border:1px solid #dde6f4; border-radius:7px; padding:7px 10px; }
+  .ax-legend b{ color:#3a5bd0; }
+
+  /* ---- 核心模块 / 工具：带「根」映射备注 ---- */
+  .chip-cell{ display:flex; flex-direction:column; gap:3px; background:#eef2f8; border:1px solid #e3e9f2; border-radius:8px; padding:7px 10px; font-size:12px; color:#34404e; }
+  .chip-cell .label{ font-weight:600; }
+  .chip-cell .map-note{ font-size:11px; color:#7a5ca8; }
+  .chip-cell.red{ background:#fdeaea; border-color:#f0c9b8; }
+  .chip-cell.red .label{ color:#a32d2d; font-weight:600; }
+  .cols3 .chip-cell{ margin-bottom:7px; }
+  .chips .chip-cell{ flex:1 1 210px; }
+  .map-legend{ font-size:11.5px; color:#7a5ca8; margin:4px 0 2px; }
+
   .note{ background:#fdf3ef; border:1px solid #f0c9b8; border-radius:12px; padding:14px 18px; max-width:920px; margin:0 auto 8px; }
   .note-h{ font-size:14px; font-weight:700; color:#b00020; margin:0 0 8px; }
   .note ul{ margin:0; padding-left:18px; font-size:12.5px; color:#501313; line-height:1.75; }
@@ -143,22 +164,23 @@
   <div class="band-role">认知起点，不占课时 ≈15min · 让佳琪“信得过体系”——这 5 公设 + 5 公理，是几何全部推论的真正根</div>
 
   <div class="sub-h">五大公设 Postulates（几何专用 · 只管图形）</div>
-  <div class="chips">
-    <span class="chip">1. 随便两个点，就能连出一条直直的线（而且只此一条）</span>
-    <span class="chip">2. 画好的线段，想接多长就接多长，一直拉直下去</span>
-    <span class="chip">3. 随便选个中心点、随便定个距离，就能画一个圆</span>
-    <span class="chip">4. 所有直角都一样大（都是 90°）</span>
-    <span class="chip">5. 平行公设：一条线斜穿两条线，若同一边两角加起来不到 180°，那两条线无限延长后必在这一边碰头（刚好 180° 就永不相交＝平行）</span>
+  <div class="ax-list">
+    <div class="ax-item"><span class="ax-badge">P1</span><div class="ax-text"><div class="ax-orig">「从任一点到任一点可作一直线。」</div><div class="ax-plain">随便两个点就能连出一条直直的线，而且只此一条。</div></div></div>
+    <div class="ax-item"><span class="ax-badge">P2</span><div class="ax-text"><div class="ax-orig">「把一条有限直线不断沿直线延长。」</div><div class="ax-plain">画好的线段想接多长就接多长，一直拉直下去。</div></div></div>
+    <div class="ax-item"><span class="ax-badge">P3</span><div class="ax-text"><div class="ax-orig">「以任意点为心、任意距离为半径画一个圆。」</div><div class="ax-plain">随便选个中心点、随便定个距离，就能画一个圆。</div></div></div>
+    <div class="ax-item"><span class="ax-badge">P4</span><div class="ax-text"><div class="ax-orig">「凡直角彼此相等。」</div><div class="ax-plain">所有直角都一样大（都是 90°）。</div></div></div>
+    <div class="ax-item"><span class="ax-badge">P5</span><div class="ax-text"><div class="ax-orig">「若一直线与两直线相交，同侧内角之和小于两直角，则两直线无限延长后必在该侧相交。」</div><div class="ax-plain">平行公设：斜穿两线、同侧两角不到 180° 就必碰头，刚好 180° 就平行永不相交。</div></div></div>
   </div>
 
   <div class="sub-h">五条公理 Common Notions（通用逻辑 · 量的一般规则）</div>
-  <div class="chips">
-    <span class="chip">1. 跟同一个东西一样大的，彼此也一样大（A=C 且 B=C ⇒ A=B）</span>
-    <span class="chip">2. 一样大的东西，各加一样大的，加起来还一样大</span>
-    <span class="chip">3. 一样大的东西，各减一样大的，减完还一样大</span>
-    <span class="chip">4. 能完全叠在一起（重合）的东西，就是一样大</span>
-    <span class="chip">5. 整个总比它的一部分大</span>
+  <div class="ax-list">
+    <div class="ax-item"><span class="ax-badge ax-c">C1</span><div class="ax-text"><div class="ax-orig">「与同一物相等的量，彼此相等。」</div><div class="ax-plain">跟同一个东西一样大的，彼此也一样大（A=C 且 B=C ⇒ A=B）。</div></div></div>
+    <div class="ax-item"><span class="ax-badge ax-c">C2</span><div class="ax-text"><div class="ax-orig">「等量加等量，其和相等。」</div><div class="ax-plain">一样大的东西，各加一样大的，加起来还一样大。</div></div></div>
+    <div class="ax-item"><span class="ax-badge ax-c">C3</span><div class="ax-text"><div class="ax-orig">「等量减等量，其余相等。」</div><div class="ax-plain">一样大的东西，各减一样大的，减完还一样大。</div></div></div>
+    <div class="ax-item"><span class="ax-badge ax-c">C4</span><div class="ax-text"><div class="ax-orig">「能彼此重合的事物相等。」</div><div class="ax-plain">能完全叠在一起（重合）的东西，就是一样大。</div></div></div>
+    <div class="ax-item"><span class="ax-badge ax-c">C5</span><div class="ax-text"><div class="ax-orig">「整体大于部分。」</div><div class="ax-plain">整个总比它的一部分大。</div></div></div>
   </div>
+  <div class="ax-legend">📌 编号：<b>P1–P5</b> ＝ 五大公设，<b>C1–C5</b> ＝ 五条公理（欧几里得《几何原本》原数）。下方核心模块 / 解题工具用「根：Px·Cy」标注它涉及哪些公设与公理——<b>不是严格推导路径，只标"涉及"</b>，因为有的严格推导会拉得很长。</div>
 </div>
 
 <!-- ② 基础定理 -->
@@ -179,27 +201,28 @@
   <div class="cols3">
     <div class="col">
       <div class="col-h">三角形</div>
-      <span class="chip">相似 AA/SAS/SSS（最高频）</span>
-      <span class="chip">角平分线定理</span>
-      <span class="chip">中线·高线·角平分线</span>
-      <span class="chip">三角形的心（内/外/重/垂）</span>
+      <div class="chip-cell"><span class="label">相似 AA/SAS/SSS（最高频）</span><span class="map-note">根：公设④⑤ · 公理④</span></div>
+      <div class="chip-cell"><span class="label">角平分线定理</span><span class="map-note">根：公设⑤ · 公理②③④</span></div>
+      <div class="chip-cell"><span class="label">中线·高线·角平分线</span><span class="map-note">根：公设①④ · 公理②</span></div>
+      <div class="chip-cell"><span class="label">三角形的心（内/外/重/垂）</span><span class="map-note">根：公设①③④ · 公理②④</span></div>
     </div>
     <div class="col">
       <div class="col-h">圆</div>
-      <span class="chip">圆周角 + 直径对直角</span>
-      <span class="chip">弦切角定理</span>
-      <span class="chip">圆幂（相交弦·切割线）</span>
-      <span class="chip">切线与切线长</span>
-      <span class="chip">圆内接四边形</span>
+      <div class="chip-cell"><span class="label">圆周角 + 直径对直角</span><span class="map-note">根：公设④ · 公理①</span></div>
+      <div class="chip-cell"><span class="label">弦切角定理</span><span class="map-note">根：公设③④ · 公理①</span></div>
+      <div class="chip-cell"><span class="label">圆幂（相交弦·切割线）</span><span class="map-note">根：公设③⑤ · 公理①④</span></div>
+      <div class="chip-cell"><span class="label">切线与切线长</span><span class="map-note">根：公设③④ · 公理①</span></div>
+      <div class="chip-cell"><span class="label">圆内接四边形</span><span class="map-note">根：公设④ · 公理①</span></div>
     </div>
     <div class="col">
       <div class="col-h">四边形·多边形</div>
-      <span class="chip">平行四边形性质</span>
-      <span class="chip">矩形·菱形·正方形</span>
-      <span class="chip">梯形与面积</span>
-      <span class="chip">多边形内角和</span>
+      <div class="chip-cell"><span class="label">平行四边形性质</span><span class="map-note">根：公设⑤ · 公理②③</span></div>
+      <div class="chip-cell"><span class="label">矩形·菱形·正方形</span><span class="map-note">根：公设④⑤ · 公理②</span></div>
+      <div class="chip-cell"><span class="label">梯形与面积</span><span class="map-note">根：公设① · 公理②⑤</span></div>
+      <div class="chip-cell"><span class="label">多边形内角和</span><span class="map-note">根：公设⑤ · 公理①②③</span></div>
     </div>
   </div>
+  <div class="map-legend">📌 每个模块下方「根：Px·Cy」＝它涉及的公设(P)/公理(C)编号（非严格推导，仅标注涉及）。</div>
 </div>
 
 <!-- ④ 解题工具 -->
@@ -207,16 +230,17 @@
   <div class="band-h">④ 解题工具 Tools — 必须螺旋穿插，别放最后</div>
   <div class="band-role">学一块内容立刻配 1–2 个工具练，AMC 10 一题就混着用</div>
   <div class="chips">
-    <span class="chip">解析几何（距离·斜率）</span>
-    <span class="chip">几何变换（平移·旋转·对称）</span>
-    <span class="chip">面积法</span>
-    <span class="chip">辅助线构造</span>
-    <span class="chip">质点法 Mass Points</span>
-    <span class="chip">Stewart 定理</span>
-    <span class="chip">海伦公式 Heron（已知三边求面积）</span>
-    <span class="chip red">三角函数（正弦·余弦）［原框架漏了］</span>
-    <span class="chip red">梅涅劳斯 / 塞瓦［原框架漏了］</span>
+    <div class="chip-cell"><span class="label">解析几何（距离·斜率）</span><span class="map-note">根：公设①③ · 公理②③</span></div>
+    <div class="chip-cell"><span class="label">几何变换（平移·旋转·对称）</span><span class="map-note">根：公理④（重合＝保距保角）</span></div>
+    <div class="chip-cell"><span class="label">面积法</span><span class="map-note">根：公理②③⑤</span></div>
+    <div class="chip-cell"><span class="label">辅助线构造</span><span class="map-note">根：公设①②</span></div>
+    <div class="chip-cell"><span class="label">质点法 Mass Points</span><span class="map-note">根：公理②③④</span></div>
+    <div class="chip-cell"><span class="label">Stewart 定理</span><span class="map-note">根：公设①②③④⑤ · 公理④</span></div>
+    <div class="chip-cell"><span class="label">海伦公式 Heron（已知三边求面积）</span><span class="map-note">根：公设①④ · 公理②③⑤</span></div>
+    <div class="chip-cell red"><span class="label">三角函数（正弦·余弦）［原框架漏了］</span><span class="map-note">根：公设④⑤ · 公理④</span></div>
+    <div class="chip-cell red"><span class="label">梅涅劳斯 / 塞瓦［原框架漏了］</span><span class="map-note">根：公设⑤ · 公理②③④</span></div>
   </div>
+  <div class="map-legend">📌 解题工具标「根：Px·Cy」＝它建立在哪些公设/公理之上（非严格推导，仅标注涉及）。</div>
 </div>
 
 <div class="sec-h">二、几何知识点掌握清单</div>
