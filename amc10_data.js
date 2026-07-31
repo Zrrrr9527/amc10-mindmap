@@ -64,7 +64,9 @@ var MODULES = [
       ]},
       { title: "坐标几何", leaves: [
         { t: "距离 / 中点公式 Distance / Midpoint Formulas", lv: "easy", ex: "What is the distance between \\((1,2)\\) and \\((4,6)\\)?", kw: "distance formula" },
+        { t: "对称点坐标 Symmetric Points", lv: "easy", ex: "点 (3,4) 关于直线 x=2 的对称点坐标是什么？", kw: "symmetric points reflection" },
         { t: "直线方程 / 斜率 Line Equations / Slope", lv: "mid", ex: "A line through \\((0,1)\\) with slope \\(2\\) has equation \\(y = \\,?\\)", kw: "equation of a line" },
+        { t: "定比分点 General Point Formula", lv: "mid", ex: "线段端点 (1,2) 与 (7,8) 上，按 2:1 内分的分点坐标？", kw: "section formula general point" },
         { t: "圆的方程 Equations of Circles", lv: "mid", ex: "What is the equation of the circle centered at \\((0,0)\\) with radius \\(3\\)?", kw: "equation of a circle" },
         { t: "解析法综合 Analytic Geometry (Combined)", lv: "hard", ex: "A square has vertices \\((0,0),(0,2),(2,0),(2,2)\\). What is the area of the triangle formed by \\((0,0),(2,0),(1,2)\\)?", kw: "coordinate geometry area" }
       ]},
