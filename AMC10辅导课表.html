@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AMC10 辅导课表 · 张佳琪</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --primary:#2563eb;
+      --primary-light:#eff6ff;
+      --phase1:#dbeafe;
+      --phase1-text:#1e40af;
+      --phase2:#dcfce7;
+      --phase2-text:#166534;
+      --phase3:#fef3c7;
+      --phase3-text:#92400e;
+      --phase4:#f3e8ff;
+      --phase4-text:#6b21a8;
+      --phase5:#fce7f3;
+      --phase5-text:#9d174d;
+      --phase6:#fee2e2;
+      --phase6-text:#991b1b;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:"Segoe UI","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      margin:0;
+      padding:24px 16px;
+      line-height:1.6;
+    }
+    .container{
+      max-width:1100px;
+      margin:0 auto;
+      background:var(--card);
+      border-radius:16px;
+      box-shadow:0 4px 24px rgba(0,0,0,.06);
+      padding:32px;
+    }
+    header{
+      text-align:center;
+      margin-bottom:28px;
+      padding-bottom:20px;
+      border-bottom:2px solid var(--border);
+    }
+    h1{
+      font-size:28px;
+      margin:0 0 8px;
+      color:var(--primary);
+      letter-spacing:.5px;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size:15px;
+      margin:0;
+    }
+    .summary{
+      display:flex;
+      justify-content:center;
+      gap:32px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+    .summary-item{
+      text-align:center;
+      padding:12px 20px;
+      background:var(--primary-light);
+      border-radius:12px;
+      min-width:120px;
+    }
+    .summary-item .num{
+      display:block;
+      font-size:24px;
+      font-weight:700;
+      color:var(--primary);
+    }
+    .summary-item .label{
+      font-size:13px;
+      color:var(--muted);
+    }
+    .phase-legend{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:10px;
+      margin-bottom:22px;
+    }
+    .phase-legend span{
+      padding:5px 12px;
+      border-radius:20px;
+      font-size:13px;
+      font-weight:500;
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:14px;
+      overflow:hidden;
+      border-radius:12px;
+      border:1px solid var(--border);
+    }
+    thead th{
+      background:var(--primary);
+      color:#fff;
+      font-weight:600;
+      padding:14px 12px;
+      text-align:left;
+      white-space:nowrap;
+    }
+    thead th:first-child{border-top-left-radius:12px}
+    thead th:last-child{border-top-right-radius:12px}
+    tbody td{
+      padding:14px 12px;
+      border-bottom:1px solid var(--border);
+      vertical-align:top;
+    }
+    tbody tr:last-child td{border-bottom:none}
+    tbody tr:hover{background:rgba(37,99,235,.03)}
+    .phase-cell{
+      font-weight:600;
+      text-align:center;
+      white-space:nowrap;
+      width:110px;
+      background:#fafafa;
+    }
+    .lesson-cell{
+      font-weight:700;
+      text-align:center;
+      width:48px;
+    }
+    .time-cell{
+      white-space:nowrap;
+      width:150px;
+      color:var(--text);
+    }
+    .duration-cell{
+      text-align:center;
+      width:60px;
+    }
+    .outline-cell{
+      color:var(--text);
+    }
+    .phase-1 .phase-cell{color:var(--phase1-text);background:var(--phase1)}
+    .phase-2 .phase-cell{color:var(--phase2-text);background:var(--phase2)}
+    .phase-3 .phase-cell{color:var(--phase3-text);background:var(--phase3)}
+    .phase-4 .phase-cell{color:var(--phase4-text);background:var(--phase4)}
+    .phase-5 .phase-cell{color:var(--phase5-text);background:var(--phase5)}
+    .phase-6 .phase-cell{color:var(--phase6-text);background:var(--phase6)}
+    .tag{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:12px;
+      font-size:12px;
+      margin-left:6px;
+      font-weight:500;
+    }
+    .tag-lecture{
+      background:var(--primary-light);
+      color:var(--primary);
+    }
+    footer{
+      margin-top:24px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .print-btn{
+      display:block;
+      width:max-content;
+      margin:0 auto 20px;
+      padding:10px 24px;
+      background:var(--primary);
+      color:#fff;
+      border:none;
+      border-radius:24px;
+      cursor:pointer;
+      font-size:14px;
+    }
+    @media print{
+      body{background:#fff;padding:0}
+      .container{box-shadow:none;border-radius:0;padding:20px;max-width:100%}
+      .print-btn{display:none}
+      thead th{background:#2563eb !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .phase-cell{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    }
+    @media(max-width:768px){
+      .container{padding:16px}
+      table{font-size:13px}
+      .time-cell{white-space:normal}
+      .phase-cell{white-space:normal;width:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>AMC10 辅导课表</h1>
+      <p class="subtitle">张佳琪 · 30 课时 · 2026.07–2026.10</p>
+    </header>
+
+    <div class="summary">
+      <div class="summary-item">
+        <span class="num">20</span>
+        <span class="label">已列课次</span>
+      </div>
+      <div class="summary-item">
+        <span class="num">6</span>
+        <span class="label">阶段模块</span>
+      </div>
+      <div class="summary-item">
+        <span class="num">1.5h</span>
+        <span class="label">单次课时</span>
+      </div>
+      <div class="summary-item">
+        <span class="num">19:00</span>
+        <span class="label">上课时间</span>
+      </div>
+    </div>
+
+    <div class="phase-legend">
+      <span style="background:var(--phase1);color:var(--phase1-text)">阶段一：代数基础与 AMC10 入门</span>
+      <span style="background:var(--phase2);color:var(--phase2-text)">阶段二：几何基础与图形模型</span>
+      <span style="background:var(--phase3);color:var(--phase3-text)">阶段三：数论基础与整数问题</span>
+      <span style="background:var(--phase4);color:var(--phase4-text)">阶段四：计数概率与组合思维</span>
+      <span style="background:var(--phase5);color:var(--phase5-text)">阶段五：综合题型与薄弱补强</span>
+      <span style="background:var(--phase6);color:var(--phase6-text)">阶段六：真题训练与考前冲刺</span>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨 打印 / 存为 PDF</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>阶段</th>
+          <th>课次</th>
+          <th>上课时间（北京时间）</th>
+          <th>课时</th>
+          <th>课程大纲</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="phase-1">
+          <td class="phase-cell">阶段一<br>代数基础与<br>AMC10入门</td>
+          <td class="lesson-cell">1</td>
+          <td class="time-cell">2026年7月15日（周三）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 1</span> 因式分解收尾：复盘试课内容；讲解余数定理、因式定理、有理根定理；订正 Practice 1 并训练"先识别结构再分解"。</td>
+        </tr>
+        <tr class="phase-1">
+          <td class="phase-cell">阶段一<br>代数基础与<br>AMC10入门</td>
+          <td class="lesson-cell">2</td>
+          <td class="time-cell">2026年7月23日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 2</span> 坐标系与函数：坐标平面、函数图像、代数式与图像互译；训练 AMC10 中基础函数、点坐标与图像读题。</td>
+        </tr>
+        <tr class="phase-1">
+          <td class="phase-cell">阶段一<br>代数基础与<br>AMC10入门</td>
+          <td class="lesson-cell">3</td>
+          <td class="time-cell">2026年7月30日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 3</span> 直线与圆：斜率、截距、直线方程、圆的基础关系；训练坐标几何题中的代数建模与图形观察。</td>
+        </tr>
+        <tr class="phase-1">
+          <td class="phase-cell">阶段一<br>代数基础与<br>AMC10入门</td>
+          <td class="lesson-cell">4</td>
+          <td class="time-cell">2026年8月6日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 4</span> 数列：等差/等比数列、递推与规律识别；训练数列求和、项数判断及 AMC10 前中段规律题。</td>
+        </tr>
+
+        <tr class="phase-2">
+          <td class="phase-cell">阶段二<br>几何基础与<br>图形模型</td>
+          <td class="lesson-cell">5</td>
+          <td class="time-cell">2026年8月13日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 5</span> 全等三角形：全等判定、角度追踪、边角关系；训练几何题中"先找对应关系"的解题习惯。</td>
+        </tr>
+        <tr class="phase-2">
+          <td class="phase-cell">阶段二<br>几何基础与<br>图形模型</td>
+          <td class="lesson-cell">6</td>
+          <td class="time-cell">2026年8月20日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 6</span> 四边形：平行四边形、矩形、菱形、梯形性质；结合面积、角度与边长关系训练 AMC10 基础几何。</td>
+        </tr>
+        <tr class="phase-2">
+          <td class="phase-cell">阶段二<br>几何基础与<br>图形模型</td>
+          <td class="lesson-cell">7</td>
+          <td class="time-cell">2026年8月27日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 7</span> 全等模型进阶：叠图、辅助线与常见全等结构；训练从图形中主动构造相等线段和相等角。</td>
+        </tr>
+        <tr class="phase-2">
+          <td class="phase-cell">阶段二<br>几何基础与<br>图形模型</td>
+          <td class="lesson-cell">8</td>
+          <td class="time-cell">2026年9月3日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 8</span> 立体几何初步：长方体、正方体、表面积、体积与空间想象；训练空间问题的画图与转化。</td>
+        </tr>
+
+        <tr class="phase-3">
+          <td class="phase-cell">阶段三<br>数论基础与<br>整数问题</td>
+          <td class="lesson-cell">9</td>
+          <td class="time-cell">2026年9月10日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 9</span> 整除和余数：因数、倍数、整除规则、余数分类；建立 AMC10 数论题的基本语言。</td>
+        </tr>
+        <tr class="phase-3">
+          <td class="phase-cell">阶段三<br>数论基础与<br>整数问题</td>
+          <td class="lesson-cell">10</td>
+          <td class="time-cell">2026年9月17日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 10</span> 不定方程与余数方程：整数解、因数配对、线性方程组；训练"代数式转化为整数限制"的方法。</td>
+        </tr>
+        <tr class="phase-3">
+          <td class="phase-cell">阶段三<br>数论基础与<br>整数问题</td>
+          <td class="lesson-cell">11</td>
+          <td class="time-cell">2026年9月24日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 11</span> 完全平方数：平方数性质、奇偶性、因数指数与夹逼；训练判断表达式是否为平方数。</td>
+        </tr>
+        <tr class="phase-3">
+          <td class="phase-cell">阶段三<br>数论基础与<br>整数问题</td>
+          <td class="lesson-cell">12</td>
+          <td class="time-cell">2026年10月1日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 12</span> 进制与数位：十进制/其他进制、数位表示、数字反转；训练把文字条件转化为代数表达式。</td>
+        </tr>
+
+        <tr class="phase-4">
+          <td class="phase-cell">阶段四<br>计数概率与<br>组合思维</td>
+          <td class="lesson-cell">13</td>
+          <td class="time-cell">2026年10月5日（周一）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 13</span> 计数原理：加法原理、乘法原理、分步计数；训练有序/无序、可重复/不可重复的区分。</td>
+        </tr>
+        <tr class="phase-4">
+          <td class="phase-cell">阶段四<br>计数概率与<br>组合思维</td>
+          <td class="lesson-cell">14</td>
+          <td class="time-cell">2026年10月8日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 14</span> 计数技巧：分类讨论、补集思想、容斥初步；训练避免重复计数和遗漏情况。</td>
+        </tr>
+        <tr class="phase-4">
+          <td class="phase-cell">阶段四<br>计数概率与<br>组合思维</td>
+          <td class="lesson-cell">15</td>
+          <td class="time-cell">2026年10月12日（周一）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell"><span class="tag tag-lecture">Lecture 15</span> 组合恒等式与综合计数：组合表达式、简单恒等变形；结合概率题训练计数结果的应用。</td>
+        </tr>
+
+        <tr class="phase-5">
+          <td class="phase-cell">阶段五<br>综合题型与<br>薄弱补强</td>
+          <td class="lesson-cell">16</td>
+          <td class="time-cell">2026年10月15日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell">四大板块阶段复盘：代数、几何、数论、计数概率错题归类；针对佳琪目前 AMC8 中游基础补强公式识别和读题方法。</td>
+        </tr>
+        <tr class="phase-5">
+          <td class="phase-cell">阶段五<br>综合题型与<br>薄弱补强</td>
+          <td class="lesson-cell">17</td>
+          <td class="time-cell">2026年10月19日（周一）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell">AMC10 中段题专项：选取 Advanced 中适合当前水平的代数恒等变形、面积法、模运算和组合题，训练 11–15 题稳定得分。</td>
+        </tr>
+
+        <tr class="phase-6">
+          <td class="phase-cell">阶段六<br>真题训练与<br>考前冲刺</td>
+          <td class="lesson-cell">18</td>
+          <td class="time-cell">2026年10月22日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell">历年真题分段训练①：前 10 题限时训练；重点检查基础题准确率、计算速度、英文条件提取和粗心点。</td>
+        </tr>
+        <tr class="phase-6">
+          <td class="phase-cell">阶段六<br>真题训练与<br>考前冲刺</td>
+          <td class="lesson-cell">19</td>
+          <td class="time-cell">2026年10月26日（周一）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell">历年真题分段训练②：第 11–20 题选讲；训练跳题判断、方法选择、复杂题拆分和错题复盘。</td>
+        </tr>
+        <tr class="phase-6">
+          <td class="phase-cell">阶段六<br>真题训练与<br>考前冲刺</td>
+          <td class="lesson-cell">20</td>
+          <td class="time-cell">2026年10月29日（周四）<br>19:00–20:30</td>
+          <td class="duration-cell">1.5</td>
+          <td class="outline-cell">考前综合模拟与策略课：完整套题节奏、目标分段、留空策略、检查顺序；整理个人错题清单和最后复习重点。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer>
+      整理自机构课表图片 · AMC10JJL.png · 2026 年 8 月 6 日
+    </footer>
+  </div>
+</body>
+</html>
