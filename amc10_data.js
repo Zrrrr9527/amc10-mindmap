@@ -68,6 +68,9 @@ var MODULES = [
         { t: "直线方程 / 斜率 Line Equations / Slope", lv: "mid", ex: "A line through \\((0,1)\\) with slope \\(2\\) has equation \\(y = \\,?\\)", kw: "equation of a line" },
         { t: "定比分点 General Point Formula", lv: "mid", ex: "线段端点 (1,2) 与 (7,8) 上，按 2:1 内分的分点坐标？", kw: "section formula general point" },
         { t: "圆的方程 Equations of Circles", lv: "mid", ex: "What is the equation of the circle centered at \\((0,0)\\) with radius \\(3\\)?", kw: "equation of a circle" },
+        { t: "点到直线 / 平行线距离 Point-to-Line & Parallel-Line Distance", lv: "mid", ex: "点 (2,3) 到直线 3x+4y=5 的距离？两平行线 3x+4y=5 与 3x+4y=15 的距离？", kw: "point to line distance parallel lines" },
+        { t: "切线关系 Tangent to Circle", lv: "mid", ex: "圆心到切线距离 = 半径，且半径垂直于切线；过圆外一点作切线有几条？", kw: "tangent to circle" },
+        { t: "坐标几何最值 Optimization in Coordinate Geometry", lv: "mid", ex: "根式 \\(\\sqrt{(x-a)^2+(y-b)^2}\\) 可转化为点到点距离；\\(|ax+by+c|\\) 可转化为点到直线距离求最值", kw: "coordinate geometry optimization" },
         { t: "解析法综合 Analytic Geometry (Combined)", lv: "hard", ex: "A square has vertices \\((0,0),(0,2),(2,0),(2,2)\\). What is the area of the triangle formed by \\((0,0),(2,0),(1,2)\\)?", kw: "coordinate geometry area" }
       ]},
       { title: "立体几何", leaves: [
