@@ -4,6 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AMC10 · 圆知识点信息图（截至第5课已学）</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script defer>
+  document.addEventListener("DOMContentLoaded", function(){ if (window.renderMathInElement) { renderMathInElement(document.body); } });
+</script>
 <style>
   :root{
     --blue:#3b6ef6; --blue-d:#2f56c8; --purple:#7a4df0; --cyan:#1ba8c4;
@@ -31,6 +37,8 @@
   .box h3{margin:0 0 8px;font-size:15px;color:var(--blue-d);}
   .formula{background:#0f1b3d;color:#eaf2ff;border-radius:10px;padding:11px 12px;font-family:"Cambria Math","Times New Roman",serif;font-size:16px;text-align:center;margin:8px 0;letter-spacing:.3px;}
   .formula small{color:#9fb6e6;font-size:12px;display:block;margin-top:5px;font-family:"Microsoft YaHei",sans-serif;}
+  .formula .katex-display{margin:0;}
+  .formula .katex{color:#eaf2ff;}
   .box ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:#3a4452;}
   .box ul li{margin:3px 0;}
   .law{border-left:5px solid var(--purple);background:linear-gradient(90deg,#f3eeff,#fff);border-radius:0 12px 12px 0;padding:14px 16px;margin:10px 0;font-size:15px;}
@@ -65,7 +73,7 @@
     <div class="grid2">
       <div class="box">
         <h3>标准方程 Standard</h3>
-        <div class="formula">(x−h)<sup>2</sup> + (y−k)<sup>2</sup> = r<sup>2</sup><small>圆心 (h, k) ，半径 r</small></div>
+        <div class="formula">$$(x-h)^2 + (y-k)^2 = r^2$$<small>圆心 (h, k) ，半径 r</small></div>
         <ul>
           <li>圆心在原点时简化为 x<sup>2</sup> + y<sup>2</sup> = r<sup>2</sup></li>
           <li>给圆心和半径 → 直接写；给三点/直径 → 先求圆心半径</li>
@@ -73,7 +81,7 @@
       </div>
       <div class="box">
         <h3>一般方程 General（需配方）</h3>
-        <div class="formula">x<sup>2</sup> + y<sup>2</sup> + Dx + Ey + F = 0<small>配方 → 圆心 (−D/2, −E/2)，半径 ½√(D²+E²−4F)</small></div>
+        <div class="formula">$$x^2 + y^2 + Dx + Ey + F = 0$$<small>配方 → 圆心 $$\left(-\frac{D}{2},-\frac{E}{2}\right)$$，半径 $$\frac{1}{2}\sqrt{D^2+E^2-4F}$$</small></div>
         <ul>
           <li>判定是否成圆：需 D² + E² − 4F &gt; 0</li>
           <li>题目常给一般式，第一步先配方拿圆心半径</li>
@@ -88,17 +96,17 @@
     <div class="grid3">
       <div class="box">
         <h3>两点距离</h3>
-        <div class="formula">d = √[(x₂−x₁)²+(y₂−y₁)²]</div>
+        <div class="formula">$$d = \sqrt{(x_2-x_1)^2+(y_2-y_1)^2}$$</div>
         <ul><li>圆心到圆心、半径弦长都用它</li></ul>
       </div>
       <div class="box">
         <h3>点到直线距离</h3>
-        <div class="formula">d = |Ax₀+By₀+C| / √(A²+B²)</div>
+        <div class="formula">$$d = \frac{|Ax_0+By_0+C|}{\sqrt{A^2+B^2}}$$</div>
         <ul><li>★切线判定的核心（见板块3）</li></ul>
       </div>
       <div class="box">
         <h3>平行线距离</h3>
-        <div class="formula">d = |C₁−C₂| / √(A²+B²)</div>
+        <div class="formula">$$d = \frac{|C_1-C_2|}{\sqrt{A^2+B^2}}$$</div>
         <ul><li>两条平行切线间距 = 2r 常考</li></ul>
       </div>
     </div>
