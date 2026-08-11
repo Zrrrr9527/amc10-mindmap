@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AMC10 · 数列知识点信息图（接下来要学）</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script defer>
+  document.addEventListener("DOMContentLoaded", function(){ if (window.renderMathInElement) { renderMathInElement(document.body); } });
+</script>
+<style>
+  :root{
+    --blue:#3b6ef6; --blue-d:#2f56c8; --purple:#7a4df0; --cyan:#1ba8c4;
+    --ink:#1f2733; --muted:#6b7686; --line:#e6eaf2; --bg:#f4f7fc;
+    --card:#ffffff; --warn-bg:#fff6e6; --warn-bd:#ffce6b; --good-bg:#eafaf0; --good-bd:#7fd9a2;
+    --tip-bg:#eef3ff; --tip-bd:#9db8ff;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;}
+  .wrap{max-width:960px;margin:0 auto;padding:18px 18px 40px;}
+  .hero{background:linear-gradient(135deg,#1ba8c4 0%,#3b6ef6 55%,#7a4df0 100%);color:#fff;border-radius:18px;padding:26px 28px;box-shadow:0 10px 30px rgba(27,168,196,.25);position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border:14px solid rgba(255,255,255,.16);border-radius:50%;}
+  .hero::before{content:"";position:absolute;right:50px;bottom:-60px;width:120px;height:120px;border:10px solid rgba(255,255,255,.12);border-radius:50%;}
+  .hero h1{margin:0 0 6px;font-size:27px;letter-spacing:1px;}
+  .hero p{margin:0;font-size:14.5px;opacity:.96;}
+  .hero .tag{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:20px;font-size:13px;}
+  .sec{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 4px 14px rgba(31,39,51,.05);}
+  .sec-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;}
+  .sec-h .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:none;}
+  .sec-h h2{margin:0;font-size:18px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .box{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:#fbfcff;}
+  .box h3{margin:0 0 8px;font-size:15px;color:var(--blue-d);}
+  .formula{background:#0f1b3d;color:#eaf2ff;border-radius:10px;padding:11px 12px;font-size:16px;text-align:center;margin:8px 0;letter-spacing:.3px;}
+  .formula small{color:#9fb6e6;font-size:12px;display:block;margin-top:5px;font-family:"Microsoft YaHei",sans-serif;}
+  .formula .katex-display{margin:0;}
+  .formula .katex{color:#eaf2ff;}
+  .box ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:#3a4452;}
+  .box ul li{margin:3px 0;}
+  .law{border-left:5px solid var(--purple);background:linear-gradient(90deg,#f3eeff,#fff);border-radius:0 12px 12px 0;padding:14px 16px;margin:10px 0;font-size:14.5px;}
+  .law b{color:var(--purple);}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .chip{background:var(--tip-bg);border:1px solid var(--tip-bd);color:var(--blue-d);border-radius:20px;padding:5px 12px;font-size:13px;}
+  .callout{border:1px dashed var(--warn-bd);background:var(--warn-bg);border-radius:12px;padding:14px 16px;margin-top:12px;font-size:14.5px;}
+  .callout .t{font-weight:700;color:#c98a00;margin-bottom:4px;}
+  .done{background:#eafaf0;border:1px solid var(--good-bd);border-radius:12px;padding:12px 16px;font-size:13.5px;color:#2f6b4a;}
+  .done b{color:#1f7a47;}
+  .print-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:26px;padding:12px 20px;font-size:14px;cursor:pointer;box-shadow:0 6px 18px rgba(59,110,246,.4);z-index:9;}
+  @media print{
+    .print-btn{display:none;}
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    body{background:#fff;}
+    .wrap{max-width:100%;padding:0;}
+    .sec,.done{box-shadow:none;break-inside:avoid;}
+    .hero{box-shadow:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>📈 数列 · 知识点信息图</h1>
+    <p>AMC10 代数核心模块 — 从"认识数列"走向"求和与递推"</p>
+    <span class="tag">📍 定位：承接第 5 课 4.1 入门 · 展开接下来要深入的内容</span>
+  </div>
+
+  <!-- 板块0：已学基础 -->
+  <div class="done">
+    <b>✅ 已学基础（第 5 课 4.1 入门）</b>：sequence 数列 / term 项 / 首项 a₁ / 通项 aₙ / 递推公式 / 前 n 项和 Sₙ 的概念；等差数列、等比数列、递推、周期已初步接触（导图标"已学习"，但深度待展开）。本图聚焦<b>接下来要学</b>的进阶公式与题型。
+  </div>
+
+  <!-- 板块1：等差数列 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">1</span><h2>等差数列 Arithmetic（接下来深入）</h2></div>
+    <div class="grid2">
+      <div class="box">
+        <h3>通项公式</h3>
+        <div class="formula">$$a_n = a_1 + (n-1)d$$<small>公差 d，第 n 项由首项 + (n−1)个公差</small></div>
+        <ul><li>已知任意两项可反求 a₁ 与 d</li><li>等差 ⇒ 相邻项差恒定</li></ul>
+      </div>
+      <div class="box">
+        <h3>前 n 项和 Sₙ</h3>
+        <div class="formula">$$S_n = \frac{n(a_1+a_n)}{2} = \frac{n\big[2a_1+(n-1)d\big]}{2}$$<small>首尾配对 / 高斯求和</small></div>
+        <ul><li>中项性质：a,b,c 等差 ⇒ 2b = a + c</li><li>对称项和相等</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块2：等比数列 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">2</span><h2>等比数列 Geometric（接下来深入）</h2></div>
+    <div class="grid2">
+      <div class="box">
+        <h3>通项公式</h3>
+        <div class="formula">$$a_n = a_1 \cdot r^{\,n-1}$$<small>公比 r，每项 = 前一项 × r</small></div>
+        <ul><li>r = 1 时退化为常数数列（求和公式分母变 0，需单独讨论）</li></ul>
+      </div>
+      <div class="box">
+        <h3>前 n 项和 + 无穷和</h3>
+        <div class="formula">$$S_n = \frac{a_1(1-r^n)}{1-r} \quad (r\neq 1)$$<small>无穷等比和（|r|&lt;1）：</small>$$S_\infty = \frac{a_1}{1-r}$$</div>
+        <ul><li>|r|&lt;1 时项数趋无穷和收敛</li><li>增长/衰减、复利模型常用</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块3：递推与周期 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">3</span><h2>递推与周期（接下来深入）</h2></div>
+    <div class="grid3">
+      <div class="box">
+        <h3>线性递推</h3>
+        <div class="formula">$$a_n = p\,a_{n-1} + q$$<small>待定系数 / 特征法求通项</small></div>
+        <ul><li>形如 aₙ − c = p(aₙ₋₁ − c)</li></ul>
+      </div>
+      <div class="box">
+        <h3>裂项相消</h3>
+        <div class="formula">$$\frac{1}{n(n+1)} = \frac{1}{n} - \frac{1}{n+1}$$<small>求和时中间项抵消</small></div>
+        <ul><li>telescoping 是 AMC 高频技巧</li></ul>
+      </div>
+      <div class="box">
+        <h3>周期数列</h3>
+        <div class="formula">$$a_{n+p} = a_n$$<small>周期为 p，求大项下标取模</small></div>
+        <ul><li>模意义下常出现循环</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块4：AMC 常见题型 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">4</span><h2>AMC 常见数列题型</h2></div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 2px;">老师第 5 课指出：数列题主要考查"识别规律、建立通项、理解递推、求和转化"。</p>
+    <div class="chips">
+      <span class="chip">找规律写通项</span>
+      <span class="chip">求和转化（裂项 / 配对）</span>
+      <span class="chip">递归定义求值</span>
+      <span class="chip">周期性求大项下标</span>
+      <span class="chip">数字相关序列（digit sequences）</span>
+      <span class="chip">等差 / 等比综合应用</span>
+      <span class="chip">无穷等比和</span>
+    </div>
+  </div>
+
+  <!-- 板块5：核心心法 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">5</span><h2>核心心法 · 易错提醒</h2></div>
+    <div class="law">① <b>区分"通项公式"与"递推公式"</b>：通项是 aₙ 关于 n 的闭式；递推是前后项关系，求具体项需递推展开或先化通项。</div>
+    <div class="law">② <b>等比求和必查 r = 1 特例</b>：公式分母 (1−r) 在 r=1 时无意义，常数数列单独算；无穷和只在 |r|&lt;1 时收敛。</div>
+    <div class="law">③ <b>大下标不硬算</b>：遇递推或周期，先找周期 p / 模规律，用 n mod p 化简到小项下标再求。</div>
+    <div class="callout">
+      <div class="t">💡 学习顺序建议</div>
+      先吃透等差 / 等比的<b>通项 + 求和</b>两套公式（含无穷和），再攻递推（线性递推、裂项），最后用周期与模收口。每学一个公式，配 2–3 道 AMC 小题验证"代入不跳步"。
+    </div>
+  </div>
+
+</div>
+<button class="print-btn" onclick="window.print()">🖨 打印 / 存 PDF</button>
+</body>
+</html>
