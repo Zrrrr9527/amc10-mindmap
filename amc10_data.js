@@ -27,6 +27,7 @@ var MODULES = [
         { t: "绝对值函数 Absolute Value Functions", lv: "mid", ex: "The function \\(f(x)=|x-2|\\) has a V-shaped graph. At which point is its vertex, and what is \\(f(-1)+f(5)\\)?", kw: "absolute value function" }
       ]},
       { title: "数列与级数", leaves: [
+        { t: "数列基础概念 Basic Sequence Concepts", lv: "easy", ex: "A sequence has first term \\(a_1=2\\) and general term \\(a_n=3n-1\\). Find \\(a_5\\) and the sum of the first 5 terms.", kw: "sequence basics" },
         { t: "等差数列 Arithmetic Sequences", lv: "easy", ex: "In the arithmetic sequence \\(3, 7, 11, \\dots\\), what is the 10th term?", kw: "arithmetic sequence" },
         { t: "等比数列 Geometric Sequences", lv: "mid", ex: "A geometric sequence begins \\(2, 6, 18, \\dots\\) What is its 5th term?", kw: "geometric sequence" },
         { t: "递推公式 Recursive Sequences", lv: "hard", ex: "A sequence satisfies \\(a_1=1\\) and \\(a_{n+1}=2a_n+1\\). Find \\(a_4\\).", kw: "recursive sequence" },
