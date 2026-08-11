@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AMC10 · 圆知识点信息图（截至第5课已学）</title>
+<style>
+  :root{
+    --blue:#3b6ef6; --blue-d:#2f56c8; --purple:#7a4df0; --cyan:#1ba8c4;
+    --ink:#1f2733; --muted:#6b7686; --line:#e6eaf2; --bg:#f4f7fc;
+    --card:#ffffff; --warn-bg:#fff6e6; --warn-bd:#ffce6b; --good-bg:#eafaf0; --good-bd:#7fd9a2;
+    --tip-bg:#eef3ff; --tip-bd:#9db8ff;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;}
+  .wrap{max-width:960px;margin:0 auto;padding:18px 18px 40px;}
+  .hero{background:linear-gradient(135deg,#3b6ef6 0%,#7a4df0 100%);color:#fff;border-radius:18px;padding:26px 28px;box-shadow:0 10px 30px rgba(59,110,246,.25);position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border:14px solid rgba(255,255,255,.18);border-radius:50%;}
+  .hero::before{content:"";position:absolute;right:50px;bottom:-60px;width:120px;height:120px;border:10px solid rgba(255,255,255,.13);border-radius:50%;}
+  .hero h1{margin:0 0 6px;font-size:27px;letter-spacing:1px;}
+  .hero p{margin:0;font-size:14.5px;opacity:.95;}
+  .hero .tag{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:20px;font-size:13px;}
+  .sec{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 4px 14px rgba(31,39,51,.05);}
+  .sec-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;}
+  .sec-h .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:none;}
+  .sec-h h2{margin:0;font-size:18px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .box{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:#fbfcff;}
+  .box h3{margin:0 0 8px;font-size:15px;color:var(--blue-d);}
+  .formula{background:#0f1b3d;color:#eaf2ff;border-radius:10px;padding:11px 12px;font-family:"Cambria Math","Times New Roman",serif;font-size:16px;text-align:center;margin:8px 0;letter-spacing:.3px;}
+  .formula small{color:#9fb6e6;font-size:12px;display:block;margin-top:5px;font-family:"Microsoft YaHei",sans-serif;}
+  .box ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:#3a4452;}
+  .box ul li{margin:3px 0;}
+  .law{border-left:5px solid var(--purple);background:linear-gradient(90deg,#f3eeff,#fff);border-radius:0 12px 12px 0;padding:14px 16px;margin:10px 0;font-size:15px;}
+  .law b{color:var(--purple);}
+  .steps{counter-reset:s;margin:0;padding:0;list-style:none;}
+  .steps li{counter-increment:s;position:relative;padding:11px 12px 11px 50px;margin:9px 0;background:#fbfcff;border:1px solid var(--line);border-radius:10px;font-size:14px;}
+  .steps li::before{content:counter(s);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;}
+  .steps li b{color:var(--blue-d);}
+  .callout{border:1px dashed var(--warn-bd);background:var(--warn-bg);border-radius:12px;padding:14px 16px;margin-top:12px;font-size:14.5px;}
+  .callout .t{font-weight:700;color:#c98a00;margin-bottom:4px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .chip{background:var(--tip-bg);border:1px solid var(--tip-bd);color:var(--blue-d);border-radius:20px;padding:5px 12px;font-size:13px;}
+  .foot{margin-top:20px;border:1px solid var(--line);background:#fafbfe;border-radius:14px;padding:16px 20px;}
+  .foot h3{margin:0 0 8px;font-size:15px;color:var(--muted);}
+  .foot ul{margin:0;padding-left:18px;font-size:13.5px;color:#566070;}
+  .print-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:26px;padding:12px 20px;font-size:14px;cursor:pointer;box-shadow:0 6px 18px rgba(59,110,246,.4);z-index:9;}
+  @media print{.print-btn{display:none;}body{background:#fff;}.wrap{max-width:100%;padding:0;}.sec,.foot{box-shadow:none;break-inside:avoid;}.hero{box-shadow:none;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>⭕ 圆 · 知识点信息图</h1>
+    <p>AMC10 坐标几何核心综合考点 — 把图形条件翻译成方程的能力训练场</p>
+    <span class="tag">📍 范围：截至第 5 课（2026-08-09）已学 · 坐标几何视角</span>
+  </div>
+
+  <!-- 板块1：圆的两种方程 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">1</span><h2>圆的两种方程</h2></div>
+    <div class="grid2">
+      <div class="box">
+        <h3>标准方程 Standard</h3>
+        <div class="formula">(x−h)<sup>2</sup> + (y−k)<sup>2</sup> = r<sup>2</sup><small>圆心 (h, k) ，半径 r</small></div>
+        <ul>
+          <li>圆心在原点时简化为 x<sup>2</sup> + y<sup>2</sup> = r<sup>2</sup></li>
+          <li>给圆心和半径 → 直接写；给三点/直径 → 先求圆心半径</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>一般方程 General（需配方）</h3>
+        <div class="formula">x<sup>2</sup> + y<sup>2</sup> + Dx + Ey + F = 0<small>配方 → 圆心 (−D/2, −E/2)，半径 ½√(D²+E²−4F)</small></div>
+        <ul>
+          <li>判定是否成圆：需 D² + E² − 4F &gt; 0</li>
+          <li>题目常给一般式，第一步先配方拿圆心半径</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块2：三个距离公式 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">2</span><h2>三个距离公式（圆综合题的"弹药库"）</h2></div>
+    <div class="grid3">
+      <div class="box">
+        <h3>两点距离</h3>
+        <div class="formula">d = √[(x₂−x₁)²+(y₂−y₁)²]</div>
+        <ul><li>圆心到圆心、半径弦长都用它</li></ul>
+      </div>
+      <div class="box">
+        <h3>点到直线距离</h3>
+        <div class="formula">d = |Ax₀+By₀+C| / √(A²+B²)</div>
+        <ul><li>★切线判定的核心（见板块3）</li></ul>
+      </div>
+      <div class="box">
+        <h3>平行线距离</h3>
+        <div class="formula">d = |C₁−C₂| / √(A²+B²)</div>
+        <ul><li>两条平行切线间距 = 2r 常考</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块3：切线铁律 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">3</span><h2>切线关系（两条铁律）</h2></div>
+    <div class="law">① 直线与圆<b>相切</b> ⟺ 圆心到该直线的距离 <b>= 半径</b></div>
+    <div class="law">② 半径与切线在<b>切点处互相垂直</b>（半径 ⊥ 切线）</div>
+    <div class="callout">
+      <div class="t">💡 核心转化套路（老师第 4–5 课重点）</div>
+      看到 <b>tangent / 相切</b>，第一反应不是画图猜，而是：<b>把"相切"翻译成"圆心到直线距离 = 半径"</b>，再用点到直线距离公式列方程求解。图形条件 → 代数方程，是圆题稳定的解题路径。
+    </div>
+  </div>
+
+  <!-- 板块4：综合解题四步法 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">4</span><h2>圆与直线综合 · 固定解题流程</h2></div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 4px;">老师第 5 课强调：几何综合题不要凭直觉，按下面四步走，避免跳步失分。</p>
+    <ol class="steps">
+      <li><b>标圆心和半径</b> — 先把圆方程写成标准式，明确 (h,k) 与 r</li>
+      <li><b>写切线 / 距离关系</b> — 相切就写"圆心到直线距离 = r"；相交/相离就写对应不等式</li>
+      <li><b>代入公式计算</b> — 点到直线距离公式代入，解出斜率 / 截距 / 参数</li>
+      <li><b>检查是否符合题目条件</b> — 验证解是否真满足几何意义（如半径>0、点在圆外等）</li>
+    </ol>
+  </div>
+
+  <!-- 板块5：典型题型 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">5</span><h2>已练典型题型</h2></div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 2px;">来自 Lecture 3 Practice / Example（第 4–5 课）：</p>
+    <div class="chips">
+      <span class="chip">平移</span>
+      <span class="chip">定比分点</span>
+      <span class="chip">矩形</span>
+      <span class="chip">根式距离</span>
+      <span class="chip">反射 / 对称点</span>
+      <span class="chip">直线围成面积</span>
+      <span class="chip">圆与切线</span>
+      <span class="chip">坐标几何最值（根式转距离）</span>
+    </div>
+  </div>
+
+  <!-- 待学预告 -->
+  <div class="foot">
+    <h3>⏳ 待学预告（平面几何 · 阶段二 课 5–8，目前未讲）</h3>
+    <ul>
+      <li><b>圆周角 / 弦切角</b>：圆上角度关系（同弧所对圆周角相等、直径所对圆周角=90°、弦切角=所夹弧圆周角）</li>
+      <li><b>圆幂定理 Power of a Point</b>：相交弦 PT²=PA·PB、割线等（属"高级定理"，压轴难题常客）</li>
+      <li>届时将在《几何单元导学图》补充，本图聚焦已学的坐标几何圆，避免超前。</li>
+    </ul>
+  </div>
+
+</div>
+<button class="print-btn" onclick="window.print()">🖨 打印 / 存 PDF</button>
+</body>
+</html>
