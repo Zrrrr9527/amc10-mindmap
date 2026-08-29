@@ -33,6 +33,7 @@ var MODULES = [
         { t: "等差数列性质 Arithmetic Sequence Properties", lv: "mid", ex: "In an arithmetic sequence, \\(a_3+a_7=20\\). Find \\(a_5\\).", kw: "arithmetic sequence properties" },
         { t: "等比数列性质 Geometric Sequence Properties", lv: "mid", ex: "In a geometric sequence, \\(a_2=6\\) and \\(a_6=96\\). Find \\(a_4\\).", kw: "geometric sequence properties" },
         { t: "等差 vs 等比辨析 Arithmetic vs Geometric", lv: "easy", ex: "The first three terms of a sequence are \\(2, 6, 18\\). Is it arithmetic or geometric? Find its 6th term.", kw: "arithmetic vs geometric" },
+        { t: "通项与前n项和的关系 a_n & S_n Relationship", lv: "mid", ex: "For a sequence, \\(S_n = n^2 + 2n\\). Find \\(a_4\\).", kw: "sum of first n terms find nth term" },
         { t: "递推公式 Recursive Sequences", lv: "hard", ex: "A sequence satisfies \\(a_1=1\\) and \\(a_{n+1}=2a_n+1\\). Find \\(a_4\\).", kw: "recursive sequence" },
         { t: "周期性数列 Periodic Sequences", lv: "hard", ex: "The sequence \\(1, 2, 1, 2, \\dots\\) repeats with period 2. What is its 101st term?", kw: "periodic sequence" }
       ]},
