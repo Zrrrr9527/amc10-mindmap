@@ -30,6 +30,9 @@ var MODULES = [
         { t: "数列基础概念 Basic Sequence Concepts", lv: "easy", ex: "A sequence has first term \\(a_1=2\\) and general term \\(a_n=3n-1\\). Find \\(a_5\\) and the sum of the first 5 terms.", kw: "sequence basics" },
         { t: "等差数列 Arithmetic Sequences", lv: "easy", ex: "In the arithmetic sequence \\(3, 7, 11, \\dots\\), what is the 10th term?", kw: "arithmetic sequence" },
         { t: "等比数列 Geometric Sequences", lv: "mid", ex: "A geometric sequence begins \\(2, 6, 18, \\dots\\) What is its 5th term?", kw: "geometric sequence" },
+        { t: "等差数列性质 Arithmetic Sequence Properties", lv: "mid", ex: "In an arithmetic sequence, \\(a_3+a_7=20\\). Find \\(a_5\\).", kw: "arithmetic sequence properties" },
+        { t: "等比数列性质 Geometric Sequence Properties", lv: "mid", ex: "In a geometric sequence, \\(a_2=6\\) and \\(a_6=96\\). Find \\(a_4\\).", kw: "geometric sequence properties" },
+        { t: "等差 vs 等比辨析 Arithmetic vs Geometric", lv: "easy", ex: "The first three terms of a sequence are \\(2, 6, 18\\). Is it arithmetic or geometric? Find its 6th term.", kw: "arithmetic vs geometric" },
         { t: "递推公式 Recursive Sequences", lv: "hard", ex: "A sequence satisfies \\(a_1=1\\) and \\(a_{n+1}=2a_n+1\\). Find \\(a_4\\).", kw: "recursive sequence" },
         { t: "周期性数列 Periodic Sequences", lv: "hard", ex: "The sequence \\(1, 2, 1, 2, \\dots\\) repeats with period 2. What is its 101st term?", kw: "periodic sequence" }
       ]},
