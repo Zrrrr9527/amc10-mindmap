@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AMC10 · 数列知识点信息图（接下来要学）</title>
+<title>AMC10 · 数列与级数 知识点信息图（截至第 7 课）</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -13,49 +13,85 @@
 <style>
   :root{
     --blue:#3b6ef6; --blue-d:#2f56c8; --purple:#7a4df0; --cyan:#1ba8c4;
+    --green:#2f9e5f; --green-bg:#eafaf0; --green-bd:#7fd9a2;
     --ink:#1f2733; --muted:#6b7686; --line:#e6eaf2; --bg:#f4f7fc;
-    --card:#ffffff; --warn-bg:#fff6e6; --warn-bd:#ffce6b; --good-bg:#eafaf0; --good-bd:#7fd9a2;
-    --tip-bg:#eef3ff; --tip-bd:#9db8ff;
+    --card:#ffffff; --warn-bg:#fff6e6; --warn-bd:#ffce6b;
+    --tip-bg:#eef3ff; --tip-bd:#9db8ff; --soon-bg:#f3f5f9; --soon-bd:#c9d2e0;
   }
   *{box-sizing:border-box;}
   body{margin:0;font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;}
-  .wrap{max-width:960px;margin:0 auto;padding:18px 18px 40px;}
-  .hero{background:linear-gradient(135deg,#1ba8c4 0%,#3b6ef6 55%,#7a4df0 100%);color:#fff;border-radius:18px;padding:26px 28px;box-shadow:0 10px 30px rgba(27,168,196,.25);position:relative;overflow:hidden;}
+  .wrap{max-width:980px;margin:0 auto;padding:18px 18px 40px;}
+
+  .hero{background:linear-gradient(135deg,#1ba8c4 0%,#3b6ef6 55%,#7a4df0 100%);color:#fff;border-radius:18px;padding:24px 28px;box-shadow:0 10px 30px rgba(27,168,196,.25);position:relative;overflow:hidden;}
   .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border:14px solid rgba(255,255,255,.16);border-radius:50%;}
   .hero::before{content:"";position:absolute;right:50px;bottom:-60px;width:120px;height:120px;border:10px solid rgba(255,255,255,.12);border-radius:50%;}
-  .hero h1{margin:0 0 6px;font-size:27px;letter-spacing:1px;}
+  .hero h1{margin:0 0 6px;font-size:26px;letter-spacing:1px;}
   .hero p{margin:0;font-size:14.5px;opacity:.96;}
-  .hero .tag{display:inline-block;margin-top:12px;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:20px;font-size:13px;}
-  .sec{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 4px 14px rgba(31,39,51,.05);}
-  .sec-h{display:flex;align-items:center;gap:10px;margin:0 0 14px;}
+  .hero .tag{display:inline-block;margin:10px 8px 0 0;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:20px;font-size:13px;}
+
+  .progress{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+  @media(max-width:680px){.progress{grid-template-columns:1fr;}}
+  .pcell{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+  .pcell .k{font-size:12px;color:var(--muted);letter-spacing:.5px;}
+  .pcell .v{font-size:19px;font-weight:700;margin-top:2px;}
+  .pcell.ok .v{color:var(--green);}
+  .pcell.soon .v{color:var(--muted);}
+
+  .sec{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 4px 14px rgba(31,39,51,.05);}
+  .sec-h{display:flex;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap;}
   .sec-h .num{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:none;}
   .sec-h h2{margin:0;font-size:18px;}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .badge{font-size:11.5px;padding:3px 10px;border-radius:20px;border:1px solid;font-weight:600;}
+  .badge.ok{background:var(--green-bg);border-color:var(--green-bd);color:#1f7a47;}
+  .badge.soon{background:var(--soon-bg);border-color:var(--soon-bd);color:#6b7686;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;}
   @media(max-width:680px){.grid2,.grid3{grid-template-columns:1fr;}}
-  .box{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:#fbfcff;}
-  .box h3{margin:0 0 8px;font-size:15px;color:var(--blue-d);}
-  .formula{background:#0f1b3d;color:#eaf2ff;border-radius:10px;padding:11px 12px;font-size:16px;text-align:center;margin:8px 0;letter-spacing:.3px;}
+
+  .box{border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fbfcff;}
+  .box h3{margin:0 0 7px;font-size:15px;color:var(--blue-d);}
+  .box h4{margin:9px 0 4px;font-size:13.5px;color:var(--purple);}
+  .formula{background:#0f1b3d;color:#eaf2ff;border-radius:10px;padding:10px 12px;font-size:15.5px;text-align:center;margin:7px 0;letter-spacing:.3px;}
   .formula small{color:#9fb6e6;font-size:12px;display:block;margin-top:5px;font-family:"Microsoft YaHei",sans-serif;}
   .formula .katex-display{margin:0;}
   .formula .katex{color:#eaf2ff;}
   .box ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:#3a4452;}
   .box ul li{margin:3px 0;}
-  .law{border-left:5px solid var(--purple);background:linear-gradient(90deg,#f3eeff,#fff);border-radius:0 12px 12px 0;padding:14px 16px;margin:10px 0;font-size:14.5px;}
+
+  /* 等差 vs 等比 辨析 */
+  .vs{display:grid;grid-template-columns:1fr 84px 1fr;gap:0;align-items:stretch;margin-top:6px;}
+  @media(max-width:680px){.vs{grid-template-columns:1fr;}}
+  .vs .side{border-radius:12px;padding:14px 16px;}
+  .vs .side.a{background:linear-gradient(135deg,#eef3ff,#f7f9ff);border:1px solid var(--tip-bd);}
+  .vs .side.g{background:linear-gradient(135deg,#f3eeff,#faf8ff);border:1px solid #c4aaf5;}
+  .vs .side h3{margin:0 0 8px;font-size:16px;}
+  .vs .side.a h3{color:var(--blue-d);}
+  .vs .side.g h3{color:var(--purple);}
+  .vs .mid{display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--muted);font-size:15px;}
+  .kv{font-size:13.5px;margin:5px 0;}
+  .kv b{display:inline-block;min-width:62px;}
+
+  .flow{border-left:5px solid var(--green);background:linear-gradient(90deg,#eafaf0,#fff);border-radius:0 12px 12px 0;padding:13px 16px;margin-top:12px;font-size:14px;}
+  .flow .t{font-weight:700;color:#1f7a47;margin-bottom:6px;}
+
+  .law{border-left:5px solid var(--purple);background:linear-gradient(90deg,#f3eeff,#fff);border-radius:0 12px 12px 0;padding:12px 15px;margin:9px 0;font-size:14px;}
   .law b{color:var(--purple);}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
   .chip{background:var(--tip-bg);border:1px solid var(--tip-bd);color:var(--blue-d);border-radius:20px;padding:5px 12px;font-size:13px;}
-  .callout{border:1px dashed var(--warn-bd);background:var(--warn-bg);border-radius:12px;padding:14px 16px;margin-top:12px;font-size:14.5px;}
+  .chip.soon{background:var(--soon-bg);border-color:var(--soon-bd);color:#6b7686;}
+
+  .callout{border:1px dashed var(--warn-bd);background:var(--warn-bg);border-radius:12px;padding:13px 16px;margin-top:12px;font-size:14px;}
   .callout .t{font-weight:700;color:#c98a00;margin-bottom:4px;}
-  .done{background:#eafaf0;border:1px solid var(--good-bd);border-radius:12px;padding:12px 16px;font-size:13.5px;color:#2f6b4a;}
-  .done b{color:#1f7a47;}
+
   .print-btn{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:26px;padding:12px 20px;font-size:14px;cursor:pointer;box-shadow:0 6px 18px rgba(59,110,246,.4);z-index:9;}
   @media print{
     .print-btn{display:none;}
     *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     body{background:#fff;}
     .wrap{max-width:100%;padding:0;}
-    .sec,.done{box-shadow:none;break-inside:avoid;}
+    .sec,.pcell{box-shadow:none;break-inside:avoid;}
     .hero{box-shadow:none;}
   }
 </style>
@@ -64,96 +100,169 @@
 <div class="wrap">
 
   <div class="hero">
-    <h1>📈 数列 · 知识点信息图</h1>
-    <p>AMC10 代数核心模块 — 从"认识数列"走向"求和与递推"</p>
-    <span class="tag">📍 定位：承接第 5 课 4.1 入门 · 展开接下来要深入的内容</span>
+    <h1>📈 数列与级数 · 知识点全景图</h1>
+    <p>AMC10 代数核心模块 — 常见于<b>前中段题目</b>，重「规律识别 + 公式灵活使用」，而非纯计算</p>
+    <div>
+      <span class="tag">📍 进度：截至第 7 课（Lecture 4 全部讲完）</span>
+      <span class="tag">🗺 对应导图 9 个节点</span>
+    </div>
   </div>
 
-  <!-- 板块0：已学基础 -->
-  <div class="done">
-    <b>✅ 已学基础（第 5 课 4.1 入门）</b>：sequence 数列 / term 项 / 首项 a₁ / 通项 aₙ / 递推公式 / 前 n 项和 Sₙ 的概念；等差数列、等比数列、递推、周期已初步接触（导图标"已学习"，但深度待展开）。本图聚焦<b>接下来要学</b>的进阶公式与题型。
+  <!-- 进度概览 -->
+  <div class="progress">
+    <div class="pcell ok">
+      <div class="k">已学（课 5–7）</div>
+      <div class="v">7 个节点</div>
+      <div style="font-size:12.5px;color:#3a4452;">基础概念 · 等差 · 等比 · 等差性质 · 等比性质 · 等差vs等比 · aₙ与Sₙ</div>
+    </div>
+    <div class="pcell soon">
+      <div class="k">待学（后续课）</div>
+      <div class="v">2 个节点</div>
+      <div style="font-size:12.5px;color:#3a4452;">递推公式（hard）· 周期性数列（hard）</div>
+    </div>
+    <div class="pcell soon">
+      <div class="k">进阶技巧（待练）</div>
+      <div class="v">3 类</div>
+      <div style="font-size:12.5px;color:#3a4452;">裂项相消 · 错位相减 · 无穷等比和</div>
+    </div>
   </div>
 
-  <!-- 板块1：等差数列 -->
+  <!-- 板块1：基础 + aₙ 与 Sₙ -->
   <div class="sec">
-    <div class="sec-h"><span class="num">1</span><h2>等差数列 Arithmetic（接下来深入）</h2></div>
+    <div class="sec-h"><span class="num">1</span><h2>基础概念与 aₙ ↔ Sₙ 的关系</h2><span class="badge ok">✅ 已学（课 5 · 课 7 作业）</span></div>
     <div class="grid2">
       <div class="box">
-        <h3>通项公式</h3>
-        <div class="formula">$$a_n = a_1 + (n-1)d$$<small>公差 d，第 n 项由首项 + (n−1)个公差</small></div>
-        <ul><li>已知任意两项可反求 a₁ 与 d</li><li>等差 ⇒ 相邻项差恒定</li></ul>
+        <h3>四个基本概念</h3>
+        <ul>
+          <li><b>sequence 数列</b>：按次序排列的一列数</li>
+          <li><b>term 项</b>：<b>aₙ</b> 通项（第 n 项），<b>a₁</b> 首项</li>
+          <li><b>递推</b>：用前一项（或几项）定义后一项</li>
+          <li><b>Sₙ 前 n 项和</b>：Sₙ = a₁ + a₂ + … + aₙ</li>
+        </ul>
       </div>
       <div class="box">
-        <h3>前 n 项和 Sₙ</h3>
-        <div class="formula">$$S_n = \frac{n(a_1+a_n)}{2} = \frac{n\big[2a_1+(n-1)d\big]}{2}$$<small>首尾配对 / 高斯求和</small></div>
-        <ul><li>中项性质：a,b,c 等差 ⇒ 2b = a + c</li><li>对称项和相等</li></ul>
+        <h3>通项与前 n 项和的互求</h3>
+        <div class="formula">$$a_1 = S_1,\qquad a_n = S_n - S_{n-1}\ \ (n\ge 2)$$<small>已知 Sₙ 求 aₙ —— 第 7 课作业三类题型之一</small></div>
+        <ul><li>⚠️ n=1 必须单独验证：S₁ 未必满足通项公式</li></ul>
       </div>
     </div>
   </div>
 
-  <!-- 板块2：等比数列 -->
+  <!-- 板块2：等差数列 -->
   <div class="sec">
-    <div class="sec-h"><span class="num">2</span><h2>等比数列 Geometric（接下来深入）</h2></div>
+    <div class="sec-h"><span class="num">2</span><h2>等差数列 Arithmetic —— 看「差」</h2><span class="badge ok">✅ 已学（课 6 公式 · 课 7 性质）</span></div>
     <div class="grid2">
       <div class="box">
-        <h3>通项公式</h3>
-        <div class="formula">$$a_n = a_1 \cdot r^{\,n-1}$$<small>公比 r，每项 = 前一项 × r</small></div>
-        <ul><li>r = 1 时退化为常数数列（求和公式分母变 0，需单独讨论）</li></ul>
+        <h3>核心公式</h3>
+        <div class="formula">$$a_n = a_1 + (n-1)d$$<small>公差 d = aₙ − aₙ₋₁（恒定）</small></div>
+        <div class="formula">$$S_n = \frac{n(a_1+a_n)}{2} = \frac{n\big[2a_1+(n-1)d\big]}{2}$$<small>高斯首尾配对</small></div>
       </div>
       <div class="box">
-        <h3>前 n 项和 + 无穷和</h3>
-        <div class="formula">$$S_n = \frac{a_1(1-r^n)}{1-r} \quad (r\neq 1)$$<small>无穷等比和（|r|&lt;1）：</small>$$S_\infty = \frac{a_1}{1-r}$$</div>
-        <ul><li>|r|&lt;1 时项数趋无穷和收敛</li><li>增长/衰减、复利模型常用</li></ul>
+        <h3>四条性质（课 7 新讲）</h3>
+        <h4>① 下标关系</h4>
+        <div class="formula">$$m+n=p+q \ \Longrightarrow\ a_m+a_n=a_p+a_q$$</div>
+        <h4>② 等距项</h4>
+        <ul><li>aₖ, aₖ₊ₘ, aₖ₊₂ₘ … 仍成等差，公差 <b>m·d</b></li></ul>
+        <h4>③ 分组和</h4>
+        <ul><li>Sₘ, S₂ₘ−Sₘ, S₃ₘ−S₂ₘ … 成等差，公差 <b>m²d</b></li></ul>
+        <h4>④ 平均值</h4>
+        <div class="formula">$$\frac{S_n}{n} = \frac{a_1+a_n}{2}$$<small>前 n 项算术平均 = 首尾平均</small></div>
       </div>
     </div>
   </div>
 
-  <!-- 板块3：递推与周期 -->
+  <!-- 板块3：等比数列 -->
   <div class="sec">
-    <div class="sec-h"><span class="num">3</span><h2>递推与周期（接下来深入）</h2></div>
+    <div class="sec-h"><span class="num">3</span><h2>等比数列 Geometric —— 看「比」</h2><span class="badge ok">✅ 已学（课 7）</span></div>
+    <div class="grid2">
+      <div class="box">
+        <h3>核心公式</h3>
+        <div class="formula">$$a_n = a_1\cdot r^{\,n-1}$$<small>公比 r = aₙ / aₙ₋₁（恒定）</small></div>
+        <div class="formula">$$S_n = \frac{a_1(1-r^n)}{1-r}\quad (r\neq 1)$$<small>⚠️ r = 1 时退化为常数数列，Sₙ = n·a₁，单独算</small></div>
+        <div class="formula">$$S_\infty = \frac{a_1}{1-r}\quad (|r|<1)$$<small>无穷等比和，仅 |r|&lt;1 收敛</small></div>
+      </div>
+      <div class="box">
+        <h3>四条性质（课 7 新讲）</h3>
+        <h4>① 下标关系</h4>
+        <div class="formula">$$m+n=p+q \ \Longrightarrow\ a_m\cdot a_n=a_p\cdot a_q$$</div>
+        <h4>② 等距项</h4>
+        <ul><li>aₖ, aₖ₊ₘ, aₖ₊₂ₘ … 仍成等比，公比 <b>rᵐ</b></li></ul>
+        <h4>③ 等距积</h4>
+        <ul><li>与两端等距的两项之积相等（等比版「对称」）</li></ul>
+        <h4>④ 分组和</h4>
+        <ul><li>Sₘ, S₂ₘ−Sₘ, S₃ₘ−S₂ₘ … 成等比，公比 <b>rᵐ</b></li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块4：辨析（直击短板） -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">4</span><h2>等差 vs 等比：先判断，再代公式</h2><span class="badge ok">✅ 课 7 核心对比 · 当前主攻点</span></div>
+    <div class="vs">
+      <div class="side a">
+        <h3>🔵 等差：看「差」</h3>
+        <div class="kv"><b>判据</b>a₂−a₁ = a₃−a₂ = … = d</div>
+        <div class="kv"><b>运算</b>加 / 减（线性增长）</div>
+        <div class="kv"><b>对称</b>下标和相等 ⇒ 两项<b>和</b>相等（a₁+a₄ = a₂+a₃）</div>
+        <div class="kv"><b>关键词</b>每次多/少同样多、等间隔</div>
+      </div>
+      <div class="mid">VS</div>
+      <div class="side g">
+        <h3>🟣 等比：看「比」</h3>
+        <div class="kv"><b>判据</b>a₂/a₁ = a₃/a₂ = … = r</div>
+        <div class="kv"><b>运算</b>乘 / 除（指数增长·衰减）</div>
+        <div class="kv"><b>对称</b>下标和相等 ⇒ 两项<b>积</b>相等（a₁·a₄ = a₂·a₃）</div>
+        <div class="kv"><b>关键词</b>每次翻倍、减半、复利、百分比</div>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="t">🎯 三步判断法（第 7 课作业第 2 条要求的就是这个）</div>
+      ① 拿到数列先<b>算相邻差</b>——差恒定 ⇒ 等差，套 aₙ = a₁+(n−1)d；<br>
+      ② 差不恒定，再<b>算相邻比</b>——比恒定 ⇒ 等比，套 aₙ = a₁rⁿ⁻¹；<br>
+      ③ 差、比都不恒定，且已知 Sₙ ⇒ 走 <b>aₙ = Sₙ − Sₙ₋₁</b> 这条路。<br>
+      <span style="color:#1f7a47;">※ 先写判断、再写公式、最后代入数——这三步写全，步骤分就拿到了。</span>
+    </div>
+  </div>
+
+  <!-- 板块5：待学 -->
+  <div class="sec">
+    <div class="sec-h"><span class="num">5</span><h2>待学预告（后续课）</h2><span class="badge soon">⏳ 导图标 hard / 进阶技巧</span></div>
     <div class="grid3">
       <div class="box">
-        <h3>线性递推</h3>
-        <div class="formula">$$a_n = p\,a_{n-1} + q$$<small>待定系数 / 特征法求通项</small></div>
-        <ul><li>形如 aₙ − c = p(aₙ₋₁ − c)</li></ul>
+        <h3>递推公式 Recursive</h3>
+        <div class="formula">$$a_n = p\,a_{n-1} + q$$<small>待定系数 / 特征法化成通项</small></div>
+        <ul><li>变形：aₙ − c = p(aₙ₋₁ − c)</li></ul>
       </div>
       <div class="box">
-        <h3>裂项相消</h3>
-        <div class="formula">$$\frac{1}{n(n+1)} = \frac{1}{n} - \frac{1}{n+1}$$<small>求和时中间项抵消</small></div>
-        <ul><li>telescoping 是 AMC 高频技巧</li></ul>
+        <h3>裂项相消 Telescoping</h3>
+        <div class="formula">$$\frac{1}{n(n+1)}=\frac{1}{n}-\frac{1}{n+1}$$<small>中间项全部抵消</small></div>
+        <ul><li>AMC 求和高频技巧</li></ul>
       </div>
       <div class="box">
-        <h3>周期数列</h3>
-        <div class="formula">$$a_{n+p} = a_n$$<small>周期为 p，求大项下标取模</small></div>
-        <ul><li>模意义下常出现循环</li></ul>
+        <h3>周期性数列 Periodic</h3>
+        <div class="formula">$$a_{n+p}=a_n$$<small>周期 p，大下标取模化简</small></div>
+        <ul><li>模运算下常出现循环</li></ul>
       </div>
     </div>
-  </div>
-
-  <!-- 板块4：AMC 常见题型 -->
-  <div class="sec">
-    <div class="sec-h"><span class="num">4</span><h2>AMC 常见数列题型</h2></div>
-    <p style="font-size:13.5px;color:var(--muted);margin:0 0 2px;">老师第 5 课指出：数列题主要考查"识别规律、建立通项、理解递推、求和转化"。</p>
     <div class="chips">
-      <span class="chip">找规律写通项</span>
-      <span class="chip">求和转化（裂项 / 配对）</span>
-      <span class="chip">递归定义求值</span>
-      <span class="chip">周期性求大项下标</span>
-      <span class="chip">数字相关序列（digit sequences）</span>
-      <span class="chip">等差 / 等比综合应用</span>
-      <span class="chip">无穷等比和</span>
+      <span class="chip soon">错位相减求和</span>
+      <span class="chip soon">无穷等比和（|r|&lt;1）</span>
+      <span class="chip soon">递推转通项</span>
+      <span class="chip soon">数字序列 digit sequences</span>
     </div>
   </div>
 
-  <!-- 板块5：核心心法 -->
+  <!-- 板块6：心法 -->
   <div class="sec">
-    <div class="sec-h"><span class="num">5</span><h2>核心心法 · 易错提醒</h2></div>
-    <div class="law">① <b>区分"通项公式"与"递推公式"</b>：通项是 aₙ 关于 n 的闭式；递推是前后项关系，求具体项需递推展开或先化通项。</div>
-    <div class="law">② <b>等比求和必查 r = 1 特例</b>：公式分母 (1−r) 在 r=1 时无意义，常数数列单独算；无穷和只在 |r|&lt;1 时收敛。</div>
-    <div class="law">③ <b>大下标不硬算</b>：遇递推或周期，先找周期 p / 模规律，用 n mod p 化简到小项下标再求。</div>
+    <div class="sec-h"><span class="num">6</span><h2>核心心法 · 易错提醒</h2></div>
+    <div class="law">① <b>「差」与「比」先分清</b>：等差看差、等比看比。判断错了，后面全错——这是当前最该练的反应速度。</div>
+    <div class="law">② <b>等比求和先查 r = 1</b>：公式分母 (1−r) 在 r=1 时无意义，常数数列单独算；无穷和只在 |r|&lt;1 时收敛。</div>
+    <div class="law">③ <b>由 Sₙ 求 aₙ 必须验 n = 1</b>：aₙ = Sₙ − Sₙ₋₁ 只对 n ≥ 2 成立，a₁ = S₁ 要单独代回检查。</div>
+    <div class="law">④ <b>通项 ≠ 递推</b>：通项是 aₙ 关于 n 的闭式；递推是前后项关系，求远项需先化通项或找周期。</div>
     <div class="callout">
-      <div class="t">💡 学习顺序建议</div>
-      先吃透等差 / 等比的<b>通项 + 求和</b>两套公式（含无穷和），再攻递推（线性递推、裂项），最后用周期与模收口。每学一个公式，配 2–3 道 AMC 小题验证"代入不跳步"。
+      <div class="t">💡 第 7 课老师的四条作业要求（照做即可，比多刷题管用）</div>
+      1. 写出<b>完整过程</b>；2. 每题<b>先判断类型</b>（等差 / 等比 / aₙ 与 Sₙ 关系）；3. <b>先写公式，再代入数据</b>；4. 做错或不会的题<b>做标记</b>，下节课优先讲评。
+      <br><span style="color:#c98a00;">重点在第 2、3 条——它们练的就是「判断 → 选公式 → 规范代入」这条链。</span>
     </div>
   </div>
 
