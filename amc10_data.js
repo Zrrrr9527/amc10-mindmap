@@ -60,6 +60,8 @@ var MODULES = [
     branches: [
       { title: "平面几何", sub: "阶段二·课 5–8 几何基础核心", leaves: [
         { t: "三角形面积 / 全等 Triangle Area / Congruence", lv: "easy", ex: "A right triangle has legs \\(3\\) and \\(4\\). What is its area?", kw: "triangle area" },
+        { t: "全等三角形判定与 CPCTC Congruence Criteria & CPCTC", lv: "easy", ex: "In triangles \\(ABC\\) and \\(DEF\\), \\(AB=DE\\), \\(BC=EF\\) and \\(\\angle B=\\angle E\\). Which criterion (SSS/SAS/ASA/AAS/HL) proves them congruent, and why does \\(AC=DF\\) follow?", kw: "SAS triangle congruence CPCTC" },
+        { t: "等腰与等边三角形 Isosceles & Equilateral Triangles", lv: "easy", ex: "In isosceles triangle \\(ABC\\), \\(AB=AC\\) and \\(\\angle B=50^\\circ\\). Find \\(\\angle A\\).", kw: "isosceles triangle base angles" },
         { t: "勾股定理 Pythagorean Theorem", lv: "easy", ex: "A right triangle has legs \\(5\\) and \\(12\\). What is the hypotenuse?", kw: "Pythagorean theorem" },
         { t: "相似三角形 Similar Triangles", lv: "mid", ex: "Two similar triangles have side ratio \\(1:3\\). If the smaller has area \\(4\\), what is the larger's area?", kw: "similar triangles" },
         { t: "圆（圆周角 / 弦切角） Circles (Inscribed / Tangent-Chord Angles)", lv: "mid", ex: "In a circle, an inscribed angle subtends an arc of \\(80^\\circ\\). What is the angle measure? (What if it subtends a diameter?)", kw: "inscribed angle" },
