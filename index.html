@@ -224,6 +224,9 @@
   <span>🎯 进度：<b style="color:#3b82f6">已学习 <span id="cnt1">0</span></b> · <b style="color:#f59e0b">已操练 <span id="cnt2">0</span></b> · <b style="color:#1fae6b">已掌握 <span id="cnt3">0</span></b> <span style="color:var(--muted)">/ 共 <span id="tot">0</span></span></span>
   <span class="hint">点击文本行 = 循环切换 已学习 → 已操练 → 已掌握（再点取消）</span>
   <button id="reset">重置进度</button>
+  <button id="exportBtn" title="把已标记的进度存成 JSON 文件：换网址 / 换设备 / 换浏览器时带走">导出进度</button>
+  <button id="importBtn" title="从 JSON 文件恢复进度：换网址 / 换设备后导入，避免重新标记">导入进度</button>
+  <input type="file" id="importFile" accept="application/json,.json" style="display:none">
 </div>
 
 <div id="maps"></div>
@@ -231,6 +234,7 @@
 <div class="foot">
   用法说明：<b style="color:var(--easy)">🟢 基础</b>务必零失误保分 · <b style="color:var(--mid)">🟡 进阶</b>决定能否晋级 AIME · <b style="color:var(--hard)">🔴 压轴</b>冲击全球前 1% 的关键区。<br>
   点击知识点名称可循环切换 <b style="color:#3b82f6">已学习</b> → <b style="color:#f59e0b">已操练</b> → <b style="color:#1fae6b">已掌握</b>（再点取消，进度自动缓存）；点击右侧 📖 图标，可在下方无损展开<b>自编精选示例</b>与 <b>AoPS Wiki 对应词条的高阶检索</b>。<br>
+  进度保存在<b>当前网址的浏览器本地</b>（按网址隔离）：换网址 / 换电脑 / 换浏览器时，先在原页面点<b>「导出进度」</b>存成文件，再到新页面点<b>「导入进度」</b>即可原样带走，不必重新标记。<br>
   <b>提示：</b>📖 内的示例为帮助理解考点的自编练习，非某年特定真题；检索按钮直达 AoPS Wiki 站内搜索，点开即是该考点的真实历年真题与解析。
 </div>
 
@@ -377,6 +381,49 @@ MODULES.forEach(function(mod){
     try{ localStorage.setItem(KEY,JSON.stringify({})); }catch(err){}
     recount();
   });
+
+  /* 进度导出 / 导入：localStorage 按网址 origin 隔离，换网址或换设备时用它搬家 */
+  var expBtn=document.getElementById('exportBtn');
+  if(expBtn) expBtn.addEventListener('click', function(){
+    try{
+      var payload={ key:KEY, exportedAt:new Date().toISOString(), levels:Object.fromEntries(levels) };
+      var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url; a.download='amc10-progress-'+new Date().toISOString().slice(0,10)+'.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }catch(err){ alert('导出失败：'+err.message); }
+  });
+
+  var impBtn=document.getElementById('importBtn');
+  var impFile=document.getElementById('importFile');
+  if(impBtn && impFile){
+    impBtn.addEventListener('click', function(){ impFile.click(); });
+    impFile.addEventListener('change', function(){
+      var f = impFile.files && impFile.files[0];
+      impFile.value='';
+      if(!f) return;
+      var fr=new FileReader();
+      fr.onload=function(){
+        try{
+          var obj=JSON.parse(String(fr.result));
+          var incoming = (obj && obj.levels && typeof obj.levels==='object') ? obj.levels : obj;
+          if(!incoming || typeof incoming!=='object') throw new Error('bad format');
+          var cur={}; try{ cur=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ cur={}; }
+          var n=0;
+          Object.keys(incoming).forEach(function(k){
+            var v=Number(incoming[k]);
+            if(v>=1 && v<=3){ cur[k]=v; n++; }
+          });
+          localStorage.setItem(KEY, JSON.stringify(cur));
+          alert('已导入 '+n+' 条标记（与现有进度合并），页面即将刷新。');
+          location.reload();
+        }catch(err){ alert('导入失败：文件不是有效的进度 JSON'); }
+      };
+      fr.readAsText(f);
+    });
+  }
 })();
 
 /* ---------- KaTeX 公式渲染（练习示例）---------- */
