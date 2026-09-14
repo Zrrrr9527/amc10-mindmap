@@ -67,7 +67,9 @@ var MODULES = [
         { t: "圆（圆周角 / 弦切角） Circles (Inscribed / Tangent-Chord Angles)", lv: "mid", ex: "In a circle, an inscribed angle subtends an arc of \\(80^\\circ\\). What is the angle measure? (What if it subtends a diameter?)", kw: "inscribed angle" },
         { t: "正余弦 / 三角法（特殊角·建系） Law of Sines/Cosines (Special Angles · Coordinates)", lv: "hard", ex: "In triangle \\(ABC\\), \\(AB=5\\), \\(AC=7\\), \\(\\angle A=60^\\circ\\). Use the Law of Cosines to find \\(BC\\).", kw: "Law of Cosines" },
         { t: "常见全等结构（翻折/辅助线） Common Congruence Structures (Folding / Auxiliary Lines)", lv: "mid", ex: "In isosceles triangle \\(ABC\\) with \\(AB = AC\\), the bisector from \\(A\\) meets \\(BC\\) at \\(D\\). Why are triangles \\(ABD\\) and \\(ACD\\) congruent, and what is \\(BD\\) if \\(BC = 10\\)?", kw: "triangle congruence auxiliary line" },
-        { t: "角平分线定理 Angle Bisector Theorem", lv: "mid", ex: "In triangle \\(ABC\\), the bisector of \\(\\angle A\\) meets \\(BC\\) at \\(D\\). If \\(AB=6\\), \\(AC=9\\), and \\(BC=10\\), what is \\(BD\\)? (Hint: \\(BD:DC = AB:AC\\).)", kw: "angle bisector theorem" }
+        { t: "角平分线定理 Angle Bisector Theorem", lv: "mid", ex: "In triangle \\(ABC\\), the bisector of \\(\\angle A\\) meets \\(BC\\) at \\(D\\). If \\(AB=6\\), \\(AC=9\\), and \\(BC=10\\), what is \\(BD\\)? (Hint: \\(BD:DC = AB:AC\\).)", kw: "angle bisector theorem" },
+        { t: "特殊四边形性质 Parallelogram / Rectangle / Rhombus / Square", lv: "mid", ex: "In parallelogram \\(ABCD\\), \\(AB=10\\), \\(BC=6\\), and the diagonals meet at \\(E\\). If \\(AC=16\\), what is \\(AE\\)? (Diagonals bisect each other.)", kw: "parallelogram rectangle rhombus square properties" },
+        { t: "梯形与四边形面积 Trapezoids & Quadrilateral Area", lv: "mid", ex: "An isosceles trapezoid has bases \\(8\\) and \\(14\\) and height \\(5\\). Find its area. (Area \\(=\\frac{(b_1+b_2)h}{2}\\))", kw: "trapezoid area quadrilateral" }
       ]},
       { title: "坐标几何", leaves: [
         { t: "距离 / 中点公式 Distance / Midpoint Formulas", lv: "easy", ex: "What is the distance between \\((1,2)\\) and \\((4,6)\\)?", kw: "distance formula" },
