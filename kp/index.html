@@ -202,7 +202,7 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
   <header>
     <h1>AMC10 知识点 <em>索引</em></h1>
     <p class="sum">
-      共 <b>63</b> 集 ｜ <b>56</b> 个视频（<b>95.4</b> 分钟）｜ <b>36</b> 个可交互网页
+      共 <b>63</b> 集 ｜ <b>56</b> 个视频（<b>95.7</b> 分钟）｜ <b>36</b> 个可交互网页
       ｜ 其中 <b>29</b> 集两种形态都有<br>
       点「▶ 视频」就地播放，点「◱ 动手」新开一页自己拖
     </p>
@@ -238,6 +238,12 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
         <option value="no">默认顺序</option>
         <option value="gap">补漏优先（没看的在前）</option>
         <option value="last">最近看过</option>
+      </select>
+      <select id="batch" aria-label="按批次筛选">
+        <option value="all">全部批次</option>
+        <option value="B">B 批 · 薄弱点</option>
+        <option value="W">W 批 · 高频考点</option>
+        <option value="R">R 批 · 大纲补齐</option>
       </select>
       <button class="tbtn" id="btnEdit">修正计数</button>
       <button class="tbtn" id="btnData">数据</button>
@@ -336,11 +342,11 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
           </div>
         </div>
       </article>
-      <article class="card" data-no="B02" data-k="b02 因数个数与因数和 质因数分解后，指数加 1 再相乘 数论 约数 因数 因数和 质因数分解" data-t="vh">
+      <article class="card" data-no="B02" data-k="b02 因数个数与因数和 个数：指数加 1 再相乘；和：各次幂先求和，再相乘 数论 约数 因数 因数和 质因数分解" data-t="vh">
         <div class="no">B02</div>
         <div class="bd">
           <h3>因数个数与因数和<span class="tg both">双形态</span><span class="seen z" data-no="B02">待看</span></h3>
-          <p>质因数分解后，指数加 1 再相乘</p>
+          <p>个数：指数加 1 再相乘；和：各次幂先求和，再相乘</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_B02_因数个数.mp4" data-no="B02">▶ 视频 1:40</button><a class="btn h" href="AMC10知识点_B02_因数个数.html" data-no="B02" target="_blank" rel="noopener">◱ 动手</a></div>
           <div class="adj">
             <button class="mini" data-d="-1" data-no="B02">-1</button>
@@ -570,7 +576,7 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
         <div class="bd">
           <h3>凑成两个括号（SFFT）<span class="tg both">双形态</span><span class="seen z" data-no="R09">待看</span></h3>
           <p>xy 带两个一次项时，补常数凑成括号相乘</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R09_SFFT凑因式.mp4" data-no="R09">▶ 视频 1:50</button><a class="btn h" href="AMC10知识点_R09_SFFT凑因式.html" data-no="R09" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R09_SFFT凑因式.mp4" data-no="R09">▶ 视频 2:02</button><a class="btn h" href="AMC10知识点_R09_SFFT凑因式.html" data-no="R09" target="_blank" rel="noopener">◱ 动手</a></div>
           <div class="adj">
             <button class="mini" data-d="-1" data-no="R09">-1</button>
             <button class="mini" data-d="1" data-no="R09">+1</button>
@@ -682,11 +688,11 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
           </div>
         </div>
       </article>
-      <article class="card" data-no="W11" data-k="w11 圆排列与分组去重 圆排列除以 n，等大分组除以阶乘 计数 圆桌 环形 分组 去重" data-t="v">
+      <article class="card" data-no="W11" data-k="w11 圆排列与分组去重 物体互异才能除 n；等大分组再除阶乘 计数 圆桌 环形 分组 去重" data-t="v">
         <div class="no">W11</div>
         <div class="bd">
           <h3>圆排列与分组去重<span class="seen z" data-no="W11">待看</span></h3>
-          <p>圆排列除以 n，等大分组除以阶乘</p>
+          <p>物体互异才能除 n；等大分组再除阶乘</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W11_圆排列与分组.mp4" data-no="W11">▶ 视频 1:42</button></div>
           <div class="adj">
             <button class="mini" data-d="-1" data-no="W11">-1</button>
@@ -851,12 +857,12 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
           </div>
         </div>
       </article>
-      <article class="card" data-no="R15" data-k="r15 距离、中点与定比分点 权重配在对端：靠近谁，谁系数小 解析几何 距离 中点 定比 分点 坐标" data-t="vh">
+      <article class="card" data-no="R15" data-k="r15 距离、中点与定比分点 系数配在对端：a 前配 n，靠近谁谁的系数大 解析几何 距离 中点 定比 分点 坐标" data-t="vh">
         <div class="no">R15</div>
         <div class="bd">
           <h3>距离、中点与定比分点<span class="tg both">双形态</span><span class="seen z" data-no="R15">待看</span></h3>
-          <p>权重配在对端：靠近谁，谁系数小</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R15_距离中点与定比分点.mp4" data-no="R15">▶ 视频 1:42</button><a class="btn h" href="AMC10知识点_R15_距离中点与定比分点.html" data-no="R15" target="_blank" rel="noopener">◱ 动手</a></div>
+          <p>系数配在对端：A 前配 n，靠近谁谁的系数大</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R15_距离中点与定比分点.mp4" data-no="R15">▶ 视频 1:44</button><a class="btn h" href="AMC10知识点_R15_距离中点与定比分点.html" data-no="R15" target="_blank" rel="noopener">◱ 动手</a></div>
           <div class="adj">
             <button class="mini" data-d="-1" data-no="R15">-1</button>
             <button class="mini" data-d="1" data-no="R15">+1</button>
@@ -1211,7 +1217,8 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
   <footer>
     <b>计数</b>：每集右侧显示看过几次。视频要播到 3%（或 3 秒）才算一次，点开就关不会虚增；点「◱ 动手」打开即算一次。数字存在本机浏览器，不上传。<br>
     <b>说明</b>：时长取自视频实测，非估算。网页版与视频版内容同源，一个可回退细看、一个可拖动验证。<br>
-    <b>形态选择</b>：需要「看着它连续怎么变」的知识点做成可交互网页；需要「听清判断顺序」的做成视频。<br>
+    <b>形态选择</b>：需要「看着它连续怎么变」的知识点做成可交互网页；需要「听清判断顺序」的做成视频。双形态的两种都看，一种管「懂」，一种管「快」。<br>
+    <b>占比口径</b>：分组标题后的百分比是<b>细分类真题统计</b>（2011–2024 年 750 题实测），与主站思维导图按「代数 / 几何 / 数论 / 组合」四大模块的粗口径不同，两者不矛盾，只是颗粒度不一样。<br>
     <b>覆盖</b>：三批全部完成：第一批（薄弱点）13 集 + 第二批（高频考点）25 集 + 第三批（大纲补齐）25 集，共 63 集。<br>
     <a href="AMC10动画选题_三批总表.html" class="lnk">→ 看三批选题总表</a><span class="lnk2">（含未做的第三批与勾选进度）</span>
   </footer>
@@ -1236,7 +1243,8 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
   var grps = [].slice.call(document.querySelectorAll('.grp'));
   var empty = document.getElementById('empty');
   var sortby = document.getElementById('sortby');
-  var modeF = 'all', modeS = 'all';
+  var batchSel = document.getElementById('batch');
+  var modeF = 'all', modeS = 'all', modeB = 'all';
 
   /* ---------------- 计数存取（本地，不上传） ---------------- */
   var seen = {};
@@ -1363,11 +1371,12 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
       var n = parseInt(c.getAttribute('data-n'), 10) || 0;
       var hitT = !t || c.getAttribute('data-k').indexOf(t) >= 0;
       var hitF = modeF === 'all' || c.getAttribute('data-t').indexOf(modeF) >= 0;
+      var hitB = modeB === 'all' || c.getAttribute('data-no').charAt(0) === modeB;
       var hitS = modeS === 'all'
         || (modeS === 'none' && n === 0)
         || (modeS === 'once' && n === 1)
         || (modeS === 'more' && n >= 2);
-      var on = hitT && hitF && hitS;
+      var on = hitT && hitF && hitS && hitB;
       c.style.display = on ? '' : 'none';
       if (on) shown++;
     });
@@ -1405,6 +1414,7 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
     b.addEventListener('click', function(){ setStat(b.getAttribute('data-s')); });
   });
   if (sortby) sortby.addEventListener('change', sortAll);
+  if (batchSel) batchSel.addEventListener('change', function(){ modeB = batchSel.value; apply(); });
 
   var pnoneEl = document.getElementById('pnone');
   if (pnoneEl) pnoneEl.addEventListener('click', function(){ setStat('none'); });
