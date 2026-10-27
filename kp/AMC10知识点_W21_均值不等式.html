@@ -584,6 +584,7 @@ window.S = (function(){
   var i = 0;
   function render(){
     var s = STEPS[i];
+    window.__STEP = i;          // 让各集的 draw() 知道当前第几步，做「这一步该强调什么」
     document.getElementById('stitle').innerHTML = s.t;
     document.getElementById('sdesc').innerHTML = s.d;
     var dots = document.getElementById('dots');
@@ -658,9 +659,11 @@ window.__EP = (function(){
 
     // 曲线下方整片是空的（y 的最小值就是谷底），把不等式本身放在这里，
     // 既补上构图空白，也让「结论」和「图形」始终同框。
-    S.text(S.X(0.95), S.Y(1.55), 'x + k/x ≥ 2√k', {size: 17, c: '#fbbf24', bold: true});
-    S.text(S.X(0.95), S.Y(1.12), '当且仅当 x = √k 取等', {size: 12, c: '#34d399'});
-    S.text(S.X(0.95), S.Y(0.78), '前提：x 与 k 都是正数', {size: 12, c: '#9fb3cf'});
+    // 文字块原来居中在 x=0.95，宽度横跨 x=√k 那条竖直虚线，字被线穿过。
+    // 改成左对齐、整块挪到竖线右侧的空白里（曲线在下方，不压线）
+    S.text(S.X(1.62), S.Y(1.55), 'x + k/x ≥ 2√k', {size: 17, c: '#fbbf24', bold: true, align: 'left'});
+    S.text(S.X(1.62), S.Y(1.14), '当且仅当 x = √k 取等', {size: 12, c: '#34d399', align: 'left'});
+    S.text(S.X(1.62), S.Y(0.82), '前提：x 与 k 都是正数', {size: 12, c: '#9fb3cf', align: 'left'});
 
     S.ro([
       {k: 'k', v: S.fmt(st.k, 2)},

@@ -584,6 +584,7 @@ window.S = (function(){
   var i = 0;
   function render(){
     var s = STEPS[i];
+    window.__STEP = i;          // 让各集的 draw() 知道当前第几步，做「这一步该强调什么」
     document.getElementById('stitle').innerHTML = s.t;
     document.getElementById('sdesc').innerHTML = s.d;
     var dots = document.getElementById('dots');
@@ -615,6 +616,7 @@ window.S = (function(){
 <script>
 window.__EP = (function(){
   var st = { a1: 2.0, mode: 'seq' };
+  var step = 0;
   var segBox = null;
 
   function h(x){
@@ -680,7 +682,8 @@ window.__EP = (function(){
     }
   }
 
-  function drawCob(){
+  function drawCob(rounds){
+    rounds = rounds || 3;
     S.fit(2.6, 2.9, 26, 0.6, 0.5);
     var B = S.bounds();
     S.axes({x0: B.x0, x1: B.x1, y0: B.y0, y1: B.y1, step: 1});
@@ -697,7 +700,7 @@ window.__EP = (function(){
     // 蛛网路径
     var path = [], x = st.a1;
     path.push([x, 0]);
-    for (var i = 0; i < 3; i++){
+    for (var i = 0; i < rounds; i++){
       var nx = h(x);
       if (!isFinite(nx)) break;
       path.push([x, nx]);
@@ -708,9 +711,16 @@ window.__EP = (function(){
       S.line(path[j][0], path[j][1], path[j+1][0], path[j+1][1],
              {c: '#7dd3fc', w: 2.4});
     }
-    // 回到起点的那一段（闭合循环）
-    S.line(path[path.length-1][0], path[path.length-1][1], st.a1, h(st.a1),
-           {c: 'rgba(52,211,153,.9)', w: 2.4, dash: [6, 5]});
+    // 回到起点的那一段（闭合循环）—— 只有走满三步才画
+    if (rounds >= 3){
+      S.line(path[path.length-1][0], path[path.length-1][1], st.a1, h(st.a1),
+             {c: 'rgba(52,211,153,.95)', w: 2.8, dash: [6, 5]});
+    }
+    // 每一步的两段标上序号：竖直 = 算下一项，横走 = 挪回 y=x
+    if (rounds === 1){
+      S.label(st.a1 + 0.16, h(st.a1) / 2, '①', {c: '#7dd3fc', size: 15, bold: true});
+      S.label((st.a1 + h(st.a1)) / 2, h(st.a1) + 0.16, '②', {c: '#7dd3fc', size: 15, bold: true});
+    }
 
     // 起点
     S.dot(st.a1, 0, {c: '#34d399', r: 5.6});
@@ -719,11 +729,25 @@ window.__EP = (function(){
 
   function draw(){
     S.clear({grid: 'none'});
-    if (st.mode === 'cob') drawCob(); else drawSeq();
+    if (st.mode === 'cob') drawCob(step === 1 ? 1 : 3); else drawSeq();
 
     // 蛛网图里起始项就是横轴上的位置，可以拖；序列图里用滑块
     if (st.mode === 'cob'){
       S.handle(st.a1, 0, function(x){ st.a1 = fixA1(x); });
+    }
+
+    // ---- 每步定格提示 ----
+    var tp = [
+      ['先手算：a₂ = −1，a₃ = 0.5', '算到第三步别急，再算一项试试', '#7dd3fc'],
+      ['① 竖直走到曲线上 = 算出下一项；② 横走回 y=x = 当成新的 x', '这两步重复，就是「代入」的全部动作', '#7dd3fc'],
+      ['走三步：2 → −1 → 0.5 → 2，回到起点', '三项一循环，永远不会跑出新值', '#34d399'],
+      ['序列图上就是三条水平线轮流出现', '换起始项，三个值整体挪位，循环长度还是 3', '#fbbf24'],
+      ['2024 除以 3 看余数，别真算 2024 次', '余 1 落第 1 位、余 2 落第 2 位、整除落第 3 位', '#f87171']
+    ][step] || null;
+    if (tp){
+      var w = S.W;
+      S.text(w / 2, 22, tp[0], {px:true, size: st.mode === 'cob' ? 12 : 15, bold:true, c:tp[2], align:'center'});
+      S.text(w / 2, 44, tp[1], {px:true, size: 12, c:'#9fb3cf', align:'center'});
     }
 
     var cy = cycle();
@@ -742,6 +766,7 @@ window.__EP = (function(){
   }
 
   function onStep(i, p){
+    step = i;
     if (p) for (var kk in p) st[kk] = p[kk];
     sync();
   }

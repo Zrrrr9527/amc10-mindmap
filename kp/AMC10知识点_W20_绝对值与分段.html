@@ -584,6 +584,7 @@ window.S = (function(){
   var i = 0;
   function render(){
     var s = STEPS[i];
+    window.__STEP = i;          // 让各集的 draw() 知道当前第几步，做「这一步该强调什么」
     document.getElementById('stitle').innerHTML = s.t;
     document.getElementById('sdesc').innerHTML = s.d;
     var dots = document.getElementById('dots');
@@ -660,7 +661,7 @@ window.__EP = (function(){
       S.label((st.a + st.b) / 2, d, '高度 |a−b| = ' + S.fmt(d, 2),
               {dy: -23, c: '#34d399', size: 12, bold: true});
       // 放在平台与 x 轴之间的空白里：原来压在 x 轴上，和刻度、「O」叠在一起
-      S.label((st.a + st.b) / 2, d * 0.34, '这一段都取到最小值',
+      S.label((st.a + st.b) / 2, d * 0.86, '这一段都取到最小值',
               {c: '#34d399', size: 11});
     } else {
       // 两端平台
@@ -675,8 +676,9 @@ window.__EP = (function(){
     // 折点
     S.dot(st.a, 0, {c: '#7dd3fc', r: 4});
     S.dot(st.b, 0, {c: '#7dd3fc', r: 4});
-    S.label(st.a, 0, 'a', {dx: -12, dy: 15, c: '#7dd3fc', size: 13, bold: true});
-    S.label(st.b, 0, 'b', {dx: 12, dy: 15, c: '#7dd3fc', size: 13, bold: true});
+    // dy 必须大于刻度数字的高度，否则 a/b 会和 −2、1 这些刻度叠在一起
+    S.label(st.a, 0, 'a', {dx: -14, dy: 26, c: '#7dd3fc', size: 13, bold: true});
+    S.label(st.b, 0, 'b', {dx: 14, dy: 26, c: '#7dd3fc', size: 13, bold: true});
 
     S.handle(st.a, 0, function(x){ st.a = clamp(x, -4.6, st.b - 0.4); });
     S.handle(st.b, 0, function(x){ st.b = clamp(x, st.a + 0.4, 4.6); });

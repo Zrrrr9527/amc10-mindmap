@@ -166,10 +166,17 @@ window.S = (function(){
     return view.s;
   }
 
-  function clear(){
+  /* 当前可见的世界范围（画布四边对应的坐标） */
+  function bounds(){
+    return { x0: view.cx - (W/2)/view.s, x1: view.cx + (W/2)/view.s,
+             y0: view.cy - (H/2)/view.s, y1: view.cy + (H/2)/view.s };
+  }
+
+  function clear(o){
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = '#0a1b33';
     ctx.fillRect(0, 0, W, H);
+    if (o && o.grid === 'none'){ HS = []; return; }   // 函数图用 axes() 自己的网格
     // 极淡网格，帮助估长度
     ctx.strokeStyle = 'rgba(125,211,252,.055)'; ctx.lineWidth = 1;
     var g = 40;
@@ -319,6 +326,127 @@ window.S = (function(){
     }
   }
 
+  /* ---------- 函数图专用图元 ---------- */
+
+  /* 屏幕空间的箭头（世界坐标给两端） */
+  function arrow(x1, y1, x2, y2, o){
+    o = o || {};
+    var c = o.c || 'rgba(159,179,207,.7)';
+    var sxp = X(x2), syp = Y(y2);
+    var dx = sxp - X(x1), dy = syp - Y(y1), L = Math.hypot(dx, dy) || 1;
+    var ux = dx/L, uy = dy/L, k = o.k || 8;
+    ctx.save();
+    ctx.fillStyle = c;
+    ctx.beginPath();
+    ctx.moveTo(sxp, syp);
+    ctx.lineTo(sxp - ux*k - uy*k*0.55, syp - uy*k + ux*k*0.55);
+    ctx.lineTo(sxp - ux*k + uy*k*0.55, syp - uy*k - ux*k*0.55);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  /* 坐标轴：过 (ox,oy)，画到给定世界范围，带刻度与数字
+     o = {x0,x1,y0,y1, step, ox, oy, c, grid:true, labels:true} */
+  function axes(o){
+    o = o || {};
+    var ox = o.ox == null ? 0 : o.ox, oy = o.oy == null ? 0 : o.oy;
+    var x0 = o.x0 == null ? view.cx - 6 : o.x0;
+    var x1 = o.x1 == null ? view.cx + 6 : o.x1;
+    var y0 = o.y0 == null ? view.cy - 5 : o.y0;
+    var y1 = o.y1 == null ? view.cy + 5 : o.y1;
+    var step = o.step || 1;
+    var cA = o.c || 'rgba(159,179,207,.55)';
+    var cT = o.tc || 'rgba(140,166,199,.85)';
+
+    // 网格（对齐刻度，比默认像素网格有用）
+    if (o.grid !== false){
+      ctx.save(); ctx.strokeStyle = 'rgba(125,211,252,.075)'; ctx.lineWidth = 1;
+      for (var gx = Math.ceil(x0/step)*step; gx <= x1 + 1e-9; gx += step){
+        ctx.beginPath(); ctx.moveTo(X(gx), 0); ctx.lineTo(X(gx), H); ctx.stroke();
+      }
+      for (var gy = Math.ceil(y0/step)*step; gy <= y1 + 1e-9; gy += step){
+        ctx.beginPath(); ctx.moveTo(0, Y(gy)); ctx.lineTo(W, Y(gy)); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // 两条轴 + 箭头
+    line(x0, oy, x1, oy, {c: cA, w: 1.4});
+    line(ox, y0, ox, y1, {c: cA, w: 1.4});
+    arrow(x1 - 0.001, oy, x1, oy, {c: cA});
+    arrow(ox, y1 - 0.001, ox, y1, {c: cA});
+
+    // 刻度
+    var showL = o.labels !== false;
+    for (var t = Math.ceil(x0/step)*step; t <= x1 + 1e-9; t += step){
+      if (Math.abs(t) < 1e-9) continue;
+      var px = X(t), py = Y(oy);
+      if (px < 16 || px > W - 16) continue;
+      line(t, oy - 0.06*step, t, oy + 0.06*step, {c: cA, w: 1.2});
+      if (showL) text(px, py + 13, fmt(t, 1), {size: 11, c: cT});
+    }
+    for (var u = Math.ceil(y0/step)*step; u <= y1 + 1e-9; u += step){
+      if (Math.abs(u) < 1e-9) continue;
+      var pxx = X(ox), pyy = Y(u);
+      if (pyy < 14 || pyy > H - 14) continue;
+      line(ox - 0.06*step, u, ox + 0.06*step, u, {c: cA, w: 1.2});
+      if (showL) text(pxx - 11, pyy, fmt(u, 1), {size: 11, c: cT, align: 'right'});
+    }
+    if (showL){
+      text(X(ox) - 12, Y(oy) + 13, 'O', {size: 12, c: cT});
+      text(X(x1) - 12, Y(oy) - 13, o.xlab || 'x', {size: 13, c: cT, bold: true});
+      text(X(ox) + 14, Y(y1) + 12, o.ylab || 'y', {size: 13, c: cT, bold: true});
+    }
+  }
+
+  /* 函数曲线：在 [x0,x1] 上采样 f 并描线；f 返回非有限值时自动断开 */
+  function fn(x0, x1, f, o){
+    o = o || {};
+    var n = o.n || Math.max(120, Math.round(Math.abs(X(x1) - X(x0))));
+    ctx.save();
+    ctx.strokeStyle = o.c || P.amber;
+    ctx.lineWidth = lw(o.w || 2.6);
+    if (o.dash) ctx.setLineDash(o.dash);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.beginPath();
+    var pen = false;
+    for (var i = 0; i <= n; i++){
+      var x = x0 + (x1 - x0) * i / n;
+      var y = f(x);
+      if (!isFinite(y) || Math.abs(y) > 1e6){ pen = false; continue; }
+      var sx = X(x), sy = Y(y);
+      if (!pen){ ctx.moveTo(sx, sy); pen = true; } else ctx.lineTo(sx, sy);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /* 曲边填充：曲线与基线之间（基线默认 y=0） */
+  function area(x0, x1, f, o){
+    o = o || {};
+    var base = o.base == null ? 0 : o.base;
+    var n = o.n || Math.max(90, Math.round(Math.abs(X(x1) - X(x0))));
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(X(x0), Y(base));
+    for (var i = 0; i <= n; i++){
+      var x = x0 + (x1 - x0) * i / n, y = f(x);
+      if (!isFinite(y)) y = base;
+      ctx.lineTo(X(x), Y(y));
+    }
+    ctx.lineTo(X(x1), Y(base));
+    ctx.closePath();
+    ctx.fillStyle = o.fill || 'rgba(251,191,36,.16)';
+    ctx.fill();
+    if (o.stroke){ ctx.strokeStyle = o.stroke; ctx.lineWidth = lw(1.2); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  function vline(x, o){ o = o || {}; line(x, o.y0 == null ? view.cy - 5 : o.y0,
+                                   x, o.y1 == null ? view.cy + 5 : o.y1, o); }
+  function hline(y, o){ o = o || {}; line(o.x0 == null ? view.cx - 6 : o.x0, y,
+                                   o.x1 == null ? view.cx + 6 : o.x1, y, o); }
+
   /* 可拖手柄：每帧 draw 里调用；指针在 24px 内按下即可拖 */
   function handle(x, y, cb, o){
     o = o || {};
@@ -446,6 +574,7 @@ window.S = (function(){
   return { X:X, Y:Y, inv:inv, fit:fit, clear:clear, line:line, poly:poly, circle:circle,
            arc:arcPath, sector:sector, dot:dot, text:text, label:label, right:right, ticks:ticks,
            handle:handle, ro:ro, fmt:fmt, slider:slider, setSlider:setSlider, seg:seg, setSeg:setSeg,
+           arrow:arrow, axes:axes, fn:fn, area:area, vline:vline, hline:hline, bounds:bounds,
            resize:resize, P:P, get W(){ return W; }, get H(){ return H; }, get view(){ return view; } };
 })();
 
@@ -455,6 +584,7 @@ window.S = (function(){
   var i = 0;
   function render(){
     var s = STEPS[i];
+    window.__STEP = i;          // 让各集的 draw() 知道当前第几步，做「这一步该强调什么」
     document.getElementById('stitle').innerHTML = s.t;
     document.getElementById('sdesc').innerHTML = s.d;
     var dots = document.getElementById('dots');
@@ -485,6 +615,7 @@ window.S = (function(){
 </script>
 <script>
 window.__EP = (function(){
+  var step = 0;
   var st = { cx:1.2, cy:-1.0, r:2.0, k:0.6, b:0.4 };
 
   function controls(){
@@ -503,9 +634,16 @@ window.__EP = (function(){
   function draw(){
     S.clear();
     var cx = st.cx, cy = st.cy, r = st.r, k = st.k, b = st.b;
-    // 取景以「圆」为准：原来按固定框取景，圆心一偏圆就被裁掉
-    var half = r * 1.12 + 0.5;
-    S.fit(half, half * 0.86, 38, cx, cy);
+
+    // 先把垂足算出来：取景必须把「圆心→垂足」这条 d 也包进去，
+    // 否则 d 一长，那条绿色虚线就冲出画布下边（第 3 步原本就是这样）
+    var den = Math.sqrt(k*k + 1);
+    var d = Math.abs(k*cx - cy + b) / den;
+    var F = [cx - (k*cx - cy + b)/(k*k+1) * k, cy + (k*cx - cy + b)/(k*k+1)];
+
+    var xLo = Math.min(cx - r, F[0]) - 0.45, xHi = Math.max(cx + r, F[0]) + 0.45;
+    var yLo = Math.min(cy - r, F[1]) - 0.45, yHi = Math.max(cy + r, F[1]) + 0.45;
+    S.fit((xHi - xLo) / 2, (yHi - yLo) / 2, 34, (xLo + xHi) / 2, (yLo + yHi) / 2);
 
     var vw = (S.W / S.view.s) / 2, vh = (S.H / S.view.s) / 2;
     S.line(-vw, 0, vw, 0, {c:'rgba(125,211,252,.18)', w:1});
@@ -514,10 +652,7 @@ window.__EP = (function(){
     // 直线：kx − y + b = 0
     S.line(-vw, k*(-vw) + b, vw, k*vw + b, {c:'#f87171', w:2.2});
 
-    // 圆心到直线的距离
-    var den = Math.sqrt(k*k + 1);
-    var d = Math.abs(k*cx - cy + b) / den;
-    var F = [cx - (k*cx - cy + b)/(k*k+1) * k, cy + (k*cx - cy + b)/(k*k+1)];
+    // 圆心到直线的距离（d 与 F 已在取景前算好）
     S.line(cx, cy, F[0], F[1], {c:'#34d399', w:2, dash:[6,5]});
     if (Math.abs(k) > 1e-6){
       var ux = -k/den, uy = 1/den;
@@ -553,6 +688,11 @@ window.__EP = (function(){
     var eq = '(x' + sgn(-cx, false) + ')² + (y' + sgn(-cy, false) + ')² = ' +
              (r*r).toFixed(2).replace(/\.?0+$/, '');
     S.text(S.W/2, 22, eq, {size:14, c:'#7dd3fc', bold:true, align:'center'});
+    // 每步把「谁和谁比」摆出来：这才是位置关系的全部
+    var relCol = rel === '相切' ? '#fbbf24' : (rel === '相交' ? '#34d399' : '#f87171');
+    S.text(S.W/2, 44, 'd = ' + S.fmt(d, 2) + '   ' + (d > r ? '>' : (Math.abs(d-r) < 0.02 ? '=' : '<')) +
+           '   r = ' + S.fmt(r, 2) + '   ⇒ ' + rel,
+           {size:13, c:relCol, bold:true, align:'center'});
 
     S.ro([
       {k:'圆心', v:'(' + S.fmt(cx,2) + ', ' + S.fmt(cy,2) + ')'},
@@ -563,7 +703,8 @@ window.__EP = (function(){
     ]);
   }
 
-  function onStep(i, p){ if (p) for (var kk in p) st[kk] = p[kk]; sync(); }
+  function onStep(i, p){
+    step = i; if (p) for (var kk in p) st[kk] = p[kk]; sync(); }
   return { st:st, controls:controls, redraw:draw, onStep:onStep };
 })();
 </script>

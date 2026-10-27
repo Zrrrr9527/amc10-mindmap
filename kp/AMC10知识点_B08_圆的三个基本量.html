@@ -166,10 +166,17 @@ window.S = (function(){
     return view.s;
   }
 
-  function clear(){
+  /* 当前可见的世界范围（画布四边对应的坐标） */
+  function bounds(){
+    return { x0: view.cx - (W/2)/view.s, x1: view.cx + (W/2)/view.s,
+             y0: view.cy - (H/2)/view.s, y1: view.cy + (H/2)/view.s };
+  }
+
+  function clear(o){
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = '#0a1b33';
     ctx.fillRect(0, 0, W, H);
+    if (o && o.grid === 'none'){ HS = []; return; }   // 函数图用 axes() 自己的网格
     // 极淡网格，帮助估长度
     ctx.strokeStyle = 'rgba(125,211,252,.055)'; ctx.lineWidth = 1;
     var g = 40;
@@ -319,6 +326,127 @@ window.S = (function(){
     }
   }
 
+  /* ---------- 函数图专用图元 ---------- */
+
+  /* 屏幕空间的箭头（世界坐标给两端） */
+  function arrow(x1, y1, x2, y2, o){
+    o = o || {};
+    var c = o.c || 'rgba(159,179,207,.7)';
+    var sxp = X(x2), syp = Y(y2);
+    var dx = sxp - X(x1), dy = syp - Y(y1), L = Math.hypot(dx, dy) || 1;
+    var ux = dx/L, uy = dy/L, k = o.k || 8;
+    ctx.save();
+    ctx.fillStyle = c;
+    ctx.beginPath();
+    ctx.moveTo(sxp, syp);
+    ctx.lineTo(sxp - ux*k - uy*k*0.55, syp - uy*k + ux*k*0.55);
+    ctx.lineTo(sxp - ux*k + uy*k*0.55, syp - uy*k - ux*k*0.55);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  /* 坐标轴：过 (ox,oy)，画到给定世界范围，带刻度与数字
+     o = {x0,x1,y0,y1, step, ox, oy, c, grid:true, labels:true} */
+  function axes(o){
+    o = o || {};
+    var ox = o.ox == null ? 0 : o.ox, oy = o.oy == null ? 0 : o.oy;
+    var x0 = o.x0 == null ? view.cx - 6 : o.x0;
+    var x1 = o.x1 == null ? view.cx + 6 : o.x1;
+    var y0 = o.y0 == null ? view.cy - 5 : o.y0;
+    var y1 = o.y1 == null ? view.cy + 5 : o.y1;
+    var step = o.step || 1;
+    var cA = o.c || 'rgba(159,179,207,.55)';
+    var cT = o.tc || 'rgba(140,166,199,.85)';
+
+    // 网格（对齐刻度，比默认像素网格有用）
+    if (o.grid !== false){
+      ctx.save(); ctx.strokeStyle = 'rgba(125,211,252,.075)'; ctx.lineWidth = 1;
+      for (var gx = Math.ceil(x0/step)*step; gx <= x1 + 1e-9; gx += step){
+        ctx.beginPath(); ctx.moveTo(X(gx), 0); ctx.lineTo(X(gx), H); ctx.stroke();
+      }
+      for (var gy = Math.ceil(y0/step)*step; gy <= y1 + 1e-9; gy += step){
+        ctx.beginPath(); ctx.moveTo(0, Y(gy)); ctx.lineTo(W, Y(gy)); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // 两条轴 + 箭头
+    line(x0, oy, x1, oy, {c: cA, w: 1.4});
+    line(ox, y0, ox, y1, {c: cA, w: 1.4});
+    arrow(x1 - 0.001, oy, x1, oy, {c: cA});
+    arrow(ox, y1 - 0.001, ox, y1, {c: cA});
+
+    // 刻度
+    var showL = o.labels !== false;
+    for (var t = Math.ceil(x0/step)*step; t <= x1 + 1e-9; t += step){
+      if (Math.abs(t) < 1e-9) continue;
+      var px = X(t), py = Y(oy);
+      if (px < 16 || px > W - 16) continue;
+      line(t, oy - 0.06*step, t, oy + 0.06*step, {c: cA, w: 1.2});
+      if (showL) text(px, py + 13, fmt(t, 1), {size: 11, c: cT});
+    }
+    for (var u = Math.ceil(y0/step)*step; u <= y1 + 1e-9; u += step){
+      if (Math.abs(u) < 1e-9) continue;
+      var pxx = X(ox), pyy = Y(u);
+      if (pyy < 14 || pyy > H - 14) continue;
+      line(ox - 0.06*step, u, ox + 0.06*step, u, {c: cA, w: 1.2});
+      if (showL) text(pxx - 11, pyy, fmt(u, 1), {size: 11, c: cT, align: 'right'});
+    }
+    if (showL){
+      text(X(ox) - 12, Y(oy) + 13, 'O', {size: 12, c: cT});
+      text(X(x1) - 12, Y(oy) - 13, o.xlab || 'x', {size: 13, c: cT, bold: true});
+      text(X(ox) + 14, Y(y1) + 12, o.ylab || 'y', {size: 13, c: cT, bold: true});
+    }
+  }
+
+  /* 函数曲线：在 [x0,x1] 上采样 f 并描线；f 返回非有限值时自动断开 */
+  function fn(x0, x1, f, o){
+    o = o || {};
+    var n = o.n || Math.max(120, Math.round(Math.abs(X(x1) - X(x0))));
+    ctx.save();
+    ctx.strokeStyle = o.c || P.amber;
+    ctx.lineWidth = lw(o.w || 2.6);
+    if (o.dash) ctx.setLineDash(o.dash);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.beginPath();
+    var pen = false;
+    for (var i = 0; i <= n; i++){
+      var x = x0 + (x1 - x0) * i / n;
+      var y = f(x);
+      if (!isFinite(y) || Math.abs(y) > 1e6){ pen = false; continue; }
+      var sx = X(x), sy = Y(y);
+      if (!pen){ ctx.moveTo(sx, sy); pen = true; } else ctx.lineTo(sx, sy);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /* 曲边填充：曲线与基线之间（基线默认 y=0） */
+  function area(x0, x1, f, o){
+    o = o || {};
+    var base = o.base == null ? 0 : o.base;
+    var n = o.n || Math.max(90, Math.round(Math.abs(X(x1) - X(x0))));
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(X(x0), Y(base));
+    for (var i = 0; i <= n; i++){
+      var x = x0 + (x1 - x0) * i / n, y = f(x);
+      if (!isFinite(y)) y = base;
+      ctx.lineTo(X(x), Y(y));
+    }
+    ctx.lineTo(X(x1), Y(base));
+    ctx.closePath();
+    ctx.fillStyle = o.fill || 'rgba(251,191,36,.16)';
+    ctx.fill();
+    if (o.stroke){ ctx.strokeStyle = o.stroke; ctx.lineWidth = lw(1.2); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  function vline(x, o){ o = o || {}; line(x, o.y0 == null ? view.cy - 5 : o.y0,
+                                   x, o.y1 == null ? view.cy + 5 : o.y1, o); }
+  function hline(y, o){ o = o || {}; line(o.x0 == null ? view.cx - 6 : o.x0, y,
+                                   o.x1 == null ? view.cx + 6 : o.x1, y, o); }
+
   /* 可拖手柄：每帧 draw 里调用；指针在 24px 内按下即可拖 */
   function handle(x, y, cb, o){
     o = o || {};
@@ -446,6 +574,7 @@ window.S = (function(){
   return { X:X, Y:Y, inv:inv, fit:fit, clear:clear, line:line, poly:poly, circle:circle,
            arc:arcPath, sector:sector, dot:dot, text:text, label:label, right:right, ticks:ticks,
            handle:handle, ro:ro, fmt:fmt, slider:slider, setSlider:setSlider, seg:seg, setSeg:setSeg,
+           arrow:arrow, axes:axes, fn:fn, area:area, vline:vline, hline:hline, bounds:bounds,
            resize:resize, P:P, get W(){ return W; }, get H(){ return H; }, get view(){ return view; } };
 })();
 
@@ -455,6 +584,7 @@ window.S = (function(){
   var i = 0;
   function render(){
     var s = STEPS[i];
+    window.__STEP = i;          // 让各集的 draw() 知道当前第几步，做「这一步该强调什么」
     document.getElementById('stitle').innerHTML = s.t;
     document.getElementById('sdesc').innerHTML = s.d;
     var dots = document.getElementById('dots');
@@ -486,6 +616,7 @@ window.S = (function(){
 <script>
 window.__EP = (function(){
   var st = { r: 3.0, d: 1.8 };
+  var step = 0;                    // 当前第几步：每步强调不同的量，避免切步白切
 
   function controls(){
     S.slider('r', '半径 r', 1.6, 4, 0.1, st.r, function(v){ st.r = v; if (st.d > v*0.94) st.d = v*0.94; });
@@ -501,43 +632,89 @@ window.__EP = (function(){
   function draw(){
     S.clear();
     var r = st.r, d = st.d, v = vals();
-    S.fit(r * 1.22, r * 1.22, 28);
+    // 顶端要写公式，图形整体下移一点
+    S.fit(r * 1.24, r * 1.24, 30, 0, -r * 0.10);
+
+    var showD   = step >= 1;        // 弦心距从第 2 步才出现
+    var showTri = step >= 2;        // 直角三角形第 3 步出现
+    var halfCol = step === 2 ? '#fbbf24' : '#34d399';
 
     S.circle(0, 0, r, {stroke:'rgba(125,211,252,.45)', w:2.2});
+    if (showTri) S.poly([[0,0], [v.half, d], [0, d]], {fill:'rgba(52,211,153,.14)', stroke:null});
+
     // 弦
     S.line(-v.half, d, v.half, d, {c:'#fbbf24', w:3.2});
     // 半径到弦端点
-    S.line(0, 0, v.half, d, {c:'#7dd3fc', w:2.2});
-    // 弦心距
-    S.line(0, 0, 0, d, {c:'#34d399', w:2.2, dash:[6,5]});
-    // 直角三角形填充（强调它是解题的落点）
-    S.poly([[0,0], [v.half, d], [0, d]], {fill:'rgba(52,211,153,.14)', stroke:null});
-    S.right(0, d, 0, -1, 1, 0, {c:'#34d399', k:0.34});
+    S.line(0, 0, v.half, d, {c:'#7dd3fc', w: step === 5 ? 3.4 : 2.2});
 
-    S.label(0, 0, 'O', {dx:-14, dy:12, bold:true});
-    S.label(v.half, d, 'A', {dx:4, dy:-20, bold:true, c:'#fbbf24'});
-    S.label(-v.half, d, 'B', {dx:-6, dy:-20, bold:true, c:'#fbbf24'});
-    S.label(0, d, 'M', {dx:15, dy:17, size:12, c:'#34d399'});
-    S.label(v.half * 0.55, d * 0.52 + 0.06, 'r', {c:'#7dd3fc', size:14, bold:true});
-    S.label(-0.1, d * 0.5, 'd', {dx:-16, c:'#34d399', size:13});
-    S.label(v.half * 0.55, d, '半弦 AM', {dy:19, size:12, c:'#fbbf24'});
+    if (showD){
+      S.line(0, 0, 0, d, {c:'#34d399', w:2.2, dash:[6,5]});
+      S.right(0, d, 0, -1, 1, 0, {c:'#34d399', k:0.34});
+      S.ticks(-v.half, d, 0, d, 1, {c:'#34d399'});   // MB
+      S.ticks(0, d, v.half, d, 1, {c:'#34d399'});    // AM
+    }
 
-    // 竖直方向的拖动：抓弦
+    // d 很小时（弦贴近直径）三角形几乎退化，密集标签会堆在圆心 → 只留必要的
+    var roomy = d > 0.75;
+
+    // ---- 标签（偏移都往图形外侧放，避免压线）----
+    S.label(0, 0, 'O', {dx:-17, dy:17, bold:true});
+    S.label(v.half, d, 'A', {dx:12, dy:-13, bold:true, c:'#fbbf24'});
+    S.label(-v.half, d, 'B', {dx:-12, dy:-13, bold:true, c:'#fbbf24'});
+    S.label(v.half * 0.52, d * 0.55, 'r', {c:'#7dd3fc', size:15, bold:true, dx:10, dy:2});
+    if (showD && roomy){
+      S.label(0, d, 'M', {dx:17, dy:15, size:12, c:'#34d399'});
+      S.label(-0.06, d * 0.48, 'd', {dx:-17, c:'#34d399', size:14, bold:true});
+      S.label(v.half * 0.5, d, 'AM', {dy:-15, size:12, c:'#34d399'});
+      S.label(-v.half * 0.5, d, 'MB', {dy:-15, size:12, c:'#34d399'});
+    } else if (showD){
+      S.label(0, d, 'd≈0', {dx:26, dy:-14, size:12, c:'#34d399'});
+    }
+    if (showTri && roomy) S.label(v.half * 0.24, d * 0.5, '半弦', {size:11, c:halfCol});
+
+    // ---- 每步的定格提示 ----
+    if (step === 2){
+      S.text(350, 34, 'r² = d² + 半弦²', {px:true, size:17, bold:true, c:'#34d399'});
+      S.text(350, 58, '半径是斜边，d 和半弦是两条直角边', {px:true, size:13, c:'#9fb3cf'});
+    }
+    if (step === 3){
+      S.text(350, 34, 'd 越小 → 弦越长', {px:true, size:17, bold:true, c:'#fbbf24'});
+      S.text(350, 58, 'd = 0 时弦就是直径 2r = ' + S.fmt(2*r, 2), {px:true, size:13, c:'#9fb3cf'});
+    }
+    if (step === 4){
+      S.text(350, 34, '弦长 = 2√(r² − d²)', {px:true, size:18, bold:true, c:'#fbbf24'});
+      S.text(350, 58, '先作垂径 → 认出直角三角形 → 勾股', {px:true, size:13, c:'#9fb3cf'});
+    }
+    if (step === 5){
+      // 对比：在 A 点画一条切线 —— 同一根半径，在切线图里变直角边
+      var L = Math.hypot(v.half, d) || 1, tx = -d / L, ty = v.half / L, e = r * 0.62;
+      S.line(v.half - tx * e, d - ty * e, v.half + tx * e, d + ty * e, {c:'#f87171', w:2.6});
+      S.label(v.half + tx * e * 0.82, d + ty * e * 0.82, '切线', {c:'#f87171', size:12, bold:true, dx:14, dy:-8});
+      S.label(v.half * 0.46, d * 0.62, '斜边', {c:'#7dd3fc', size:11, dx:12, dy:14});
+      S.text(350, 34, '这一集：r 是斜边', {px:true, size:17, bold:true, c:'#7dd3fc'});
+      S.text(350, 58, '红线是切线 —— 那里同一个 r 变成直角边', {px:true, size:13, c:'#9fb3cf'});
+    }
+
+    // 竖直方向的拖动：抓弦端点
     S.handle(v.half, d, function(x, y){
       st.d = Math.max(0, Math.min(st.r * 0.94, y));
       sync();
     });
 
     S.ro([
-      {k:'半径 r', v:S.fmt(r,2)},
-      {k:'弦心距 d', v:S.fmt(d,2)},
-      {k:'半弦 √(r²−d²)', v:S.fmt(v.half,2), cls:'on'},
-      {k:'弦长', v:S.fmt(v.chord,2)},
+      {k:'半径 r', v:S.fmt(r,2), cls: step === 5 ? 'on' : ''},
+      {k:'弦心距 d', v:S.fmt(d,2), cls: step >= 1 && step <= 3 ? 'on' : ''},
+      {k:'半弦 √(r²−d²)', v:S.fmt(v.half,2), cls: step === 2 || step === 4 ? 'on' : ''},
+      {k:'弦长', v:S.fmt(v.chord,2), cls: step === 3 || step === 4 ? 'on' : ''},
       {k:'d = 0 时', v:S.fmt(2*r,2), u:'直径'}
     ]);
   }
 
-  function onStep(i, p){ if (p) for (var k in p) st[k] = p[k]; sync(); }
+  function onStep(i, p){
+    step = i;
+    if (p) for (var k in p) st[k] = p[k];
+    sync();
+  }
   return { st:st, controls:controls, redraw:draw, onStep:onStep, vals:vals };
 })();
 </script>
