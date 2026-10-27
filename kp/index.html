@@ -46,6 +46,50 @@ h1 em{font-style:normal;color:var(--sky)}
 }
 .filters button:hover{border-color:#3a5f85;color:var(--ink)}
 .filters button.on{background:var(--sky);border-color:var(--sky);color:#08243c;font-weight:700}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:13px}
+.filters .flab{font-size:11px;color:var(--ink3);letter-spacing:.06em;margin-right:1px;font-weight:700}
+#fStat{margin-top:8px}
+
+/* 进度 */
+.prog{margin-top:17px}
+.pbar{height:9px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;
+  border:1px solid var(--line)}
+.pbar i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,#4fd1c5,#7dd3fc);transition:width .4s ease}
+.pnum{margin-top:8px;font-size:12.5px;color:var(--ink2);line-height:1.7;font-variant-numeric:tabular-nums}
+.pnum b{color:var(--ink)}
+.pnum .r{color:#fbbf24}
+.pnum .l{color:var(--sky);cursor:pointer;border-bottom:1px dashed rgba(125,211,252,.45);font-weight:700}
+
+/* 工具栏 */
+.tools{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
+.tools select{
+  font-family:inherit;font-size:12.5px;padding:7px 11px;border-radius:9px;cursor:pointer;
+  border:1.5px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink2);outline:none;
+}
+.tools select:focus{border-color:var(--sky)}
+.tbtn{
+  font-family:inherit;font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:9px;cursor:pointer;
+  border:1.5px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink2);transition:.16s;
+}
+.tbtn:hover{border-color:#3a5f85;color:var(--ink)}
+.tbtn.on{background:rgba(125,211,252,.18);border-color:rgba(125,211,252,.5);color:var(--sky)}
+.tbtn.danger:hover{border-color:#b91c1c;color:#fca5a5}
+
+/* 数据面板 */
+.panel{display:none;margin-top:11px;padding:13px 14px;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.04)}
+.panel.on{display:block}
+.panel .ph{font-size:11.5px;color:var(--ink3);line-height:1.75;margin-bottom:9px}
+.panel textarea{
+  width:100%;height:66px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:11px;line-height:1.6;padding:9px 10px;border-radius:9px;border:1px solid var(--line);
+  background:rgba(0,0,0,.28);color:var(--ink2);outline:none;
+}
+.panel textarea:focus{border-color:var(--sky)}
+.prow{display:flex;gap:8px;margin-top:9px;align-items:center;flex-wrap:wrap}
+.pmsg{font-size:11.5px;color:#5eead4;font-weight:700}
+.pmsg.bad{color:#fca5a5}
 
 /* 分组 */
 .grp{margin-top:30px}
@@ -76,6 +120,39 @@ h1 em{font-style:normal;color:var(--sky)}
 .tg{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.04em}
 .tg.both{background:rgba(245,158,11,.16);color:#fbbf24}
 .tg.h{background:rgba(125,211,252,.15);color:var(--sky)}
+
+/* 看过计数 */
+.seen{
+  margin-left:auto;flex:0 0 auto;font-size:10.5px;font-weight:700;letter-spacing:.01em;
+  padding:2.5px 8px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+.seen.z{background:rgba(255,255,255,.045);color:var(--ink3);border:1px solid var(--line)}
+.seen.y{background:rgba(79,209,197,.16);color:#5eead4;border:1px solid rgba(79,209,197,.3)}
+.seen.y2{background:rgba(245,158,11,.17);color:#fbbf24;border:1px solid rgba(245,158,11,.34)}
+.card.todo{border-style:dashed}
+.card.s1{box-shadow:inset 3px 0 0 rgba(79,209,197,.7)}
+.card.s2{box-shadow:inset 3px 0 0 rgba(245,158,11,.78)}
+@keyframes fl{
+  0%{box-shadow:0 0 0 2px rgba(125,211,252,.9)}
+  100%{box-shadow:0 0 0 7px rgba(125,211,252,0)}
+}
+.card.flash{animation:fl 1.1s ease-out}
+
+/* 修正控件（仅在「修正计数」开启时出现） */
+.adj{display:none;gap:6px;margin-top:9px;flex-wrap:wrap;align-items:center}
+body.edit .adj{display:flex}
+.mini{
+  font-family:inherit;font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;cursor:pointer;
+  border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink2);
+  font-variant-numeric:tabular-nums;transition:.15s;
+}
+.mini:hover{color:var(--ink);border-color:#3a5f85}
+.lts{font-size:10.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
+
+/* 分组进度 */
+.gstat{font-size:11px;font-weight:600;color:var(--ink3);font-variant-numeric:tabular-nums}
+.gstat .ok{color:#5eead4}
+.gstat .none{color:#fbbf24}
 .acts{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
 .btn{
   font-family:inherit;font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:9px;
@@ -129,584 +206,1001 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
       ｜ 其中 <b>29</b> 集两种形态都有<br>
       点「▶ 视频」就地播放，点「◱ 动手」新开一页自己拖
     </p>
+    <div class="prog">
+      <div class="pbar"><i id="pfill"></i></div>
+      <p class="pnum">
+        已看 <b id="pdone">0</b> / 63 集 ｜ 待看 <span class="l" id="pnone">63 集</span>
+        ｜ 看过两遍以上 <b class="r" id="prep">0</b>
+      </p>
+    </div>
+
     <div class="sbar">
       <span class="ic">⌕</span>
       <input id="q" type="search" placeholder="搜关键词：圆 / 概率 / 数论 / 韦达 / 容斥" autocomplete="off">
       <span class="kbd">/</span>
     </div>
-    <div class="filters">
+    <div class="filters" id="fForm">
+      <span class="flab">形态</span>
       <button class="on" data-f="all">全部</button>
       <button data-f="v">有视频</button>
       <button data-f="h">能动手</button>
       <button data-f="vh">两种都有</button>
     </div>
+    <div class="filters" id="fStat">
+      <span class="flab">看没看</span>
+      <button class="on" data-s="all">全部</button>
+      <button data-s="none">待看</button>
+      <button data-s="once">只一遍</button>
+      <button data-s="more">两遍以上</button>
+    </div>
+    <div class="tools">
+      <select id="sortby" aria-label="排序方式">
+        <option value="no">默认顺序</option>
+        <option value="gap">补漏优先（没看的在前）</option>
+        <option value="last">最近看过</option>
+      </select>
+      <button class="tbtn" id="btnEdit">修正计数</button>
+      <button class="tbtn" id="btnData">数据</button>
+    </div>
+
+    <div class="panel" id="panel">
+      <p class="ph">
+        计数只存在「这台设备的这个浏览器」里，不上传任何地方；换设备或清理浏览器数据就会丢。<br>
+        要搬家：在这里点「导出（复制）」，到另一台设备打开本页，粘贴进框里点「导入」。
+      </p>
+      <textarea id="dtxt" spellcheck="false" placeholder="点「导出」把数字填进来，或粘贴别处的数据后点「导入」"></textarea>
+      <div class="prow">
+        <button class="tbtn" id="btnExp">导出（复制）</button>
+        <button class="tbtn" id="btnImp">导入</button>
+        <button class="tbtn danger" id="btnClr">全部清零</button>
+        <span class="pmsg" id="pmsg"></span>
+      </div>
+    </div>
   </header>
 
-  <section class="grp">
-    <h2>应用题<span class="freq">第一大类别 · 真题 18.9%</span><span class="cnt">4 集</span></h2>
+  <section class="grp" data-g="应用题">
+    <h2>应用题<span class="freq">第一大类别 · 真题 18.9%</span><span class="gstat" data-g="应用题"></span><span class="cnt">4 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="w01 相遇与追及 相向看速度和，同向看速度差；方向一变，分母就变 应用题 速度 行程 相遇 追及 跑道" data-t="h">
+      <article class="card" data-no="W01" data-k="w01 相遇与追及 相向看速度和，同向看速度差；方向一变，分母就变 应用题 速度 行程 相遇 追及 跑道" data-t="h">
         <div class="no">W01</div>
         <div class="bd">
-          <h3>相遇与追及<span class="tg h">交互</span></h3>
+          <h3>相遇与追及<span class="tg h">交互</span><span class="seen z" data-no="W01">待看</span></h3>
           <p>相向看速度和，同向看速度差；方向一变，分母就变</p>
-          <div class="acts"><a class="btn h" href="AMC10知识点_W01_相遇与追及.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W01_相遇与追及.html" data-no="W01" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W01">-1</button>
+            <button class="mini" data-d="1" data-no="W01">+1</button>
+            <button class="mini" data-d="0" data-no="W01">清零</button>
+            <span class="lts" data-no="W01"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w02 工程问题 总量设为 1，效率相加；合作比谁都慢不了 应用题 工程 效率 合作 水管" data-t="h">
+      <article class="card" data-no="W02" data-k="w02 工程问题 总量设为 1，效率相加；合作比谁都慢不了 应用题 工程 效率 合作 水管" data-t="h">
         <div class="no">W02</div>
         <div class="bd">
-          <h3>工程问题<span class="tg h">交互</span></h3>
+          <h3>工程问题<span class="tg h">交互</span><span class="seen z" data-no="W02">待看</span></h3>
           <p>总量设为 1，效率相加；合作比谁都慢不了</p>
-          <div class="acts"><a class="btn h" href="AMC10知识点_W02_工程问题.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W02_工程问题.html" data-no="W02" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W02">-1</button>
+            <button class="mini" data-d="1" data-no="W02">+1</button>
+            <button class="mini" data-d="0" data-no="W02">清零</button>
+            <span class="lts" data-no="W02"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w03 百分比与增减 涨跌不能直接相抵，先找基准量 应用题 折扣 涨跌 增长率 百分比" data-t="h">
+      <article class="card" data-no="W03" data-k="w03 百分比与增减 涨跌不能直接相抵，先找基准量 应用题 折扣 涨跌 增长率 百分比" data-t="h">
         <div class="no">W03</div>
         <div class="bd">
-          <h3>百分比与增减<span class="tg h">交互</span></h3>
+          <h3>百分比与增减<span class="tg h">交互</span><span class="seen z" data-no="W03">待看</span></h3>
           <p>涨跌不能直接相抵，先找基准量</p>
-          <div class="acts"><a class="btn h" href="AMC10知识点_W03_百分比.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W03_百分比.html" data-no="W03" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W03">-1</button>
+            <button class="mini" data-d="1" data-no="W03">+1</button>
+            <button class="mini" data-d="0" data-no="W03">清零</button>
+            <span class="lts" data-no="W03"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w04 平均与加权平均 人数多的一边把平均值拉过去 应用题 平均 权重 加权 杠杆" data-t="h">
+      <article class="card" data-no="W04" data-k="w04 平均与加权平均 人数多的一边把平均值拉过去 应用题 平均 权重 加权 杠杆" data-t="h">
         <div class="no">W04</div>
         <div class="bd">
-          <h3>平均与加权平均<span class="tg h">交互</span></h3>
+          <h3>平均与加权平均<span class="tg h">交互</span><span class="seen z" data-no="W04">待看</span></h3>
           <p>人数多的一边把平均值拉过去</p>
-          <div class="acts"><a class="btn h" href="AMC10知识点_W04_加权平均.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W04_加权平均.html" data-no="W04" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W04">-1</button>
+            <button class="mini" data-d="1" data-no="W04">+1</button>
+            <button class="mini" data-d="0" data-no="W04">清零</button>
+            <span class="lts" data-no="W04"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>数论<span class="freq">质因数 9.3% + 丢番图 4.5%</span><span class="cnt">11 集</span></h2>
+  <section class="grp" data-g="数论">
+    <h2>数论<span class="freq">质因数 9.3% + 丢番图 4.5%</span><span class="gstat" data-g="数论"></span><span class="cnt">11 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="b01 数论四把钥匙 问整除、问余数、问个位、问最大公约数，各归哪把 数论 整除 余数 个位 最大公约数 总纲" data-t="vh">
+      <article class="card" data-no="B01" data-k="b01 数论四把钥匙 问整除、问余数、问个位、问最大公约数，各归哪把 数论 整除 余数 个位 最大公约数 总纲" data-t="vh">
         <div class="no">B01</div>
         <div class="bd">
-          <h3>数论四把钥匙<span class="tg both">双形态</span></h3>
+          <h3>数论四把钥匙<span class="tg both">双形态</span><span class="seen z" data-no="B01">待看</span></h3>
           <p>问整除、问余数、问个位、问最大公约数，各归哪把</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_B01_数论四把钥匙.mp4" data-no="B01">▶ 视频 2:08</button><a class="btn h" href="AMC10知识点_B01_数论四把钥匙.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B01_数论四把钥匙.mp4" data-no="B01">▶ 视频 2:08</button><a class="btn h" href="AMC10知识点_B01_数论四把钥匙.html" data-no="B01" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B01">-1</button>
+            <button class="mini" data-d="1" data-no="B01">+1</button>
+            <button class="mini" data-d="0" data-no="B01">清零</button>
+            <span class="lts" data-no="B01"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b02 因数个数与因数和 质因数分解后，指数加 1 再相乘 数论 约数 因数 因数和 质因数分解" data-t="vh">
+      <article class="card" data-no="B02" data-k="b02 因数个数与因数和 质因数分解后，指数加 1 再相乘 数论 约数 因数 因数和 质因数分解" data-t="vh">
         <div class="no">B02</div>
         <div class="bd">
-          <h3>因数个数与因数和<span class="tg both">双形态</span></h3>
+          <h3>因数个数与因数和<span class="tg both">双形态</span><span class="seen z" data-no="B02">待看</span></h3>
           <p>质因数分解后，指数加 1 再相乘</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_B02_因数个数.mp4" data-no="B02">▶ 视频 1:40</button><a class="btn h" href="AMC10知识点_B02_因数个数.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B02_因数个数.mp4" data-no="B02">▶ 视频 1:40</button><a class="btn h" href="AMC10知识点_B02_因数个数.html" data-no="B02" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B02">-1</button>
+            <button class="mini" data-d="1" data-no="B02">+1</button>
+            <button class="mini" data-d="0" data-no="B02">清零</button>
+            <span class="lts" data-no="B02"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b03 幂的个位循环 个位数字随指数循环，先找周期再定位 数论 个位 末位 尾数 循环 周期 指数" data-t="h">
+      <article class="card" data-no="B03" data-k="b03 幂的个位循环 个位数字随指数循环，先找周期再定位 数论 个位 末位 尾数 循环 周期 指数" data-t="h">
         <div class="no">B03</div>
         <div class="bd">
-          <h3>幂的个位循环<span class="tg h">交互</span></h3>
+          <h3>幂的个位循环<span class="tg h">交互</span><span class="seen z" data-no="B03">待看</span></h3>
           <p>个位数字随指数循环，先找周期再定位</p>
-          <div class="acts"><a class="btn h" href="AMC10知识点_B03_幂的个位循环.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><a class="btn h" href="AMC10知识点_B03_幂的个位循环.html" data-no="B03" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B03">-1</button>
+            <button class="mini" data-d="1" data-no="B03">+1</button>
+            <button class="mini" data-d="0" data-no="B03">清零</button>
+            <span class="lts" data-no="B03"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b04 整除判别 3 和 9 看数字和，11 看交错和 数论 3 9 11 判别 数字和 交错和" data-t="vh">
+      <article class="card" data-no="B04" data-k="b04 整除判别 3 和 9 看数字和，11 看交错和 数论 3 9 11 判别 数字和 交错和" data-t="vh">
         <div class="no">B04</div>
         <div class="bd">
-          <h3>整除判别<span class="tg both">双形态</span></h3>
+          <h3>整除判别<span class="tg both">双形态</span><span class="seen z" data-no="B04">待看</span></h3>
           <p>3 和 9 看数字和，11 看交错和</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_B04_整除判别.mp4" data-no="B04">▶ 视频 1:51</button><a class="btn h" href="AMC10知识点_B04_整除判别.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B04_整除判别.mp4" data-no="B04">▶ 视频 1:51</button><a class="btn h" href="AMC10知识点_B04_整除判别.html" data-no="B04" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B04">-1</button>
+            <button class="mini" data-d="1" data-no="B04">+1</button>
+            <button class="mini" data-d="0" data-no="B04">清零</button>
+            <span class="lts" data-no="B04"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b05 同余的本质 同余就是「差是模的倍数」，不是一种新运算 数论 模 取余 余数 mod" data-t="v">
+      <article class="card" data-no="B05" data-k="b05 同余的本质 同余就是「差是模的倍数」，不是一种新运算 数论 模 取余 余数 mod" data-t="v">
         <div class="no">B05</div>
         <div class="bd">
-          <h3>同余的本质</h3>
+          <h3>同余的本质<span class="seen z" data-no="B05">待看</span></h3>
           <p>同余就是「差是模的倍数」，不是一种新运算</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_B05_同余的本质.mp4" data-no="B05">▶ 视频 1:22</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B05">-1</button>
+            <button class="mini" data-d="1" data-no="B05">+1</button>
+            <button class="mini" data-d="0" data-no="B05">清零</button>
+            <span class="lts" data-no="B05"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w23 最大公约与最小公倍 gcd × lcm = 两数之积；辗转相除怎么除 数论 gcd lcm 最大公约数 最小公倍数 辗转相除" data-t="v">
+      <article class="card" data-no="W23" data-k="w23 最大公约与最小公倍 gcd × lcm = 两数之积；辗转相除怎么除 数论 gcd lcm 最大公约数 最小公倍数 辗转相除" data-t="v">
         <div class="no">W23</div>
         <div class="bd">
-          <h3>最大公约与最小公倍</h3>
+          <h3>最大公约与最小公倍<span class="seen z" data-no="W23">待看</span></h3>
           <p>gcd × lcm = 两数之积；辗转相除怎么除</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W23_最大公约与最小公倍.mp4" data-no="W23">▶ 视频 1:47</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W23">-1</button>
+            <button class="mini" data-d="1" data-no="W23">+1</button>
+            <button class="mini" data-d="0" data-no="W23">清零</button>
+            <span class="lts" data-no="W23"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w24 同余方程与剩余类计数 在某个模下，满足条件的数有几个 数论 同余 余数 剩余类 模" data-t="v">
+      <article class="card" data-no="W24" data-k="w24 同余方程与剩余类计数 在某个模下，满足条件的数有几个 数论 同余 余数 剩余类 模" data-t="v">
         <div class="no">W24</div>
         <div class="bd">
-          <h3>同余方程与剩余类计数</h3>
+          <h3>同余方程与剩余类计数<span class="seen z" data-no="W24">待看</span></h3>
           <p>在某个模下，满足条件的数有几个</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W24_同余计数.mp4" data-no="W24">▶ 视频 1:42</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W24">-1</button>
+            <button class="mini" data-d="1" data-no="W24">+1</button>
+            <button class="mini" data-d="0" data-no="W24">清零</button>
+            <span class="lts" data-no="W24"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w25 丢番图方程 ax + by 能凑出哪些数，凑不出的有几个 数论 不定方程 整数解 凑数 硬币" data-t="v">
+      <article class="card" data-no="W25" data-k="w25 丢番图方程 ax + by 能凑出哪些数，凑不出的有几个 数论 不定方程 整数解 凑数 硬币" data-t="v">
         <div class="no">W25</div>
         <div class="bd">
-          <h3>丢番图方程</h3>
+          <h3>丢番图方程<span class="seen z" data-no="W25">待看</span></h3>
           <p>ax + by 能凑出哪些数，凑不出的有几个</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W25_丢番图方程.mp4" data-no="W25">▶ 视频 1:41</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W25">-1</button>
+            <button class="mini" data-d="1" data-no="W25">+1</button>
+            <button class="mini" data-d="0" data-no="W25">清零</button>
+            <span class="lts" data-no="W25"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r08 凑不出的大数 互质两数，最大缺口是 a·b − a − b 数论 凑数 硬币 互质 最大 付款 frobenius" data-t="v">
+      <article class="card" data-no="R08" data-k="r08 凑不出的大数 互质两数，最大缺口是 a·b − a − b 数论 凑数 硬币 互质 最大 付款 frobenius" data-t="v">
         <div class="no">R08</div>
         <div class="bd">
-          <h3>凑不出的大数</h3>
+          <h3>凑不出的大数<span class="seen z" data-no="R08">待看</span></h3>
           <p>互质两数，最大缺口是 a·b − a − b</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R08_凑不出的大数.mp4" data-no="R08">▶ 视频 1:50</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R08">-1</button>
+            <button class="mini" data-d="1" data-no="R08">+1</button>
+            <button class="mini" data-d="0" data-no="R08">清零</button>
+            <span class="lts" data-no="R08"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r07 平方数的余数指纹 mod 4 只能是 0 或 1；能否定，不能肯定 数论 平方数 余数 指纹 模 排除 完全平方" data-t="v">
+      <article class="card" data-no="R07" data-k="r07 平方数的余数指纹 mod 4 只能是 0 或 1；能否定，不能肯定 数论 平方数 余数 指纹 模 排除 完全平方" data-t="v">
         <div class="no">R07</div>
         <div class="bd">
-          <h3>平方数的余数指纹</h3>
+          <h3>平方数的余数指纹<span class="seen z" data-no="R07">待看</span></h3>
           <p>mod 4 只能是 0 或 1；能否定，不能肯定</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R07_平方数余数指纹.mp4" data-no="R07">▶ 视频 1:43</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R07">-1</button>
+            <button class="mini" data-d="1" data-no="R07">+1</button>
+            <button class="mini" data-d="0" data-no="R07">清零</button>
+            <span class="lts" data-no="R07"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r17 进制与回文数 位值展开、数字和；四位数回文必被 11 整除 数论 进制 回文 数字和 位数 位值" data-t="v">
+      <article class="card" data-no="R17" data-k="r17 进制与回文数 位值展开、数字和；四位数回文必被 11 整除 数论 进制 回文 数字和 位数 位值" data-t="v">
         <div class="no">R17</div>
         <div class="bd">
-          <h3>进制与回文数</h3>
+          <h3>进制与回文数<span class="seen z" data-no="R17">待看</span></h3>
           <p>位值展开、数字和；四位数回文必被 11 整除</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R17_进制与回文数.mp4" data-no="R17">▶ 视频 1:45</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R17">-1</button>
+            <button class="mini" data-d="1" data-no="R17">+1</button>
+            <button class="mini" data-d="0" data-no="R17">清零</button>
+            <span class="lts" data-no="R17"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>代数<span class="freq">运算 12.0%</span><span class="cnt">9 集</span></h2>
+  <section class="grp" data-g="代数">
+    <h2>代数<span class="freq">运算 12.0%</span><span class="gstat" data-g="代数"></span><span class="cnt">9 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="w05 代数式化简 先看结构再动笔，别为展开而展开 代数 化简 因式分解 展开 配方" data-t="v">
+      <article class="card" data-no="W05" data-k="w05 代数式化简 先看结构再动笔，别为展开而展开 代数 化简 因式分解 展开 配方" data-t="v">
         <div class="no">W05</div>
         <div class="bd">
-          <h3>代数式化简</h3>
+          <h3>代数式化简<span class="seen z" data-no="W05">待看</span></h3>
           <p>先看结构再动笔，别为展开而展开</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W05_代数式化简.mp4" data-no="W05">▶ 视频 1:28</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W05">-1</button>
+            <button class="mini" data-d="1" data-no="W05">+1</button>
+            <button class="mini" data-d="0" data-no="W05">清零</button>
+            <span class="lts" data-no="W05"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w06 指数与根式 同底才能合并，根式先化最简 代数 根号 指数 幂 化简" data-t="v">
+      <article class="card" data-no="W06" data-k="w06 指数与根式 同底才能合并，根式先化最简 代数 根号 指数 幂 化简" data-t="v">
         <div class="no">W06</div>
         <div class="bd">
-          <h3>指数与根式</h3>
+          <h3>指数与根式<span class="seen z" data-no="W06">待看</span></h3>
           <p>同底才能合并，根式先化最简</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W06_指数与根式.mp4" data-no="W06">▶ 视频 1:31</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W06">-1</button>
+            <button class="mini" data-d="1" data-no="W06">+1</button>
+            <button class="mini" data-d="0" data-no="W06">清零</button>
+            <span class="lts" data-no="W06"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w18 韦达定理 两根之和、之积，以及根的对称式求值 代数 两根之和 两根之积 对称式 二次方程" data-t="vh">
+      <article class="card" data-no="W18" data-k="w18 韦达定理 两根之和、之积，以及根的对称式求值 代数 两根之和 两根之积 对称式 二次方程" data-t="vh">
         <div class="no">W18</div>
         <div class="bd">
-          <h3>韦达定理<span class="tg both">双形态</span></h3>
+          <h3>韦达定理<span class="tg both">双形态</span><span class="seen z" data-no="W18">待看</span></h3>
           <p>两根之和、之积，以及根的对称式求值</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W18_韦达定理.mp4" data-no="W18">▶ 视频 1:28</button><a class="btn h" href="AMC10知识点_W18_韦达定理.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W18_韦达定理.mp4" data-no="W18">▶ 视频 1:28</button><a class="btn h" href="AMC10知识点_W18_韦达定理.html" data-no="W18" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W18">-1</button>
+            <button class="mini" data-d="1" data-no="W18">+1</button>
+            <button class="mini" data-d="0" data-no="W18">清零</button>
+            <span class="lts" data-no="W18"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w19 二次函数 对称轴、顶点、区间最值三件套 代数 抛物线 顶点 对称轴 区间最值" data-t="vh">
+      <article class="card" data-no="W19" data-k="w19 二次函数 对称轴、顶点、区间最值三件套 代数 抛物线 顶点 对称轴 区间最值" data-t="vh">
         <div class="no">W19</div>
         <div class="bd">
-          <h3>二次函数<span class="tg both">双形态</span></h3>
+          <h3>二次函数<span class="tg both">双形态</span><span class="seen z" data-no="W19">待看</span></h3>
           <p>对称轴、顶点、区间最值三件套</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W19_二次函数.mp4" data-no="W19">▶ 视频 1:47</button><a class="btn h" href="AMC10知识点_W19_二次函数.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W19_二次函数.mp4" data-no="W19">▶ 视频 1:47</button><a class="btn h" href="AMC10知识点_W19_二次函数.html" data-no="W19" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W19">-1</button>
+            <button class="mini" data-d="1" data-no="W19">+1</button>
+            <button class="mini" data-d="0" data-no="W19">清零</button>
+            <span class="lts" data-no="W19"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w20 绝对值与分段讨论 分情况去绝对值，乘负数要变号 代数 " data-t="vh">
+      <article class="card" data-no="W20" data-k="w20 绝对值与分段讨论 分情况去绝对值，乘负数要变号 代数 " data-t="vh">
         <div class="no">W20</div>
         <div class="bd">
-          <h3>绝对值与分段讨论<span class="tg both">双形态</span></h3>
+          <h3>绝对值与分段讨论<span class="tg both">双形态</span><span class="seen z" data-no="W20">待看</span></h3>
           <p>分情况去绝对值，乘负数要变号</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W20_绝对值与分段.mp4" data-no="W20">▶ 视频 1:46</button><a class="btn h" href="AMC10知识点_W20_绝对值与分段.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W20_绝对值与分段.mp4" data-no="W20">▶ 视频 1:46</button><a class="btn h" href="AMC10知识点_W20_绝对值与分段.html" data-no="W20" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W20">-1</button>
+            <button class="mini" data-d="1" data-no="W20">+1</button>
+            <button class="mini" data-d="0" data-no="W20">清零</button>
+            <span class="lts" data-no="W20"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w21 am-gm 与最值 和定积最大，取等条件不能忘 代数 均值 不等式 最值 取等 amgm" data-t="vh">
+      <article class="card" data-no="W21" data-k="w21 am-gm 与最值 和定积最大，取等条件不能忘 代数 均值 不等式 最值 取等 amgm" data-t="vh">
         <div class="no">W21</div>
         <div class="bd">
-          <h3>AM-GM 与最值<span class="tg both">双形态</span></h3>
+          <h3>AM-GM 与最值<span class="tg both">双形态</span><span class="seen z" data-no="W21">待看</span></h3>
           <p>和定积最大，取等条件不能忘</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W21_均值不等式.mp4" data-no="W21">▶ 视频 1:37</button><a class="btn h" href="AMC10知识点_W21_均值不等式.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W21_均值不等式.mp4" data-no="W21">▶ 视频 1:37</button><a class="btn h" href="AMC10知识点_W21_均值不等式.html" data-no="W21" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W21">-1</button>
+            <button class="mini" data-d="1" data-no="W21">+1</button>
+            <button class="mini" data-d="0" data-no="W21">清零</button>
+            <span class="lts" data-no="W21"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r09 凑成两个括号（sfft） xy 带两个一次项时，补常数凑成括号相乘 代数 sfft 因式分解 凑 括号 整数解 xy" data-t="vh">
+      <article class="card" data-no="R09" data-k="r09 凑成两个括号（sfft） xy 带两个一次项时，补常数凑成括号相乘 代数 sfft 因式分解 凑 括号 整数解 xy" data-t="vh">
         <div class="no">R09</div>
         <div class="bd">
-          <h3>凑成两个括号（SFFT）<span class="tg both">双形态</span></h3>
+          <h3>凑成两个括号（SFFT）<span class="tg both">双形态</span><span class="seen z" data-no="R09">待看</span></h3>
           <p>xy 带两个一次项时，补常数凑成括号相乘</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R09_SFFT凑因式.mp4" data-no="R09">▶ 视频 1:50</button><a class="btn h" href="AMC10知识点_R09_SFFT凑因式.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R09_SFFT凑因式.mp4" data-no="R09">▶ 视频 1:50</button><a class="btn h" href="AMC10知识点_R09_SFFT凑因式.html" data-no="R09" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R09">-1</button>
+            <button class="mini" data-d="1" data-no="R09">+1</button>
+            <button class="mini" data-d="0" data-no="R09">清零</button>
+            <span class="lts" data-no="R09"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r12 立方和差与分组 第二个括号是一次项乘积，没有系数 2 代数 立方 和差 分组 因式分解 三次" data-t="v">
+      <article class="card" data-no="R12" data-k="r12 立方和差与分组 第二个括号是一次项乘积，没有系数 2 代数 立方 和差 分组 因式分解 三次" data-t="v">
         <div class="no">R12</div>
         <div class="bd">
-          <h3>立方和差与分组</h3>
+          <h3>立方和差与分组<span class="seen z" data-no="R12">待看</span></h3>
           <p>第二个括号是一次项乘积，没有系数 2</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R12_立方和差与分组.mp4" data-no="R12">▶ 视频 1:46</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R12">-1</button>
+            <button class="mini" data-d="1" data-no="R12">+1</button>
+            <button class="mini" data-d="0" data-no="R12">清零</button>
+            <span class="lts" data-no="R12"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r13 分母有理化 乘共轭造平方差，还能裂项求和 代数 有理化 共轭 分母 根号 裂项" data-t="v">
+      <article class="card" data-no="R13" data-k="r13 分母有理化 乘共轭造平方差，还能裂项求和 代数 有理化 共轭 分母 根号 裂项" data-t="v">
         <div class="no">R13</div>
         <div class="bd">
-          <h3>分母有理化</h3>
+          <h3>分母有理化<span class="seen z" data-no="R13">待看</span></h3>
           <p>乘共轭造平方差，还能裂项求和</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R13_分母有理化.mp4" data-no="R13">▶ 视频 1:53</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R13">-1</button>
+            <button class="mini" data-d="1" data-no="R13">+1</button>
+            <button class="mini" data-d="0" data-no="R13">清零</button>
+            <span class="lts" data-no="R13"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>计数<span class="freq">真题 11.5%</span><span class="cnt">9 集</span></h2>
+  <section class="grp" data-g="计数">
+    <h2>计数<span class="freq">真题 11.5%</span><span class="gstat" data-g="计数"></span><span class="cnt">9 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="b13 把步骤写全 分步写清楚，保证不重不漏 计数 步骤 不重不漏 枚举" data-t="v">
+      <article class="card" data-no="B13" data-k="b13 把步骤写全 分步写清楚，保证不重不漏 计数 步骤 不重不漏 枚举" data-t="v">
         <div class="no">B13</div>
         <div class="bd">
-          <h3>把步骤写全</h3>
+          <h3>把步骤写全<span class="seen z" data-no="B13">待看</span></h3>
           <p>分步写清楚，保证不重不漏</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_B13_把步骤写全.mp4" data-no="B13">▶ 视频 1:46</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B13">-1</button>
+            <button class="mini" data-d="1" data-no="B13">+1</button>
+            <button class="mini" data-d="0" data-no="B13">清零</button>
+            <span class="lts" data-no="B13"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w07 加乘原理 「要么」用加，「先再」用乘 计数 " data-t="v">
+      <article class="card" data-no="W07" data-k="w07 加乘原理 「要么」用加，「先再」用乘 计数 " data-t="v">
         <div class="no">W07</div>
         <div class="bd">
-          <h3>加乘原理</h3>
+          <h3>加乘原理<span class="seen z" data-no="W07">待看</span></h3>
           <p>「要么」用加，「先再」用乘</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W07_加乘原理.mp4" data-no="W07">▶ 视频 1:30</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W07">-1</button>
+            <button class="mini" data-d="1" data-no="W07">+1</button>
+            <button class="mini" data-d="0" data-no="W07">清零</button>
+            <span class="lts" data-no="W07"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w08 排列还是组合 换顺序算不算同一种，这是分水岭 计数 排列 组合 顺序 阶乘" data-t="v">
+      <article class="card" data-no="W08" data-k="w08 排列还是组合 换顺序算不算同一种，这是分水岭 计数 排列 组合 顺序 阶乘" data-t="v">
         <div class="no">W08</div>
         <div class="bd">
-          <h3>排列还是组合</h3>
+          <h3>排列还是组合<span class="seen z" data-no="W08">待看</span></h3>
           <p>换顺序算不算同一种，这是分水岭</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W08_排列与组合.mp4" data-no="W08">▶ 视频 1:37</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W08">-1</button>
+            <button class="mini" data-d="1" data-no="W08">+1</button>
+            <button class="mini" data-d="0" data-no="W08">清零</button>
+            <span class="lts" data-no="W08"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w09 捆绑与插空 相邻捆一起，不相邻先排后插 计数 相邻 不相邻 捆绑 插空" data-t="v">
+      <article class="card" data-no="W09" data-k="w09 捆绑与插空 相邻捆一起，不相邻先排后插 计数 相邻 不相邻 捆绑 插空" data-t="v">
         <div class="no">W09</div>
         <div class="bd">
-          <h3>捆绑与插空</h3>
+          <h3>捆绑与插空<span class="seen z" data-no="W09">待看</span></h3>
           <p>相邻捆一起，不相邻先排后插</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W09_捆绑与插空.mp4" data-no="W09">▶ 视频 1:41</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W09">-1</button>
+            <button class="mini" data-d="1" data-no="W09">+1</button>
+            <button class="mini" data-d="0" data-no="W09">清零</button>
+            <span class="lts" data-no="W09"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w10 容斥与补集 「至少一个」转成「一个都没有」 计数 容斥 补集 至少 至多" data-t="v">
+      <article class="card" data-no="W10" data-k="w10 容斥与补集 「至少一个」转成「一个都没有」 计数 容斥 补集 至少 至多" data-t="v">
         <div class="no">W10</div>
         <div class="bd">
-          <h3>容斥与补集</h3>
+          <h3>容斥与补集<span class="seen z" data-no="W10">待看</span></h3>
           <p>「至少一个」转成「一个都没有」</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W10_容斥与补集.mp4" data-no="W10">▶ 视频 1:34</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W10">-1</button>
+            <button class="mini" data-d="1" data-no="W10">+1</button>
+            <button class="mini" data-d="0" data-no="W10">清零</button>
+            <span class="lts" data-no="W10"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w11 圆排列与分组去重 圆排列除以 n，等大分组除以阶乘 计数 圆桌 环形 分组 去重" data-t="v">
+      <article class="card" data-no="W11" data-k="w11 圆排列与分组去重 圆排列除以 n，等大分组除以阶乘 计数 圆桌 环形 分组 去重" data-t="v">
         <div class="no">W11</div>
         <div class="bd">
-          <h3>圆排列与分组去重</h3>
+          <h3>圆排列与分组去重<span class="seen z" data-no="W11">待看</span></h3>
           <p>圆排列除以 n，等大分组除以阶乘</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_W11_圆排列与分组.mp4" data-no="W11">▶ 视频 1:42</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W11">-1</button>
+            <button class="mini" data-d="1" data-no="W11">+1</button>
+            <button class="mini" data-d="0" data-no="W11">清零</button>
+            <span class="lts" data-no="W11"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r04 格点路径计数 总步数里选一个方向的步数 计数 格点 路径 网格 走路 组合" data-t="v">
+      <article class="card" data-no="R04" data-k="r04 格点路径计数 总步数里选一个方向的步数 计数 格点 路径 网格 走路 组合" data-t="v">
         <div class="no">R04</div>
         <div class="bd">
-          <h3>格点路径计数</h3>
+          <h3>格点路径计数<span class="seen z" data-no="R04">待看</span></h3>
           <p>总步数里选一个方向的步数</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R04_格点路径计数.mp4" data-no="R04">▶ 视频 1:29</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R04">-1</button>
+            <button class="mini" data-d="1" data-no="R04">+1</button>
+            <button class="mini" data-d="0" data-no="R04">清零</button>
+            <span class="lts" data-no="R04"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r05 插板法 「每人至少一个」与「可空」是两套公式 计数 插板 分配 至少一个 可空 分糖" data-t="v">
+      <article class="card" data-no="R05" data-k="r05 插板法 「每人至少一个」与「可空」是两套公式 计数 插板 分配 至少一个 可空 分糖" data-t="v">
         <div class="no">R05</div>
         <div class="bd">
-          <h3>插板法</h3>
+          <h3>插板法<span class="seen z" data-no="R05">待看</span></h3>
           <p>「每人至少一个」与「可空」是两套公式</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R05_插板法.mp4" data-no="R05">▶ 视频 1:39</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R05">-1</button>
+            <button class="mini" data-d="1" data-no="R05">+1</button>
+            <button class="mini" data-d="0" data-no="R05">清零</button>
+            <span class="lts" data-no="R05"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r06 子集数与组合恒等式 每个元素选或不选，所以是 2 的 n 次方 计数 子集 2的n次方 组合恒等式 真子集" data-t="v">
+      <article class="card" data-no="R06" data-k="r06 子集数与组合恒等式 每个元素选或不选，所以是 2 的 n 次方 计数 子集 2的n次方 组合恒等式 真子集" data-t="v">
         <div class="no">R06</div>
         <div class="bd">
-          <h3>子集数与组合恒等式</h3>
+          <h3>子集数与组合恒等式<span class="seen z" data-no="R06">待看</span></h3>
           <p>每个元素选或不选，所以是 2 的 n 次方</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R06_子集数与组合恒等式.mp4" data-no="R06">▶ 视频 1:39</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R06">-1</button>
+            <button class="mini" data-d="1" data-no="R06">+1</button>
+            <button class="mini" data-d="0" data-no="R06">清零</button>
+            <span class="lts" data-no="R06"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>面积<span class="freq">真题 10.9%，排第四</span><span class="cnt">3 集</span></h2>
+  <section class="grp" data-g="面积">
+    <h2>面积<span class="freq">真题 10.9%，排第四</span><span class="gstat" data-g="面积"></span><span class="cnt">3 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="w12 三角形与四边形面积 底高公式、等积变换、s = rs 面积 " data-t="vh">
+      <article class="card" data-no="W12" data-k="w12 三角形与四边形面积 底高公式、等积变换、s = rs 面积 " data-t="vh">
         <div class="no">W12</div>
         <div class="bd">
-          <h3>三角形与四边形面积<span class="tg both">双形态</span></h3>
+          <h3>三角形与四边形面积<span class="tg both">双形态</span><span class="seen z" data-no="W12">待看</span></h3>
           <p>底高公式、等积变换、S = rs</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W12_面积与等积.mp4" data-no="W12">▶ 视频 1:29</button><a class="btn h" href="AMC10知识点_W12_面积与等积.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W12_面积与等积.mp4" data-no="W12">▶ 视频 1:29</button><a class="btn h" href="AMC10知识点_W12_面积与等积.html" data-no="W12" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W12">-1</button>
+            <button class="mini" data-d="1" data-no="W12">+1</button>
+            <button class="mini" data-d="0" data-no="W12">清零</button>
+            <span class="lts" data-no="W12"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w13 圆与扇形、弧长 弧长不等于弦长，扇形是圆的一部分 面积 扇形 弧长 圆心角 弧度" data-t="vh">
+      <article class="card" data-no="W13" data-k="w13 圆与扇形、弧长 弧长不等于弦长，扇形是圆的一部分 面积 扇形 弧长 圆心角 弧度" data-t="vh">
         <div class="no">W13</div>
         <div class="bd">
-          <h3>圆与扇形、弧长<span class="tg both">双形态</span></h3>
+          <h3>圆与扇形、弧长<span class="tg both">双形态</span><span class="seen z" data-no="W13">待看</span></h3>
           <p>弧长不等于弦长，扇形是圆的一部分</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W13_扇形与弧长.mp4" data-no="W13">▶ 视频 1:40</button><a class="btn h" href="AMC10知识点_W13_扇形与弧长.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W13_扇形与弧长.mp4" data-no="W13">▶ 视频 1:40</button><a class="btn h" href="AMC10知识点_W13_扇形与弧长.html" data-no="W13" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W13">-1</button>
+            <button class="mini" data-d="1" data-no="W13">+1</button>
+            <button class="mini" data-d="0" data-no="W13">清零</button>
+            <span class="lts" data-no="W13"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w14 组合图形与割补法 把不规则图形切补成规则图形 面积 " data-t="vh">
+      <article class="card" data-no="W14" data-k="w14 组合图形与割补法 把不规则图形切补成规则图形 面积 " data-t="vh">
         <div class="no">W14</div>
         <div class="bd">
-          <h3>组合图形与割补法<span class="tg both">双形态</span></h3>
+          <h3>组合图形与割补法<span class="tg both">双形态</span><span class="seen z" data-no="W14">待看</span></h3>
           <p>把不规则图形切补成规则图形</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W14_割补法.mp4" data-no="W14">▶ 视频 1:21</button><a class="btn h" href="AMC10知识点_W14_割补法.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W14_割补法.mp4" data-no="W14">▶ 视频 1:21</button><a class="btn h" href="AMC10知识点_W14_割补法.html" data-no="W14" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W14">-1</button>
+            <button class="mini" data-d="1" data-no="W14">+1</button>
+            <button class="mini" data-d="0" data-no="W14">清零</button>
+            <span class="lts" data-no="W14"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>立体几何<span class="freq">低频，但零覆盖时必失分</span><span class="cnt">3 集</span></h2>
+  <section class="grp" data-g="立体几何">
+    <h2>立体几何<span class="freq">低频，但零覆盖时必失分</span><span class="gstat" data-g="立体几何"></span><span class="cnt">3 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="r01 柱锥球体积与表面积 锥永远带一个除以 3；侧面积用母线 立体几何 圆柱 圆锥 球 体积 表面积 母线" data-t="vh">
+      <article class="card" data-no="R01" data-k="r01 柱锥球体积与表面积 锥永远带一个除以 3；侧面积用母线 立体几何 圆柱 圆锥 球 体积 表面积 母线" data-t="vh">
         <div class="no">R01</div>
         <div class="bd">
-          <h3>柱锥球体积与表面积<span class="tg both">双形态</span></h3>
+          <h3>柱锥球体积与表面积<span class="tg both">双形态</span><span class="seen z" data-no="R01">待看</span></h3>
           <p>锥永远带一个除以 3；侧面积用母线</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R01_柱锥球体积与表面积.mp4" data-no="R01">▶ 视频 1:35</button><a class="btn h" href="AMC10知识点_R01_柱锥球体积与表面积.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R01_柱锥球体积与表面积.mp4" data-no="R01">▶ 视频 1:35</button><a class="btn h" href="AMC10知识点_R01_柱锥球体积与表面积.html" data-no="R01" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R01">-1</button>
+            <button class="mini" data-d="1" data-no="R01">+1</button>
+            <button class="mini" data-d="0" data-no="R01">清零</button>
+            <span class="lts" data-no="R01"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r02 长方体对角线与表面最短路 穿内部用平方和，贴表面要展开 立体几何 对角线 展开 最短路径 长方体" data-t="vh">
+      <article class="card" data-no="R02" data-k="r02 长方体对角线与表面最短路 穿内部用平方和，贴表面要展开 立体几何 对角线 展开 最短路径 长方体" data-t="vh">
         <div class="no">R02</div>
         <div class="bd">
-          <h3>长方体对角线与表面最短路<span class="tg both">双形态</span></h3>
+          <h3>长方体对角线与表面最短路<span class="tg both">双形态</span><span class="seen z" data-no="R02">待看</span></h3>
           <p>穿内部用平方和，贴表面要展开</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R02_长方体对角线与表面最短路.mp4" data-no="R02">▶ 视频 1:45</button><a class="btn h" href="AMC10知识点_R02_长方体对角线与表面最短路.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R02_长方体对角线与表面最短路.mp4" data-no="R02">▶ 视频 1:45</button><a class="btn h" href="AMC10知识点_R02_长方体对角线与表面最短路.html" data-no="R02" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R02">-1</button>
+            <button class="mini" data-d="1" data-no="R02">+1</button>
+            <button class="mini" data-d="0" data-no="R02">清零</button>
+            <span class="lts" data-no="R02"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r03 展开图与截面 六个面，截面最多六条边 立体几何 展开图 截面 正方体 六边形" data-t="vh">
+      <article class="card" data-no="R03" data-k="r03 展开图与截面 六个面，截面最多六条边 立体几何 展开图 截面 正方体 六边形" data-t="vh">
         <div class="no">R03</div>
         <div class="bd">
-          <h3>展开图与截面<span class="tg both">双形态</span></h3>
+          <h3>展开图与截面<span class="tg both">双形态</span><span class="seen z" data-no="R03">待看</span></h3>
           <p>六个面，截面最多六条边</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R03_展开图与截面.mp4" data-no="R03">▶ 视频 1:38</button><a class="btn h" href="AMC10知识点_R03_展开图与截面.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R03_展开图与截面.mp4" data-no="R03">▶ 视频 1:38</button><a class="btn h" href="AMC10知识点_R03_展开图与截面.html" data-no="R03" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R03">-1</button>
+            <button class="mini" data-d="1" data-no="R03">+1</button>
+            <button class="mini" data-d="0" data-no="R03">清零</button>
+            <span class="lts" data-no="R03"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>解析几何<span class="freq">坐标法是最稳的底牌</span><span class="cnt">3 集</span></h2>
+  <section class="grp" data-g="解析几何">
+    <h2>解析几何<span class="freq">坐标法是最稳的底牌</span><span class="gstat" data-g="解析几何"></span><span class="cnt">3 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="r14 斜率与平行垂直 垂直看乘积等于 −1，不是取负 解析几何 斜率 平行 垂直 坐标" data-t="vh">
+      <article class="card" data-no="R14" data-k="r14 斜率与平行垂直 垂直看乘积等于 −1，不是取负 解析几何 斜率 平行 垂直 坐标" data-t="vh">
         <div class="no">R14</div>
         <div class="bd">
-          <h3>斜率与平行垂直<span class="tg both">双形态</span></h3>
+          <h3>斜率与平行垂直<span class="tg both">双形态</span><span class="seen z" data-no="R14">待看</span></h3>
           <p>垂直看乘积等于 −1，不是取负</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R14_斜率与平行垂直.mp4" data-no="R14">▶ 视频 1:49</button><a class="btn h" href="AMC10知识点_R14_斜率与平行垂直.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R14_斜率与平行垂直.mp4" data-no="R14">▶ 视频 1:49</button><a class="btn h" href="AMC10知识点_R14_斜率与平行垂直.html" data-no="R14" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R14">-1</button>
+            <button class="mini" data-d="1" data-no="R14">+1</button>
+            <button class="mini" data-d="0" data-no="R14">清零</button>
+            <span class="lts" data-no="R14"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r15 距离、中点与定比分点 权重配在对端：靠近谁，谁系数小 解析几何 距离 中点 定比 分点 坐标" data-t="vh">
+      <article class="card" data-no="R15" data-k="r15 距离、中点与定比分点 权重配在对端：靠近谁，谁系数小 解析几何 距离 中点 定比 分点 坐标" data-t="vh">
         <div class="no">R15</div>
         <div class="bd">
-          <h3>距离、中点与定比分点<span class="tg both">双形态</span></h3>
+          <h3>距离、中点与定比分点<span class="tg both">双形态</span><span class="seen z" data-no="R15">待看</span></h3>
           <p>权重配在对端：靠近谁，谁系数小</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R15_距离中点与定比分点.mp4" data-no="R15">▶ 视频 1:42</button><a class="btn h" href="AMC10知识点_R15_距离中点与定比分点.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R15_距离中点与定比分点.mp4" data-no="R15">▶ 视频 1:42</button><a class="btn h" href="AMC10知识点_R15_距离中点与定比分点.html" data-no="R15" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R15">-1</button>
+            <button class="mini" data-d="1" data-no="R15">+1</button>
+            <button class="mini" data-d="0" data-no="R15">清零</button>
+            <span class="lts" data-no="R15"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r16 圆的方程与位置关系 先配方读出圆心，再比圆心到直线的距离 解析几何 圆 方程 配方 相切 相交 弦" data-t="vh">
+      <article class="card" data-no="R16" data-k="r16 圆的方程与位置关系 先配方读出圆心，再比圆心到直线的距离 解析几何 圆 方程 配方 相切 相交 弦" data-t="vh">
         <div class="no">R16</div>
         <div class="bd">
-          <h3>圆的方程与位置关系<span class="tg both">双形态</span></h3>
+          <h3>圆的方程与位置关系<span class="tg both">双形态</span><span class="seen z" data-no="R16">待看</span></h3>
           <p>先配方读出圆心，再比圆心到直线的距离</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R16_圆的方程与位置关系.mp4" data-no="R16">▶ 视频 1:56</button><a class="btn h" href="AMC10知识点_R16_圆的方程与位置关系.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R16_圆的方程与位置关系.mp4" data-no="R16">▶ 视频 1:56</button><a class="btn h" href="AMC10知识点_R16_圆的方程与位置关系.html" data-no="R16" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R16">-1</button>
+            <button class="mini" data-d="1" data-no="R16">+1</button>
+            <button class="mini" data-d="0" data-no="R16">清零</button>
+            <span class="lts" data-no="R16"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>圆<span class="freq">几何板块</span><span class="cnt">4 集</span></h2>
+  <section class="grp" data-g="圆">
+    <h2>圆<span class="freq">几何板块</span><span class="gstat" data-g="圆"></span><span class="cnt">4 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="b08 圆的三个基本量 圆心、半径、连心线；求弦长得先作垂径 圆 半径 弦 垂径 连心线 圆心" data-t="vh">
+      <article class="card" data-no="B08" data-k="b08 圆的三个基本量 圆心、半径、连心线；求弦长得先作垂径 圆 半径 弦 垂径 连心线 圆心" data-t="vh">
         <div class="no">B08</div>
         <div class="bd">
-          <h3>圆的三个基本量<span class="tg both">双形态</span></h3>
+          <h3>圆的三个基本量<span class="tg both">双形态</span><span class="seen z" data-no="B08">待看</span></h3>
           <p>圆心、半径、连心线；求弦长得先作垂径</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_B08_圆的三个基本量.mp4" data-no="B08">▶ 视频 1:59</button><a class="btn h" href="AMC10知识点_B08_圆的三个基本量.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B08_圆的三个基本量.mp4" data-no="B08">▶ 视频 1:59</button><a class="btn h" href="AMC10知识点_B08_圆的三个基本量.html" data-no="B08" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B08">-1</button>
+            <button class="mini" data-d="1" data-no="B08">+1</button>
+            <button class="mini" data-d="0" data-no="B08">清零</button>
+            <span class="lts" data-no="B08"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b09 圆上动点到定点的最值 最值必在连心线上 —— 三角形不等式 圆 最值 极值 动点 距离 最大值 最小值" data-t="h">
+      <article class="card" data-no="B09" data-k="b09 圆上动点到定点的最值 最值必在连心线上 —— 三角形不等式 圆 最值 极值 动点 距离 最大值 最小值" data-t="h">
         <div class="no">B09</div>
         <div class="bd">
-          <h3>圆上动点到定点的最值<span class="tg h">交互</span></h3>
+          <h3>圆上动点到定点的最值<span class="tg h">交互</span><span class="seen z" data-no="B09">待看</span></h3>
           <p>最值必在连心线上 —— 三角形不等式</p>
-          <div class="acts"><a class="btn h" href="AMC10知识点_B09_圆上动点最值.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><a class="btn h" href="AMC10知识点_B09_圆上动点最值.html" data-no="B09" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B09">-1</button>
+            <button class="mini" data-d="1" data-no="B09">+1</button>
+            <button class="mini" data-d="0" data-no="B09">清零</button>
+            <span class="lts" data-no="B09"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b10 切线 圆心到切线的距离等于半径；半径此时是直角边 圆 切点 半径 垂直 相切" data-t="vh">
+      <article class="card" data-no="B10" data-k="b10 切线 圆心到切线的距离等于半径；半径此时是直角边 圆 切点 半径 垂直 相切" data-t="vh">
         <div class="no">B10</div>
         <div class="bd">
-          <h3>切线<span class="tg both">双形态</span></h3>
+          <h3>切线<span class="tg both">双形态</span><span class="seen z" data-no="B10">待看</span></h3>
           <p>圆心到切线的距离等于半径；半径此时是直角边</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_B10_切线.mp4" data-no="B10">▶ 视频 1:41</button><a class="btn h" href="AMC10知识点_B10_切线.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B10_切线.mp4" data-no="B10">▶ 视频 1:41</button><a class="btn h" href="AMC10知识点_B10_切线.html" data-no="B10" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B10">-1</button>
+            <button class="mini" data-d="1" data-no="B10">+1</button>
+            <button class="mini" data-d="0" data-no="B10">清零</button>
+            <span class="lts" data-no="B10"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r23 圆内接四边形 对角互补；反过来可判四点共圆 圆 圆内接 共圆 对角 互补 托勒密" data-t="vh">
+      <article class="card" data-no="R23" data-k="r23 圆内接四边形 对角互补；反过来可判四点共圆 圆 圆内接 共圆 对角 互补 托勒密" data-t="vh">
         <div class="no">R23</div>
         <div class="bd">
-          <h3>圆内接四边形<span class="tg both">双形态</span></h3>
+          <h3>圆内接四边形<span class="tg both">双形态</span><span class="seen z" data-no="R23">待看</span></h3>
           <p>对角互补；反过来可判四点共圆</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R23_圆内接四边形.mp4" data-no="R23">▶ 视频 1:47</button><a class="btn h" href="AMC10知识点_R23_圆内接四边形.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R23_圆内接四边形.mp4" data-no="R23">▶ 视频 1:47</button><a class="btn h" href="AMC10知识点_R23_圆内接四边形.html" data-no="R23" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R23">-1</button>
+            <button class="mini" data-d="1" data-no="R23">+1</button>
+            <button class="mini" data-d="0" data-no="R23">清零</button>
+            <span class="lts" data-no="R23"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>三角形与多边形<span class="freq">角度勾股 9.1%</span><span class="cnt">6 集</span></h2>
+  <section class="grp" data-g="三角形与多边形">
+    <h2>三角形与多边形<span class="freq">角度勾股 9.1%</span><span class="gstat" data-g="三角形与多边形"></span><span class="cnt">6 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="w15 勾股定理与特殊三角形 30-60-90 与 45-45-90 的边长比 三角形与多边形 勾股 直角三角形 30度 45度 斜边" data-t="vh">
+      <article class="card" data-no="W15" data-k="w15 勾股定理与特殊三角形 30-60-90 与 45-45-90 的边长比 三角形与多边形 勾股 直角三角形 30度 45度 斜边" data-t="vh">
         <div class="no">W15</div>
         <div class="bd">
-          <h3>勾股定理与特殊三角形<span class="tg both">双形态</span></h3>
+          <h3>勾股定理与特殊三角形<span class="tg both">双形态</span><span class="seen z" data-no="W15">待看</span></h3>
           <p>30-60-90 与 45-45-90 的边长比</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W15_勾股与特殊三角形.mp4" data-no="W15">▶ 视频 1:44</button><a class="btn h" href="AMC10知识点_W15_勾股与特殊三角形.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W15_勾股与特殊三角形.mp4" data-no="W15">▶ 视频 1:44</button><a class="btn h" href="AMC10知识点_W15_勾股与特殊三角形.html" data-no="W15" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W15">-1</button>
+            <button class="mini" data-d="1" data-no="W15">+1</button>
+            <button class="mini" data-d="0" data-no="W15">清零</button>
+            <span class="lts" data-no="W15"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w16 相似三角形三种模型 a 字、8 字、母子；比例式怎么写 三角形与多边形 相似 比例 面积比 对应边" data-t="vh">
+      <article class="card" data-no="W16" data-k="w16 相似三角形三种模型 a 字、8 字、母子；比例式怎么写 三角形与多边形 相似 比例 面积比 对应边" data-t="vh">
         <div class="no">W16</div>
         <div class="bd">
-          <h3>相似三角形三种模型<span class="tg both">双形态</span></h3>
+          <h3>相似三角形三种模型<span class="tg both">双形态</span><span class="seen z" data-no="W16">待看</span></h3>
           <p>A 字、8 字、母子；比例式怎么写</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W16_相似三角形.mp4" data-no="W16">▶ 视频 1:42</button><a class="btn h" href="AMC10知识点_W16_相似三角形.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W16_相似三角形.mp4" data-no="W16">▶ 视频 1:42</button><a class="btn h" href="AMC10知识点_W16_相似三角形.html" data-no="W16" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W16">-1</button>
+            <button class="mini" data-d="1" data-no="W16">+1</button>
+            <button class="mini" data-d="0" data-no="W16">清零</button>
+            <span class="lts" data-no="W16"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w17 多边形内角外角与正六边形 内外角公式，正六边形的三个常用长度 三角形与多边形 " data-t="vh">
+      <article class="card" data-no="W17" data-k="w17 多边形内角外角与正六边形 内外角公式，正六边形的三个常用长度 三角形与多边形 " data-t="vh">
         <div class="no">W17</div>
         <div class="bd">
-          <h3>多边形内角外角与正六边形<span class="tg both">双形态</span></h3>
+          <h3>多边形内角外角与正六边形<span class="tg both">双形态</span><span class="seen z" data-no="W17">待看</span></h3>
           <p>内外角公式，正六边形的三个常用长度</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W17_多边形与正六边形.mp4" data-no="W17">▶ 视频 1:35</button><a class="btn h" href="AMC10知识点_W17_多边形与正六边形.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W17_多边形与正六边形.mp4" data-no="W17">▶ 视频 1:35</button><a class="btn h" href="AMC10知识点_W17_多边形与正六边形.html" data-no="W17" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W17">-1</button>
+            <button class="mini" data-d="1" data-no="W17">+1</button>
+            <button class="mini" data-d="0" data-no="W17">清零</button>
+            <span class="lts" data-no="W17"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r10 角平分线与重心 分对边看邻边；中线被分成 2 比 1 三角形与多边形 角平分线 重心 中线 比例" data-t="vh">
+      <article class="card" data-no="R10" data-k="r10 角平分线与重心 分对边看邻边；中线被分成 2 比 1 三角形与多边形 角平分线 重心 中线 比例" data-t="vh">
         <div class="no">R10</div>
         <div class="bd">
-          <h3>角平分线与重心<span class="tg both">双形态</span></h3>
+          <h3>角平分线与重心<span class="tg both">双形态</span><span class="seen z" data-no="R10">待看</span></h3>
           <p>分对边看邻边；中线被分成 2 比 1</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R10_角平分线与重心.mp4" data-no="R10">▶ 视频 1:41</button><a class="btn h" href="AMC10知识点_R10_角平分线与重心.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R10_角平分线与重心.mp4" data-no="R10">▶ 视频 1:41</button><a class="btn h" href="AMC10知识点_R10_角平分线与重心.html" data-no="R10" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R10">-1</button>
+            <button class="mini" data-d="1" data-no="R10">+1</button>
+            <button class="mini" data-d="0" data-no="R10">清零</button>
+            <span class="lts" data-no="R10"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r11 三角形不等式与翻折 翻折把折线拉成直线，三点共线取等号 三角形与多边形 三角形不等式 翻折 对称 最短 距离和" data-t="vh">
+      <article class="card" data-no="R11" data-k="r11 三角形不等式与翻折 翻折把折线拉成直线，三点共线取等号 三角形与多边形 三角形不等式 翻折 对称 最短 距离和" data-t="vh">
         <div class="no">R11</div>
         <div class="bd">
-          <h3>三角形不等式与翻折<span class="tg both">双形态</span></h3>
+          <h3>三角形不等式与翻折<span class="tg both">双形态</span><span class="seen z" data-no="R11">待看</span></h3>
           <p>翻折把折线拉成直线，三点共线取等号</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R11_三角形不等式与翻折.mp4" data-no="R11">▶ 视频 2:00</button><a class="btn h" href="AMC10知识点_R11_三角形不等式与翻折.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R11_三角形不等式与翻折.mp4" data-no="R11">▶ 视频 2:00</button><a class="btn h" href="AMC10知识点_R11_三角形不等式与翻折.html" data-no="R11" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R11">-1</button>
+            <button class="mini" data-d="1" data-no="R11">+1</button>
+            <button class="mini" data-d="0" data-no="R11">清零</button>
+            <span class="lts" data-no="R11"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r22 梯形 只有一组对边平行；面积与中位线 三角形与多边形 梯形 四边形 中位线 面积" data-t="vh">
+      <article class="card" data-no="R22" data-k="r22 梯形 只有一组对边平行；面积与中位线 三角形与多边形 梯形 四边形 中位线 面积" data-t="vh">
         <div class="no">R22</div>
         <div class="bd">
-          <h3>梯形<span class="tg both">双形态</span></h3>
+          <h3>梯形<span class="tg both">双形态</span><span class="seen z" data-no="R22">待看</span></h3>
           <p>只有一组对边平行；面积与中位线</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R22_梯形.mp4" data-no="R22">▶ 视频 1:36</button><a class="btn h" href="AMC10知识点_R22_梯形.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R22_梯形.mp4" data-no="R22">▶ 视频 1:36</button><a class="btn h" href="AMC10知识点_R22_梯形.html" data-no="R22" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R22">-1</button>
+            <button class="mini" data-d="1" data-no="R22">+1</button>
+            <button class="mini" data-d="0" data-no="R22">清零</button>
+            <span class="lts" data-no="R22"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>数列<span class="freq">真题 5.7%</span><span class="cnt">3 集</span></h2>
+  <section class="grp" data-g="数列">
+    <h2>数列<span class="freq">真题 5.7%</span><span class="gstat" data-g="数列"></span><span class="cnt">3 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="b06 数列第一步 先做差还是先做比，第一步定方向 数列 等差 等比 做差 做比 判断" data-t="v">
+      <article class="card" data-no="B06" data-k="b06 数列第一步 先做差还是先做比，第一步定方向 数列 等差 等比 做差 做比 判断" data-t="v">
         <div class="no">B06</div>
         <div class="bd">
-          <h3>数列第一步</h3>
+          <h3>数列第一步<span class="seen z" data-no="B06">待看</span></h3>
           <p>先做差还是先做比，第一步定方向</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_B06_数列第一步.mp4" data-no="B06">▶ 视频 1:46</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B06">-1</button>
+            <button class="mini" data-d="1" data-no="B06">+1</button>
+            <button class="mini" data-d="0" data-no="B06">清零</button>
+            <span class="lts" data-no="B06"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b07 求和公式怎么选 首尾配对与公差式，两个公式本是同一个数 数列 求和 首尾配对 公差 等差数列" data-t="h">
+      <article class="card" data-no="B07" data-k="b07 求和公式怎么选 首尾配对与公差式，两个公式本是同一个数 数列 求和 首尾配对 公差 等差数列" data-t="h">
         <div class="no">B07</div>
         <div class="bd">
-          <h3>求和公式怎么选<span class="tg h">交互</span></h3>
+          <h3>求和公式怎么选<span class="tg h">交互</span><span class="seen z" data-no="B07">待看</span></h3>
           <p>首尾配对与公差式，两个公式本是同一个数</p>
-          <div class="acts"><a class="btn h" href="AMC10知识点_B07_求和公式.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><a class="btn h" href="AMC10知识点_B07_求和公式.html" data-no="B07" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B07">-1</button>
+            <button class="mini" data-d="1" data-no="B07">+1</button>
+            <button class="mini" data-d="0" data-no="B07">清零</button>
+            <span class="lts" data-no="B07"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="w22 递推与周期数列 递推式写几项就会现出周期 数列 递推 周期 通项" data-t="vh">
+      <article class="card" data-no="W22" data-k="w22 递推与周期数列 递推式写几项就会现出周期 数列 递推 周期 通项" data-t="vh">
         <div class="no">W22</div>
         <div class="bd">
-          <h3>递推与周期数列<span class="tg both">双形态</span></h3>
+          <h3>递推与周期数列<span class="tg both">双形态</span><span class="seen z" data-no="W22">待看</span></h3>
           <p>递推式写几项就会现出周期</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_W22_递推与周期.mp4" data-no="W22">▶ 视频 1:33</button><a class="btn h" href="AMC10知识点_W22_递推与周期.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W22_递推与周期.mp4" data-no="W22">▶ 视频 1:33</button><a class="btn h" href="AMC10知识点_W22_递推与周期.html" data-no="W22" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="W22">-1</button>
+            <button class="mini" data-d="1" data-no="W22">+1</button>
+            <button class="mini" data-d="0" data-no="W22">清零</button>
+            <span class="lts" data-no="W22"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>概率<span class="freq">真题 4.9%</span><span class="cnt">3 集</span></h2>
+  <section class="grp" data-g="概率">
+    <h2>概率<span class="freq">真题 4.9%</span><span class="gstat" data-g="概率"></span><span class="cnt">3 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="b11 概率入门 有利数除以总数，以及「至少」走补集 概率 概率 可能性 补集 至少" data-t="vh">
+      <article class="card" data-no="B11" data-k="b11 概率入门 有利数除以总数，以及「至少」走补集 概率 概率 可能性 补集 至少" data-t="vh">
         <div class="no">B11</div>
         <div class="bd">
-          <h3>概率入门<span class="tg both">双形态</span></h3>
+          <h3>概率入门<span class="tg both">双形态</span><span class="seen z" data-no="B11">待看</span></h3>
           <p>有利数除以总数，以及「至少」走补集</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_B11_概率入门.mp4" data-no="B11">▶ 视频 1:43</button><a class="btn h" href="AMC10知识点_B11_概率入门.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B11_概率入门.mp4" data-no="B11">▶ 视频 1:43</button><a class="btn h" href="AMC10知识点_B11_概率入门.html" data-no="B11" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B11">-1</button>
+            <button class="mini" data-d="1" data-no="B11">+1</button>
+            <button class="mini" data-d="0" data-no="B11">清零</button>
+            <span class="lts" data-no="B11"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="b12 独立与互斥 两件事能不能同时发生；期望是什么 概率 概率 独立 互斥 期望 同时发生" data-t="v">
+      <article class="card" data-no="B12" data-k="b12 独立与互斥 两件事能不能同时发生；期望是什么 概率 概率 独立 互斥 期望 同时发生" data-t="v">
         <div class="no">B12</div>
         <div class="bd">
-          <h3>独立与互斥</h3>
+          <h3>独立与互斥<span class="seen z" data-no="B12">待看</span></h3>
           <p>两件事能不能同时发生；期望是什么</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_B12_独立与互斥.mp4" data-no="B12">▶ 视频 1:58</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="B12">-1</button>
+            <button class="mini" data-d="1" data-no="B12">+1</button>
+            <button class="mini" data-d="0" data-no="B12">清零</button>
+            <span class="lts" data-no="B12"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r24 几何概率 点有无穷多个时，量面积而不数个数 概率 几何概率 面积 随机 连续" data-t="v">
+      <article class="card" data-no="R24" data-k="r24 几何概率 点有无穷多个时，量面积而不数个数 概率 几何概率 面积 随机 连续" data-t="v">
         <div class="no">R24</div>
         <div class="bd">
-          <h3>几何概率</h3>
+          <h3>几何概率<span class="seen z" data-no="R24">待看</span></h3>
           <p>点有无穷多个时，量面积而不数个数</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R24_几何概率.mp4" data-no="R24">▶ 视频 1:45</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R24">-1</button>
+            <button class="mini" data-d="1" data-no="R24">+1</button>
+            <button class="mini" data-d="0" data-no="R24">清零</button>
+            <span class="lts" data-no="R24"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>统计<span class="freq">低频，题干长但送分</span><span class="cnt">1 集</span></h2>
+  <section class="grp" data-g="统计">
+    <h2>统计<span class="freq">低频，题干长但送分</span><span class="gstat" data-g="统计"></span><span class="cnt">1 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="r21 平均数与中位数 回到「总和 ÷ 个数」；偶数个取中间两个平均 统计 平均数 中位数 统计 平均" data-t="v">
+      <article class="card" data-no="R21" data-k="r21 平均数与中位数 回到「总和 ÷ 个数」；偶数个取中间两个平均 统计 平均数 中位数 统计 平均" data-t="v">
         <div class="no">R21</div>
         <div class="bd">
-          <h3>平均数与中位数</h3>
+          <h3>平均数与中位数<span class="seen z" data-no="R21">待看</span></h3>
           <p>回到「总和 ÷ 个数」；偶数个取中间两个平均</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R21_平均数与中位数.mp4" data-no="R21">▶ 视频 1:37</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R21">-1</button>
+            <button class="mini" data-d="1" data-no="R21">+1</button>
+            <button class="mini" data-d="0" data-no="R21">清零</button>
+            <span class="lts" data-no="R21"></span>
+          </div>
         </div>
       </article>
     </div>
   </section>
-  <section class="grp">
-    <h2>离散与逻辑<span class="freq">鸽巢 · 不变量 · 真假话</span><span class="cnt">4 集</span></h2>
+  <section class="grp" data-g="离散与逻辑">
+    <h2>离散与逻辑<span class="freq">鸽巢 · 不变量 · 真假话</span><span class="gstat" data-g="离散与逻辑"></span><span class="cnt">4 集</span></h2>
     <div class="grid">
-      <article class="card" data-k="r18 鸽巢原理 东西比盒子多；难在怎么造盒子 离散与逻辑 鸽巢 抽屉 至少 重复 盒子" data-t="v">
+      <article class="card" data-no="R18" data-k="r18 鸽巢原理 东西比盒子多；难在怎么造盒子 离散与逻辑 鸽巢 抽屉 至少 重复 盒子" data-t="v">
         <div class="no">R18</div>
         <div class="bd">
-          <h3>鸽巢原理</h3>
+          <h3>鸽巢原理<span class="seen z" data-no="R18">待看</span></h3>
           <p>东西比盒子多；难在怎么造盒子</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R18_鸽巢原理.mp4" data-no="R18">▶ 视频 1:53</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R18">-1</button>
+            <button class="mini" data-d="1" data-no="R18">+1</button>
+            <button class="mini" data-d="0" data-no="R18">清零</button>
+            <span class="lts" data-no="R18"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r19 奇偶性与不变量 找那个每次操作都不变的东西 离散与逻辑 奇偶 不变量 染色 操作" data-t="vh">
+      <article class="card" data-no="R19" data-k="r19 奇偶性与不变量 找那个每次操作都不变的东西 离散与逻辑 奇偶 不变量 染色 操作" data-t="vh">
         <div class="no">R19</div>
         <div class="bd">
-          <h3>奇偶性与不变量<span class="tg both">双形态</span></h3>
+          <h3>奇偶性与不变量<span class="tg both">双形态</span><span class="seen z" data-no="R19">待看</span></h3>
           <p>找那个每次操作都不变的东西</p>
-          <div class="acts"><button class="btn v" data-src="AMC10知识点_R19_奇偶与不变量.mp4" data-no="R19">▶ 视频 1:45</button><a class="btn h" href="AMC10知识点_R19_奇偶与不变量.html" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R19_奇偶与不变量.mp4" data-no="R19">▶ 视频 1:45</button><a class="btn h" href="AMC10知识点_R19_奇偶与不变量.html" data-no="R19" target="_blank" rel="noopener">◱ 动手</a></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R19">-1</button>
+            <button class="mini" data-d="1" data-no="R19">+1</button>
+            <button class="mini" data-d="0" data-no="R19">清零</button>
+            <span class="lts" data-no="R19"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r20 极端情况先检查 求「至少」先去求「最多不满足」 离散与逻辑 极端 最值 构造 反例 至少" data-t="v">
+      <article class="card" data-no="R20" data-k="r20 极端情况先检查 求「至少」先去求「最多不满足」 离散与逻辑 极端 最值 构造 反例 至少" data-t="v">
         <div class="no">R20</div>
         <div class="bd">
-          <h3>极端情况先检查</h3>
+          <h3>极端情况先检查<span class="seen z" data-no="R20">待看</span></h3>
           <p>求「至少」先去求「最多不满足」</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R20_极端情况先检查.mp4" data-no="R20">▶ 视频 1:44</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R20">-1</button>
+            <button class="mini" data-d="1" data-no="R20">+1</button>
+            <button class="mini" data-d="0" data-no="R20">清零</button>
+            <span class="lts" data-no="R20"></span>
+          </div>
         </div>
       </article>
-      <article class="card" data-k="r25 逻辑推理与真假话 假设，推到矛盾，换下一个 离散与逻辑 逻辑 真假话 推理 假设 说谎" data-t="v">
+      <article class="card" data-no="R25" data-k="r25 逻辑推理与真假话 假设，推到矛盾，换下一个 离散与逻辑 逻辑 真假话 推理 假设 说谎" data-t="v">
         <div class="no">R25</div>
         <div class="bd">
-          <h3>逻辑推理与真假话</h3>
+          <h3>逻辑推理与真假话<span class="seen z" data-no="R25">待看</span></h3>
           <p>假设，推到矛盾，换下一个</p>
           <div class="acts"><button class="btn v" data-src="AMC10知识点_R25_逻辑推理与真假话.mp4" data-no="R25">▶ 视频 1:49</button></div>
+          <div class="adj">
+            <button class="mini" data-d="-1" data-no="R25">-1</button>
+            <button class="mini" data-d="1" data-no="R25">+1</button>
+            <button class="mini" data-d="0" data-no="R25">清零</button>
+            <span class="lts" data-no="R25"></span>
+          </div>
         </div>
       </article>
     </div>
@@ -715,6 +1209,7 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
   <div class="empty" id="empty"></div>
 
   <footer>
+    <b>计数</b>：每集右侧显示看过几次。视频要播到 3%（或 3 秒）才算一次，点开就关不会虚增；点「◱ 动手」打开即算一次。数字存在本机浏览器，不上传。<br>
     <b>说明</b>：时长取自视频实测，非估算。网页版与视频版内容同源，一个可回退细看、一个可拖动验证。<br>
     <b>形态选择</b>：需要「看着它连续怎么变」的知识点做成可交互网页；需要「听清判断顺序」的做成视频。<br>
     <b>覆盖</b>：三批全部完成：第一批（薄弱点）13 集 + 第二批（高频考点）25 集 + 第三批（大纲补齐）25 集，共 63 集。<br>
@@ -734,39 +1229,263 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
 
 <script>
 (function(){
+  var KEY = 'amc10_seen_v2';
+  var wrap = document.querySelector('.wrap');
   var q = document.getElementById('q');
   var cards = [].slice.call(document.querySelectorAll('.card'));
   var grps = [].slice.call(document.querySelectorAll('.grp'));
   var empty = document.getElementById('empty');
-  var mode = 'all';
+  var sortby = document.getElementById('sortby');
+  var modeF = 'all', modeS = 'all';
+
+  /* ---------------- 计数存取（本地，不上传） ---------------- */
+  var seen = {};
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw){ var o = JSON.parse(raw); if (o && typeof o === 'object') seen = o; }
+  } catch(e){}
+
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(seen)); } catch(e){} }
+  function cnt(no){ var v = seen[no]; return (v && v.n) ? (v.n | 0) : 0; }
+  function tms(no){ var v = seen[no]; return (v && v.t) ? (v.t | 0) : 0; }
+
+  function bump(no, d){
+    if (!no) return;
+    var n = Math.max(0, cnt(no) + d);
+    if (n === 0){ delete seen[no]; }
+    else { seen[no] = { n: n, t: d > 0 ? Date.now() : tms(no) }; }
+    save(); paint(); apply();
+    if (d > 0) flash(no);
+  }
+
+  function flash(no){
+    var el = document.querySelector('.card[data-no="' + no + '"]');
+    if (!el) return;
+    el.classList.remove('flash');
+    void el.offsetWidth;
+    el.classList.add('flash');
+    setTimeout(function(){ el.classList.remove('flash'); }, 1200);
+  }
+
+  function ago(t){
+    if (!t) return '';
+    var d = Date.now() - t;
+    if (d < 60000) return '刚刚';
+    if (d < 3600000) return Math.floor(d / 60000) + ' 分钟前';
+    if (d < 86400000) return Math.floor(d / 3600000) + ' 小时前';
+    var dd = Math.floor(d / 86400000);
+    if (dd < 31) return dd + ' 天前';
+    var x = new Date(t);
+    return (x.getMonth() + 1) + '-' + x.getDate();
+  }
+
+  /* ---------------- 渲染 ---------------- */
+  function paint(){
+    var done = 0, rep = 0;
+    cards.forEach(function(c){
+      var no = c.getAttribute('data-no');
+      var n = cnt(no);
+      var badge = c.querySelector('.seen');
+      if (badge){
+        badge.textContent = n === 0 ? '待看' : (n === 1 ? '看过 1 次' : '看过 ' + n + ' 次');
+        badge.className = 'seen ' + (n === 0 ? 'z' : (n === 1 ? 'y' : 'y2'));
+      }
+      var lt = c.querySelector('.lts');
+      if (lt) lt.textContent = n > 0 ? ('最近 ' + ago(tms(no))) : '';
+      c.setAttribute('data-n', n);
+      c.classList.toggle('todo', n === 0);
+      c.classList.remove('s1', 's2');
+      if (n === 1) c.classList.add('s1');
+      if (n >= 2) c.classList.add('s2');
+      if (n > 0) done++;
+      if (n >= 2) rep++;
+    });
+
+    var pdone = document.getElementById('pdone');
+    var pnone = document.getElementById('pnone');
+    var prep  = document.getElementById('prep');
+    var pfill = document.getElementById('pfill');
+    if (pdone) pdone.textContent = done;
+    if (pnone) pnone.textContent = (cards.length - done) + ' 集';
+    if (prep)  prep.textContent = rep;
+    if (pfill) pfill.style.width = (cards.length ? (done / cards.length * 100) : 0) + '%';
+
+    grps.forEach(function(g){
+      var all = g.querySelectorAll('.card'), ok = 0;
+      [].slice.call(all).forEach(function(c){ if (cnt(c.getAttribute('data-no')) > 0) ok++; });
+      var el = g.querySelector('.gstat');
+      if (el){
+        el.innerHTML = (ok === all.length && all.length > 0)
+          ? '<span class="ok">已看全部 ' + all.length + '</span>'
+          : '<span class="' + (ok === 0 ? 'none' : 'ok') + '">已看 ' + ok + '/' + all.length + '</span>';
+      }
+    });
+    sortAll();
+  }
+
+  function sortAll(){
+    var m = sortby ? sortby.value : 'no';
+    if (m === 'last'){
+      var a = cards.map(function(c, i){ return { c: c, t: tms(c.getAttribute('data-no')), i: i }; });
+      a.sort(function(x, y){ return (y.t - x.t) || (x.i - y.i); });
+      a.forEach(function(o, r){ o.c.style.order = r; });
+    } else if (m === 'gap'){
+      cards.forEach(function(c, i){
+        c.style.order = cnt(c.getAttribute('data-no')) * 100 + i;
+      });
+    } else {
+      cards.forEach(function(c){ c.style.order = 0; });
+    }
+
+    var seq;
+    if (m === 'gap' || m === 'last'){
+      seq = grps.map(function(g, i){
+        var k = 0;
+        [].slice.call(g.querySelectorAll('.card')).forEach(function(c){
+          var no = c.getAttribute('data-no');
+          if (m === 'gap'){ if (cnt(no) === 0) k++; }
+          else { var t = tms(no); if (t > k) k = t; }
+        });
+        return { g: g, k: k, i: i };
+      }).sort(function(x, y){ return (y.k - x.k) || (x.i - y.i); }).map(function(o){ return o.g; });
+    } else {
+      seq = grps;
+    }
+    if (empty && empty.parentNode === wrap){
+      seq.forEach(function(g){ wrap.insertBefore(g, empty); });
+    }
+  }
 
   function apply(){
     var t = q.value.trim().toLowerCase();
     var shown = 0;
     cards.forEach(function(c){
+      var n = parseInt(c.getAttribute('data-n'), 10) || 0;
       var hitT = !t || c.getAttribute('data-k').indexOf(t) >= 0;
-      var hitF = mode === 'all' || c.getAttribute('data-t').indexOf(mode) >= 0;
-      var on = hitT && hitF;
+      var hitF = modeF === 'all' || c.getAttribute('data-t').indexOf(modeF) >= 0;
+      var hitS = modeS === 'all'
+        || (modeS === 'none' && n === 0)
+        || (modeS === 'once' && n === 1)
+        || (modeS === 'more' && n >= 2);
+      var on = hitT && hitF && hitS;
       c.style.display = on ? '' : 'none';
       if (on) shown++;
     });
     grps.forEach(function(g){
-      var any = g.querySelectorAll('.card:not([style*="none"])').length > 0;
+      var any = false;
+      [].slice.call(g.querySelectorAll('.card')).forEach(function(c){
+        if (c.style.display !== 'none') any = true;
+      });
       g.style.display = any ? '' : 'none';
     });
     empty.classList.toggle('on', shown === 0);
     empty.textContent = shown === 0 ? ('没有匹配「' + q.value.trim() + '」的条目') : '';
   }
 
-  q.addEventListener('input', apply);
-  document.querySelectorAll('.filters button').forEach(function(b){
-    b.addEventListener('click', function(){
-      document.querySelectorAll('.filters button').forEach(function(x){ x.classList.remove('on'); });
-      b.classList.add('on');
-      mode = b.getAttribute('data-f');
-      apply();
+  function setForm(v){
+    modeF = v;
+    document.querySelectorAll('#fForm button').forEach(function(x){
+      x.classList.toggle('on', x.getAttribute('data-f') === v);
     });
+    apply();
+  }
+  function setStat(v){
+    modeS = v;
+    document.querySelectorAll('#fStat button').forEach(function(x){
+      x.classList.toggle('on', x.getAttribute('data-s') === v);
+    });
+    apply();
+  }
+
+  q.addEventListener('input', apply);
+  document.querySelectorAll('#fForm button').forEach(function(b){
+    b.addEventListener('click', function(){ setForm(b.getAttribute('data-f')); });
   });
+  document.querySelectorAll('#fStat button').forEach(function(b){
+    b.addEventListener('click', function(){ setStat(b.getAttribute('data-s')); });
+  });
+  if (sortby) sortby.addEventListener('change', sortAll);
+
+  var pnoneEl = document.getElementById('pnone');
+  if (pnoneEl) pnoneEl.addEventListener('click', function(){ setStat('none'); });
+
+  /* ---------------- 手动修正 ---------------- */
+  var btnEdit = document.getElementById('btnEdit');
+  if (btnEdit) btnEdit.addEventListener('click', function(){
+    var on = document.body.classList.toggle('edit');
+    btnEdit.classList.toggle('on', on);
+  });
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('.mini') : null;
+    if (!b) return;
+    var no = b.getAttribute('data-no');
+    var d = parseInt(b.getAttribute('data-d'), 10);
+    bump(no, d === 0 ? -cnt(no) : d);
+  });
+
+  /* ---------------- 数据面板 ---------------- */
+  var panel = document.getElementById('panel');
+  var btnData = document.getElementById('btnData');
+  if (btnData) btnData.addEventListener('click', function(){
+    var on = panel.classList.toggle('on');
+    btnData.classList.toggle('on', on);
+  });
+
+  function msg(s, bad){
+    var m = document.getElementById('pmsg');
+    if (!m) return;
+    m.textContent = s;
+    m.className = 'pmsg' + (bad ? ' bad' : '');
+    setTimeout(function(){ if (m.textContent === s) m.textContent = ''; }, 3200);
+  }
+
+  var dtxt = document.getElementById('dtxt');
+  var btnExp = document.getElementById('btnExp');
+  if (btnExp) btnExp.addEventListener('click', function(){
+    var s = JSON.stringify(seen);
+    dtxt.value = s;
+    dtxt.focus(); dtxt.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){}
+    if (ok){ msg('已复制到剪贴板'); return; }
+    if (navigator.clipboard){
+      navigator.clipboard.writeText(s).then(
+        function(){ msg('已复制到剪贴板'); },
+        function(){ msg('已填入框里，请手动复制', true); }
+      );
+      return;
+    }
+    msg('已填入框里，请手动复制', true);
+  });
+
+  var btnImp = document.getElementById('btnImp');
+  if (btnImp) btnImp.addEventListener('click', function(){
+    var s = (dtxt.value || '').trim();
+    if (!s){ msg('框里是空的', true); return; }
+    var o;
+    try { o = JSON.parse(s); } catch(e){ msg('格式不对，要是 JSON', true); return; }
+    if (!o || typeof o !== 'object' || Object.prototype.toString.call(o) === '[object Array]'){
+      msg('格式不对', true); return;
+    }
+    var n = 0;
+    Object.keys(o).forEach(function(k){
+      var v = o[k], c = 0, t = 0;
+      if (typeof v === 'number') c = v | 0;
+      else if (v && typeof v === 'object'){ c = v.n | 0; t = v.t | 0; }
+      if (c > 0){ seen[k] = { n: c, t: t || Date.now() }; n++; }
+    });
+    save(); paint(); apply();
+    msg('导入 ' + n + ' 条');
+  });
+
+  var btnClr = document.getElementById('btnClr');
+  if (btnClr) btnClr.addEventListener('click', function(){
+    if (!window.confirm('把全部计数清空？这一步不能撤销。')) return;
+    seen = {}; save(); paint(); apply(); msg('已清零');
+  });
+
+  paint();
+  apply();
 
   // 键盘：/ 或 Ctrl+K 聚焦搜索，Esc 清空/关闭
   document.addEventListener('keydown', function(e){
@@ -780,23 +1499,42 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
   var vbox = document.getElementById('vbox');
   var vtitle = document.getElementById('vtitle');
   var video = null;
+  var curNo = '', curCounted = false;
+
+  // 播到 3% 或 3 秒才算「看过一次」——点开就关不会把数字弄虚
+  function markSeen(){
+    if (curCounted || !curNo) return;
+    curCounted = true;
+    var no = curNo;
+    bump(no, 1);
+    vtitle.textContent = no + ' · 逐幕讲解 · 第 ' + cnt(no) + ' 次看';
+  }
 
   function openVideo(src, no){
     closeVideo();
+    curNo = no; curCounted = false;
+    var before = cnt(no);
     video = document.createElement('video');
     video.controls = true; video.autoplay = true; video.playsInline = true;
     video.preload = 'auto'; video.src = src;
     vbox.appendChild(video);
-    vtitle.textContent = no + ' · 逐幕讲解';
+    vtitle.textContent = no + ' · 逐幕讲解' + (before > 0 ? (' · 之前看过 ' + before + ' 次') : '');
     modal.classList.add('on');
     document.body.style.overflow = 'hidden';
+    video.addEventListener('timeupdate', function(){
+      if (!video.duration) return;
+      if (video.currentTime > 3 || video.currentTime / video.duration >= 0.03) markSeen();
+    });
+    video.addEventListener('ended', markSeen);
     var p = video.play();
     if (p && p.catch) p.catch(function(){});
   }
 
   function closeVideo(){
+    if (video && !curCounted && video.currentTime > 2) markSeen();
     modal.classList.remove('on');
     document.body.style.overflow = '';
+    curNo = '';
     if (video){
       try { video.pause(); } catch(e){}
       video.removeAttribute('src');
@@ -808,6 +1546,10 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
 
   document.querySelectorAll('.btn.v').forEach(function(b){
     b.addEventListener('click', function(){ openVideo(b.getAttribute('data-src'), b.getAttribute('data-no')); });
+  });
+  // 动手页：点开即算看过一次（新开页面无法回传播放进度）
+  document.querySelectorAll('.btn.h').forEach(function(a){
+    a.addEventListener('click', function(){ bump(a.getAttribute('data-no'), 1); });
   });
   document.getElementById('mclose').addEventListener('click', closeVideo);
   modal.addEventListener('click', function(e){ if (e.target === modal) closeVideo(); });
