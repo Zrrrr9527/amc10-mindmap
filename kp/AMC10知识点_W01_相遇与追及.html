@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>相遇与追及 · 看速度和还是速度差</title>
+<style>
+:root{
+  --bg:#0b1220; --card:#121a2b; --card2:#0e1626;
+  --ink:#e8eefc; --ink2:#93a3bd; --ink3:#5d6d88;
+  --cool:#4fd1c5; --hi:#ffd166; --warm:#ff5b5b;
+  --line:#22314b;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  background:radial-gradient(1200px 760px at 50% -12%, #17253f 0%, var(--bg) 62%);
+  background-attachment:fixed; color:var(--ink); min-height:100vh;
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+  display:flex; justify-content:center; padding:20px 14px 32px;
+  -webkit-font-smoothing:antialiased;
+}
+.app{width:100%;max-width:580px;display:flex;flex-direction:column;gap:13px}
+
+header{padding:2px 2px 0}
+.kicker{display:inline-block;font-size:12.5px;letter-spacing:.08em;color:#9db4d8;
+  background:rgba(79,209,197,.10);border:1px solid rgba(79,209,197,.28);
+  padding:4px 11px;border-radius:999px;margin-bottom:10px}
+h1{font-size:21px;line-height:1.42;font-weight:700}
+h1 em{font-style:normal;color:var(--cool)}
+h1 .sub{display:block;font-size:14.5px;font-weight:400;color:var(--ink2);margin-top:6px}
+
+.modes{display:flex;gap:8px}
+.modes button{flex:1;background:var(--card2);border:1px solid var(--line);color:var(--ink3);
+  border-radius:11px;padding:11px;font-size:14px;font-weight:700;font-family:inherit;
+  cursor:pointer;transition:.16s}
+.modes button.on{background:rgba(79,209,197,.15);border-color:var(--cool);color:#a8f0e8}
+
+.stage{background:linear-gradient(180deg,#101a2c,#0c1424);border:1px solid var(--line);
+  border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+svg{display:block;width:100%;height:auto;touch-action:none}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:14px;display:flex;flex-direction:column;gap:10px}
+.slider{display:flex;align-items:center;gap:9px}
+.slider span{font-size:12.5px;color:var(--ink2);white-space:nowrap;min-width:62px}
+.slider output{font-size:13.5px;color:var(--hi);font-weight:700;min-width:40px;
+  text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:3px;
+  background:linear-gradient(90deg,rgba(79,209,197,.55),rgba(79,209,197,.12));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+  border-radius:50%;background:var(--cool);border:2px solid #0b1220;cursor:pointer;
+  box-shadow:0 0 0 3px rgba(79,209,197,.22)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;
+  background:var(--cool);border:2px solid #0b1220;cursor:pointer}
+
+.ctrl{display:flex;gap:8px}
+.ctrl button{flex:1;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.42);
+  color:#fbc96b;border-radius:10px;padding:11px;font-size:13.5px;font-weight:700;
+  font-family:inherit;cursor:pointer;transition:.16s}
+.ctrl button:hover{background:rgba(255,209,102,.2)}
+.ctrl button:disabled{opacity:.4;cursor:default}
+
+.readout{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 15px}
+.readout .line{font-size:14.5px;line-height:1.85;color:#cdd8ea}
+.readout .line b{color:var(--hi);font-variant-numeric:tabular-nums}
+.readout .big{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(79,209,197,.3);
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.readout .big .lbl{font-size:13px;color:var(--ink2)}
+.readout .big .v{font-size:27px;font-weight:800;color:var(--cool);
+  font-variant-numeric:tabular-nums}
+.readout .big .v small{font-size:13px;font-weight:400;color:var(--ink3);margin-left:3px}
+.warn{background:rgba(255,91,91,.1);border:1px solid rgba(255,91,91,.35);
+  border-radius:12px;padding:11px 14px;font-size:13.5px;color:#ff9b9b;line-height:1.6}
+
+.note{font-size:13px;color:var(--ink3);line-height:1.68;padding:0 3px}
+.note b{color:var(--ink2)}
+@media(max-width:400px){
+  h1{font-size:19px} .readout .big .v{font-size:23px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="kicker">AMC10 · 应用题 · W01</div>
+    <h1>相遇看<em>速度和</em>，追及看<em>速度差</em>
+      <span class="sub">同一个「两人相距 L」，方向一变，分母就变</span>
+    </h1>
+  </header>
+
+  <div class="modes">
+    <button id="m-meet" class="on">相向而行 · 相遇</button>
+    <button id="m-chase">同向而行 · 追及</button>
+  </div>
+
+  <section class="stage">
+    <svg id="cv" viewBox="0 0 560 280" aria-label="相遇与追及示意">
+      <defs>
+        <linearGradient id="road" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#22314b" stop-opacity=".5"/>
+          <stop offset="50%" stop-color="#2e4563" stop-opacity=".8"/>
+          <stop offset="100%" stop-color="#22314b" stop-opacity=".5"/>
+        </linearGradient>
+      </defs>
+
+      <rect x="40" y="176" width="480" height="6" rx="3" fill="url(#road)"/>
+      <g id="ticks"></g>
+
+      <!-- 距离标注 -->
+      <line id="brace" x1="60" y1="120" x2="500" y2="120"
+            stroke="#5d6d88" stroke-width="1.4" stroke-dasharray="5 5"/>
+      <text id="braceTxt" x="280" y="108" fill="#93a3bd" font-size="14"
+            text-anchor="middle" font-weight="600"></text>
+
+      <!-- 两个动点 -->
+      <g id="dotA">
+        <circle r="13" fill="#4fd1c5"/>
+        <text y="5" fill="#062b28" font-size="14" text-anchor="middle" font-weight="800">A</text>
+      </g>
+      <g id="dotB">
+        <circle r="13" fill="#ffd166"/>
+        <text y="5" fill="#2a1f00" font-size="14" text-anchor="middle" font-weight="800">B</text>
+      </g>
+
+      <!-- 速度箭头 -->
+      <g id="arrA"><path d="M0,0 L18,-6 L18,6 Z" fill="#4fd1c5" fill-opacity=".8"/></g>
+      <g id="arrB"><path d="M0,0 L18,-6 L18,6 Z" fill="#ffd166" fill-opacity=".8"/></g>
+
+      <!-- 相遇位置标记 -->
+      <g id="hit" style="opacity:0">
+        <circle r="22" fill="none" stroke="#ff5b5b" stroke-width="2.5" stroke-dasharray="4 4"/>
+        <text y="-32" fill="#ff5b5b" font-size="13" text-anchor="middle" font-weight="700">碰面</text>
+      </g>
+    </svg>
+  </section>
+
+  <section class="panel">
+    <label class="slider">
+      <span>相距 L</span>
+      <input id="L" type="range" min="100" max="600" step="20" value="400">
+      <output id="Lo">400</output>
+    </label>
+    <label class="slider">
+      <span>A 速度 v₁</span>
+      <input id="v1" type="range" min="2" max="12" step="1" value="6">
+      <output id="v1o">6</output>
+    </label>
+    <label class="slider">
+      <span>B 速度 v₂</span>
+      <input id="v2" type="range" min="1" max="12" step="1" value="4">
+      <output id="v2o">4</output>
+    </label>
+    <div class="ctrl">
+      <button id="play">开始跑</button>
+      <button id="reset">重置</button>
+    </div>
+  </section>
+
+  <div class="readout">
+    <div class="line" id="formula"></div>
+    <div class="big">
+      <span class="lbl">相遇所需时间</span>
+      <span class="v" id="ans">40<small>秒</small></span>
+    </div>
+  </div>
+
+  <div class="warn" id="warn" style="display:none">
+    B 比 A 快，追不上 —— 追及的前提是 v₁ 大于 v₂。
+  </div>
+
+  <p class="note">
+    <b>判断口诀：</b>面对面走，两人合力缩短距离，用<b>速度相加</b>；
+    同方向追，只有多的那部分在缩短距离，用<b>速度相减</b>。
+    环形跑道和这完全一样：迎面看和，同向看差。
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var NS = 'http://www.w3.org/2000/svg';
+  var S = { mode: 'meet', L: 400, v1: 6, v2: 4, s: 0, running: false, tid: null, tEnd: 0 };
+
+  var X0 = 60, X1 = 500, SPAN = X1 - X0;
+  var $ = function(id){ return document.getElementById(id); };
+  function mk(tag, attrs, txt){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt !== undefined) e.textContent = txt;
+    return e;
+  }
+
+  // 速度 → 像素/秒（按比例缩放，只是让动画好看）
+  function pxPerSec(v){ return v * 9; }
+
+  function reset(){
+    stop();
+    S.s = 0;
+    draw();
+  }
+
+  function stop(){
+    S.running = false;
+    if (S.tid){ cancelAnimationFrame(S.tid); S.tid = null; }
+    $('play').textContent = '开始跑';
+  }
+
+  function physics(){
+    var L = S.L, v1 = S.v1, v2 = S.v2;
+    if (S.mode === 'meet'){
+      return { rel: v1 + v2, ok: true, tEnd: L / (v1 + v2) };
+    }
+    var rel = v1 - v2;
+    return { rel: rel, ok: rel > 0, tEnd: rel > 0 ? L / rel : Infinity };
+  }
+
+  // 几何：两个点的起止像素位置。
+  // 关键：不按「像素/秒」走，而是让终止点由速度比推出，
+  // 这样动画一定收在画面内，且走的长度比例与速度比一致。
+  function geom(){
+    var v1 = S.v1, v2 = S.v2;
+    if (S.mode === 'meet'){
+      var hitX = X0 + SPAN * v1 / (v1 + v2);
+      return { ax0: X0, ax1: hitX, bx0: X1, bx1: hitX, hitX: hitX };
+    }
+    if (v2 >= v1){
+      // 追不上：B 领跑且越拉越远，两者都要留在画面内
+      var b0 = X0 + SPAN * 0.16;
+      return { ax0: X0, ax1: X0 + SPAN * 0.72 * (v1 / v2),
+               bx0: b0, bx1: X1, hitX: X1 };
+    }
+    var endX = X1 - 24;
+    var dpx = (endX - X0) * (1 - v2 / v1);   // B 的领先距离由速度比决定
+    return { ax0: X0, ax1: endX, bx0: X0 + dpx, bx1: endX, hitX: endX };
+  }
+
+  function draw(){
+    var p = physics();
+    var L = S.L;
+    var g = geom();
+
+    // 刻度
+    var ticks = $('ticks'); ticks.innerHTML = '';
+    for (var i = 0; i <= 4; i++){
+      var x = X0 + SPAN * i / 4;
+      ticks.appendChild(mk('line', {x1: x, y1: 184, x2: x, y2: 196,
+        stroke: '#3a5577', 'stroke-width': 1.5}));
+      ticks.appendChild(mk('text', {x: x, y: 214, fill: '#5d6d88',
+        'font-size': '11', 'text-anchor': 'middle'}, String(Math.round(L * i / 4))));
+    }
+
+    $('braceTxt').textContent = '相距 ' + L;
+    $('brace').setAttribute('x1', X0); $('brace').setAttribute('x2', X1);
+
+    var a = g.ax0 + (g.ax1 - g.ax0) * S.s;
+    var b = g.bx0 + (g.bx1 - g.bx0) * S.s;
+
+    $('dotA').setAttribute('transform', 'translate(' + a + ',160)');
+    $('dotB').setAttribute('transform', 'translate(' + b + ',160)');
+
+    var angA = 'translate(' + (a + 16) + ',132)';
+    var angB = (S.mode === 'meet')
+      ? 'translate(' + (b - 34) + ',132) rotate(180)'
+      : 'translate(' + (b + 16) + ',132)';
+    $('arrA').setAttribute('transform', angA);
+    $('arrB').setAttribute('transform', angB);
+
+    var hit = $('hit');
+    if (p.ok && S.s >= 0.999 && p.tEnd > 0){
+      hit.setAttribute('transform', 'translate(' + g.hitX + ',160)');
+      hit.style.opacity = 1;
+    } else {
+      hit.style.opacity = 0;
+    }
+
+    var f = $('formula');
+    if (S.mode === 'meet'){
+      f.innerHTML = '时间 = 距离 ÷ <b>速度和</b> = ' + L + ' ÷ (' + S.v1 + ' + ' + S.v2
+                  + ') = ' + L + ' ÷ ' + p.rel;
+    } else {
+      f.innerHTML = '时间 = 距离差 ÷ <b>速度差</b> = ' + L + ' ÷ (' + S.v1 + ' − ' + S.v2
+                  + ') = ' + L + ' ÷ ' + p.rel;
+    }
+
+    var ansEl = $('ans');
+    if (!p.ok){
+      ansEl.innerHTML = '追不上';
+      $('warn').style.display = 'block';
+    } else {
+      var val = p.tEnd;
+      ansEl.innerHTML = (Math.abs(val - Math.round(val)) < 1e-6 ? Math.round(val) : val.toFixed(2))
+                        + '<small>秒</small>';
+      $('warn').style.display = 'none';
+    }
+
+    $('play').disabled = !p.ok;
+  }
+
+  var DUR = 4.2;   // 动画固定播 4.2 秒走完全程（真实时间是结果，不是动画长度）
+
+  function tick(now){
+    if (!S.running) return;
+    if (!S.last) S.last = now;
+    var dt = Math.min(50, now - S.last) / 1000;
+    S.last = now;
+    S.s += dt / DUR;
+    if (S.s >= 1){ S.s = 1; draw(); stop(); return; }
+    draw();
+    S.tid = requestAnimationFrame(tick);
+  }
+
+  $('play').addEventListener('click', function(){
+    var p = physics();
+    if (!p.ok) return;
+    if (S.running){ stop(); return; }
+    if (S.s >= 1) S.s = 0;
+    S.running = true; S.last = 0;
+    this.textContent = '暂停';
+    S.tid = requestAnimationFrame(tick);
+  });
+  $('reset').addEventListener('click', reset);
+
+  function setMode(m){
+    S.mode = m;
+    $('m-meet').className = (m === 'meet') ? 'on' : '';
+    $('m-chase').className = (m === 'chase') ? 'on' : '';
+    reset();
+  }
+  $('m-meet').addEventListener('click', function(){ setMode('meet'); });
+  $('m-chase').addEventListener('click', function(){ setMode('chase'); });
+
+  function bind(id, key, outId){
+    var el = $(id);
+    el.addEventListener('input', function(){
+      S[key] = parseInt(el.value, 10);
+      $(outId).textContent = el.value;
+      reset();
+    });
+  }
+  bind('L', 'L', 'Lo'); bind('v1', 'v1', 'v1o'); bind('v2', 'v2', 'v2o');
+
+  draw();
+})();
+</script>
+</body>
+</html>

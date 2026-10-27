@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>工程问题 · 总量设为 1，效率相加</title>
+<style>
+:root{--bg:#0b1220;--card:#121a2b;--card2:#0e1626;--ink:#e8eefc;--ink2:#93a3bd;
+ --ink3:#5d6d88;--cool:#4fd1c5;--hi:#ffd166;--warm:#ff5b5b;--line:#22314b}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1200px 760px at 50% -12%,#17253f 0%,var(--bg) 62%);
+ background-attachment:fixed;color:var(--ink);min-height:100vh;
+ font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+ display:flex;justify-content:center;padding:20px 14px 32px;-webkit-font-smoothing:antialiased}
+.app{width:100%;max-width:560px;display:flex;flex-direction:column;gap:13px}
+header{padding:2px 2px 0}
+.kicker{display:inline-block;font-size:12.5px;letter-spacing:.08em;color:#9db4d8;
+ background:rgba(79,209,197,.10);border:1px solid rgba(79,209,197,.28);
+ padding:4px 11px;border-radius:999px;margin-bottom:10px}
+h1{font-size:21px;line-height:1.42;font-weight:700}
+h1 em{font-style:normal;color:var(--cool)}
+h1 .sub{display:block;font-size:14.5px;font-weight:400;color:var(--ink2);margin-top:6px}
+.stage{background:linear-gradient(180deg,#101a2c,#0c1424);border:1px solid var(--line);
+ border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+svg{display:block;width:100%;height:auto}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;
+ padding:14px;display:flex;flex-direction:column;gap:10px}
+.slider{display:flex;align-items:center;gap:9px}
+.slider span{font-size:12.5px;color:var(--ink2);white-space:nowrap;min-width:70px}
+.slider output{font-size:13.5px;color:var(--hi);font-weight:700;min-width:44px;
+ text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:3px;
+ background:linear-gradient(90deg,rgba(79,209,197,.55),rgba(79,209,197,.12));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+ border-radius:50%;background:var(--cool);border:2px solid #0b1220;cursor:pointer;
+ box-shadow:0 0 0 3px rgba(79,209,197,.22)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;
+ background:var(--cool);border:2px solid #0b1220;cursor:pointer}
+.ctrl{display:flex;gap:8px}
+.ctrl button{flex:1;background:rgba(255,209,102,.12);border:1px solid rgba(255,209,102,.42);
+ color:#fbc96b;border-radius:10px;padding:11px;font-size:13.5px;font-weight:700;
+ font-family:inherit;cursor:pointer;transition:.16s}
+.ctrl button:hover{background:rgba(255,209,102,.2)}
+.readout{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 15px}
+.readout .line{font-size:14px;line-height:1.9;color:#cdd8ea}
+.readout .line b{color:var(--hi);font-variant-numeric:tabular-nums}
+.readout .big{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(79,209,197,.3);
+ display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.readout .big .lbl{font-size:13px;color:var(--ink2)}
+.readout .big .v{font-size:27px;font-weight:800;color:var(--cool);font-variant-numeric:tabular-nums}
+.readout .big .v small{font-size:13px;font-weight:400;color:var(--ink3);margin-left:3px}
+.note{font-size:13px;color:var(--ink3);line-height:1.68;padding:0 3px}
+.note b{color:var(--ink2)}
+@media(max-width:400px){h1{font-size:19px}.readout .big .v{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="kicker">AMC10 · 应用题 · W02</div>
+    <h1>工程问题：把总量<em>设为 1</em>
+      <span class="sub">效率是「每天做几分之几」，合作就把效率加起来</span>
+    </h1>
+  </header>
+
+  <section class="stage">
+    <svg id="cv" viewBox="0 0 560 320" aria-label="工程进度示意">
+      <text x="40" y="46" fill="#93a3bd" font-size="14" font-weight="700">甲 单独做</text>
+      <text x="430" y="46" fill="#4fd1c5" font-size="13" text-anchor="end" id="lblA"></text>
+      <rect x="40" y="58" width="480" height="30" rx="15" fill="#16233c"/>
+      <rect id="barA" x="40" y="58" width="0" height="30" rx="15" fill="#4fd1c5"/>
+
+      <text x="40" y="130" fill="#93a3bd" font-size="14" font-weight="700">乙 单独做</text>
+      <text x="430" y="130" fill="#ffd166" font-size="13" text-anchor="end" id="lblB"></text>
+      <rect x="40" y="142" width="480" height="30" rx="15" fill="#16233c"/>
+      <rect id="barB" x="40" y="142" width="0" height="30" rx="15" fill="#ffd166"/>
+
+      <text x="40" y="222" fill="#93a3bd" font-size="14" font-weight="700">两人合作</text>
+      <text x="430" y="222" fill="#ff8fb0" font-size="13" text-anchor="end" id="lblC"></text>
+      <rect x="40" y="234" width="480" height="30" rx="15" fill="#16233c"/>
+      <rect id="barC" x="40" y="234" width="0" height="30" rx="15" fill="#f472b6"/>
+
+      <text x="40" y="298" fill="#5d6d88" font-size="12" id="clock">时间 0</text>
+      <text x="520" y="298" fill="#3f5570" font-size="12" text-anchor="end">竖线 = 谁先做完</text>
+    </svg>
+  </section>
+
+  <section class="panel">
+    <label class="slider">
+      <span>甲 单独要</span>
+      <input id="t1" type="range" min="2" max="20" step="1" value="6">
+      <output id="t1o">6</output>
+    </label>
+    <label class="slider">
+      <span>乙 单独要</span>
+      <input id="t2" type="range" min="2" max="20" step="1" value="12">
+      <output id="t2o">12</output>
+    </label>
+    <div class="ctrl">
+      <button id="play">开始做</button>
+      <button id="reset">重置</button>
+    </div>
+  </section>
+
+  <div class="readout">
+    <div class="line" id="f1"></div>
+    <div class="line" id="f2"></div>
+    <div class="big">
+      <span class="lbl">合作完成要</span>
+      <span class="v" id="ans">4<small>天</small></span>
+    </div>
+  </div>
+
+  <p class="note">
+    <b>只记一句：</b>总量设成 1，效率就是「占几分之几」。甲是 t₁ 分之一，乙是 t₂ 分之一，
+    合起来效率相加。所以合作时间 = 1 ÷ (1/t₁ + 1/t₂)，<b>永远比两人各自都快</b>。
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var S = { t1: 6, t2: 12, s: 0, running: false, tid: null };
+  var $ = function(id){ return document.getElementById(id); };
+  var W = 480, X0 = 40;
+
+  function times(){
+    var e1 = 1 / S.t1, e2 = 1 / S.t2, ec = e1 + e2;
+    return { e1: e1, e2: e2, ec: ec, tc: 1 / ec, tEnd: Math.max(S.t1, S.t2) };
+  }
+  function fmt(x){
+    return (Math.abs(x - Math.round(x)) < 1e-9) ? String(Math.round(x)) : x.toFixed(2);
+  }
+
+  function draw(){
+    var m = times();
+    var t = S.s * m.tEnd;                     // 当前动画时间（天）
+
+    var pA = Math.min(1, t / S.t1);
+    var pB = Math.min(1, t / S.t2);
+    var pC = Math.min(1, t * m.ec);
+
+    $('barA').setAttribute('width', (W * pA).toFixed(1));
+    $('barB').setAttribute('width', (W * pB).toFixed(1));
+    $('barC').setAttribute('width', (W * pC).toFixed(1));
+
+    $('lblA').textContent = pA >= 1 ? '完成' : Math.round(pA * 100) + '%';
+    $('lblB').textContent = pB >= 1 ? '完成' : Math.round(pB * 100) + '%';
+    $('lblC').textContent = pC >= 1 ? '完成' : Math.round(pC * 100) + '%';
+
+    $('clock').textContent = '时间 ' + t.toFixed(1) + ' 天';
+
+    $('f1').innerHTML = '甲每天做 <b>1/' + S.t1 + '</b>，乙每天做 <b>1/' + S.t2 + '</b>';
+    $('f2').innerHTML = '合作效率 = 1/' + S.t1 + ' + 1/' + S.t2 + ' = <b>'
+      + fmt(m.ec) + '</b>（每天做这么多）';
+    $('ans').innerHTML = fmt(m.tc) + '<small>天</small>';
+  }
+
+  function tick(now){
+    if (!S.running) return;
+    if (!S.last) S.last = now;
+    var dt = Math.min(50, now - S.last) / 1000;
+    S.last = now;
+    S.s += dt / 4.5;
+    if (S.s >= 1){ S.s = 1; draw(); stop(); return; }
+    draw();
+    S.tid = requestAnimationFrame(tick);
+  }
+  function stop(){
+    S.running = false;
+    if (S.tid){ cancelAnimationFrame(S.tid); S.tid = null; }
+    $('play').textContent = '开始做';
+  }
+
+  $('play').addEventListener('click', function(){
+    if (S.running){ stop(); return; }
+    if (S.s >= 1) S.s = 0;
+    S.running = true; S.last = 0; this.textContent = '暂停';
+    S.tid = requestAnimationFrame(tick);
+  });
+  $('reset').addEventListener('click', function(){ stop(); S.s = 0; draw(); });
+
+  function bind(id, key, outId){
+    var el = $(id);
+    el.addEventListener('input', function(){
+      S[key] = parseInt(el.value, 10);
+      $(outId).textContent = el.value;
+      stop(); S.s = 0; draw();
+    });
+  }
+  bind('t1', 't1', 't1o'); bind('t2', 't2', 't2o');
+
+  draw();
+})();
+</script>
+</body>
+</html>

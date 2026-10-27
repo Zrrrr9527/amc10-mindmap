@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>幂的个位循环 · 指数再大也只在小圈里转</title>
+<style>
+:root{
+  --bg:#0b1220; --card:#121a2b; --card2:#0e1626;
+  --ink:#e8eefc; --ink2:#93a3bd; --ink3:#5d6d88;
+  --cool:#4fd1c5; --hi:#ffd166; --warm:#ff5b5b;
+  --line:#22314b;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  background:radial-gradient(1200px 760px at 50% -12%, #17253f 0%, var(--bg) 62%);
+  background-attachment:fixed; color:var(--ink); min-height:100vh;
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+  display:flex; justify-content:center; padding:20px 14px 32px;
+  -webkit-font-smoothing:antialiased;
+}
+.app{width:100%;max-width:560px;display:flex;flex-direction:column;gap:13px}
+
+header{padding:2px 2px 0}
+.kicker{display:inline-block;font-size:12.5px;letter-spacing:.08em;color:#9db4d8;
+  background:rgba(79,209,197,.10);border:1px solid rgba(79,209,197,.28);
+  padding:4px 11px;border-radius:999px;margin-bottom:10px}
+h1{font-size:21px;line-height:1.42;font-weight:700}
+h1 em{font-style:normal;color:var(--cool)}
+h1 .sub{display:block;font-size:14.5px;font-weight:400;color:var(--ink2);margin-top:6px}
+
+.stage{background:linear-gradient(180deg,#101a2c,#0c1424);border:1px solid var(--line);
+  border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+svg{display:block;width:100%;height:auto}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:14px;display:flex;flex-direction:column;gap:12px}
+
+.bases{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.bases button{
+  background:var(--card2);border:1px solid var(--line);color:var(--ink3);
+  border-radius:9px;padding:9px 0;font-size:15px;font-weight:700;
+  font-family:inherit;cursor:pointer;transition:.16s;font-variant-numeric:tabular-nums;
+}
+.bases button:hover{border-color:var(--cool);color:#8fe6dc}
+.bases button.on{background:rgba(79,209,197,.16);border-color:var(--cool);color:#a8f0e8}
+
+.slider{display:flex;align-items:center;gap:10px}
+.slider span{font-size:13px;color:var(--ink2);white-space:nowrap}
+.slider output{font-size:15px;color:var(--hi);font-weight:700;min-width:64px;
+  text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:3px;
+  background:linear-gradient(90deg,rgba(79,209,197,.55),rgba(79,209,197,.12));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;
+  border-radius:50%;background:var(--cool);border:2px solid #0b1220;cursor:pointer;
+  box-shadow:0 0 0 3px rgba(79,209,197,.22)}
+input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;
+  background:var(--cool);border:2px solid #0b1220;cursor:pointer}
+
+.jump{display:flex;gap:8px}
+.jump button{flex:1;background:rgba(255,209,102,.11);border:1px solid rgba(255,209,102,.42);
+  color:#fbc96b;border-radius:10px;padding:10px;font-size:13.5px;font-weight:700;
+  font-family:inherit;cursor:pointer;transition:.16s}
+.jump button:hover{background:rgba(255,209,102,.2)}
+
+.calc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 15px}
+.calc .row{display:flex;align-items:baseline;gap:8px;font-size:14.5px;line-height:1.9;
+  color:#cdd8ea;flex-wrap:wrap}
+.calc .row b{color:var(--hi);font-variant-numeric:tabular-nums}
+.calc .res{margin-top:11px;padding-top:11px;border-top:1px dashed rgba(79,209,197,.3);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.calc .res .lbl{font-size:13px;color:var(--ink2)}
+.calc .big{font-size:30px;font-weight:800;color:var(--cool);
+  font-variant-numeric:tabular-nums;line-height:1.1}
+.calc .truth{margin-left:auto;font-size:13px;color:var(--ink3);text-align:right;line-height:1.5}
+.calc .truth b{color:var(--ink2);font-variant-numeric:tabular-nums;font-size:15px}
+.ok{color:#5fd08a !important}
+.bad{color:var(--warm) !important}
+
+.note{font-size:13px;color:var(--ink3);line-height:1.65;padding:0 3px}
+.note b{color:var(--ink2)}
+@media(max-width:400px){
+  h1{font-size:19px} .calc .big{font-size:25px}
+  .bases button{padding:8px 0;font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="kicker">AMC10 · 数论 · B03</div>
+    <h1>指数再大，个位也只在<em>一个小圈里转</em>
+      <span class="sub">拖动指数看它怎么转 —— 转完一圈，个位就回到起点</span>
+    </h1>
+  </header>
+
+  <section class="stage">
+    <svg id="ring" viewBox="0 0 420 420" aria-label="个位循环示意">
+      <defs>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#4fd1c5" stop-opacity=".16"/>
+          <stop offset="100%" stop-color="#4fd1c5" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="210" cy="210" r="150" fill="url(#glow)"/>
+      <circle cx="210" cy="210" r="118" fill="none" stroke="#4fd1c5"
+              stroke-opacity=".38" stroke-width="2"/>
+      <g id="nodes"></g>
+      <line id="hand" x1="210" y1="210" x2="210" y2="92"
+            stroke="#ffd166" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="210" cy="210" r="6" fill="#ffd166"/>
+      <text id="center" x="210" y="210" fill="#ffd166" font-size="15"
+            text-anchor="middle" font-weight="700" dy="-14"></text>
+    </svg>
+  </section>
+
+  <section class="panel">
+    <div class="bases" id="bases"></div>
+    <label class="slider">
+      <span>指数 n</span>
+      <input id="n" type="range" min="1" max="40" step="1" value="1">
+      <output id="nout">1</output>
+    </label>
+    <div class="jump">
+      <button id="big">跳到 n = 2024</button>
+      <button id="reset">回到 n = 1</button>
+    </div>
+  </section>
+
+  <section class="calc">
+    <div class="row" id="r1"></div>
+    <div class="row" id="r2"></div>
+    <div class="res">
+      <span class="lbl">推算个位</span>
+      <span class="big" id="ans">3</span>
+      <span class="truth">
+        实际算出来的末位<br><b id="truth">3</b>
+      </span>
+    </div>
+  </section>
+
+  <p class="note">
+    <b>为什么余数 0 不是第 0 位？</b>因为周期从第 1 项开始数：转满一整圈，落回的是最后那一格。
+    这是这类题最常见的错。
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var R = 118, CX = 210, CY = 210;
+  var basesEl = document.getElementById('bases');
+  var nEl   = document.getElementById('n');
+  var nOut  = document.getElementById('nout');
+  var nodesEl = document.getElementById('nodes');
+  var handEl  = document.getElementById('hand');
+  var centerEl= document.getElementById('center');
+  var ansEl   = document.getElementById('ans');
+  var truthEl = document.getElementById('truth');
+  var r1 = document.getElementById('r1');
+  var r2 = document.getElementById('r2');
+
+  var S = { base: 3, n: 1 };
+
+  // 求一个底数的个位循环体，例如 3 -> [3,9,7,1]
+  function cycleOf(base){
+    var arr = [], cur = base % 10, seen = {};
+    while (!seen[cur]){
+      seen[cur] = true;
+      arr.push(cur);
+      cur = (cur * base) % 10;
+    }
+    return arr;
+  }
+
+  // 真实末位（BigInt 真算，用来对照）
+  function truthDigit(base, n){
+    try {
+      var v = BigInt(base) ** BigInt(n);
+      return Number(v % 10n);
+    } catch(e){ return null; }
+  }
+
+  function posOf(n, len){
+    // 第 n 项落在 cycle 的哪一格（0 基）
+    return (n - 1) % len;
+  }
+
+  function drawRing(cyc, pos){
+    nodesEl.innerHTML = '';
+    var len = cyc.length;
+    for (var i = 0; i < len; i++){
+      // 从正上方开始，顺时针
+      var ang = -Math.PI/2 + i * 2 * Math.PI / len;
+      var x = CX + R * Math.cos(ang), y = CY + R * Math.sin(ang);
+      var g = document.createElementNS('http://www.w3.org/2000/svg','g');
+
+      var c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 30);
+      var on = (i === pos);
+      c.setAttribute('fill', on ? '#ffd166' : '#16233c');
+      c.setAttribute('stroke', on ? '#ffd166' : '#4fd1c5');
+      c.setAttribute('stroke-opacity', on ? '1' : '.42');
+      c.setAttribute('stroke-width', on ? '3' : '2');
+      g.appendChild(c);
+
+      var t = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x', x); t.setAttribute('y', y + 9);
+      t.setAttribute('fill', on ? '#2a1f00' : '#8fbfc9');
+      t.setAttribute('font-size', '24');
+      t.setAttribute('font-weight', '700');
+      t.setAttribute('text-anchor', 'middle');
+      t.textContent = cyc[i];
+      g.appendChild(t);
+
+      // 序号（第几位）
+      var idx = document.createElementNS('http://www.w3.org/2000/svg','text');
+      var ox = CX + (R + 44) * Math.cos(ang), oy = CY + (R + 44) * Math.sin(ang);
+      idx.setAttribute('x', ox); idx.setAttribute('y', oy + 5);
+      idx.setAttribute('fill', on ? '#ffd166' : '#3f5570');
+      idx.setAttribute('font-size', '14');
+      idx.setAttribute('text-anchor', 'middle');
+      idx.textContent = (i + 1);
+      g.appendChild(idx);
+
+      nodesEl.appendChild(g);
+    }
+    // 指针
+    var a = -Math.PI/2 + pos * 2 * Math.PI / len;
+    handEl.setAttribute('x2', CX + (R - 34) * Math.cos(a));
+    handEl.setAttribute('y2', CY + (R - 34) * Math.sin(a));
+    centerEl.textContent = String(S.n);
+  }
+
+  function render(){
+    var cyc = cycleOf(S.base);
+    var len = cyc.length;
+    var pos = posOf(S.n, len);
+    drawRing(cyc, pos);
+
+    var r = S.n % len;
+    var which = (r === 0) ? len : r;
+    var digit = cyc[pos];
+
+    nOut.textContent = S.n;
+    ansEl.textContent = String(digit);
+
+    r1.innerHTML = '<span>个位循环：</span>' +
+      cyc.map(function(d, i){
+        return '<b>' + d + '</b>' + (i < len - 1 ? '<span>→</span>' : '<span>→ 回到 ' + cyc[0] + '</span>');
+      }).join('') +
+      '<span>，周期 = <b>' + len + '</b></span>';
+
+    if (S.n > 40){
+      r2.innerHTML = '<span>n = <b>' + S.n + '</b>，对 <b>' + len +
+        '</b> 取余：' + S.n + ' ÷ ' + len + ' 的余数是 <b>' + r +
+        '</b> → 落在第 <b>' + which + '</b> 位</span>';
+    } else {
+      r2.innerHTML = '<span>n = <b>' + S.n + '</b>，' + S.n + ' ÷ ' + len +
+        ' = ' + Math.floor(S.n/len) + ' 余 <b>' + r +
+        '</b> → 落在第 <b>' + which + '</b> 位</span>';
+    }
+
+    // 真实对照
+    var tv = truthDigit(S.base, S.n);
+    if (tv === null){
+      truthEl.textContent = '（数值太大）';
+      truthEl.className = '';
+    } else {
+      truthEl.textContent = String(tv);
+      truthEl.className = (tv === digit) ? 'ok' : 'bad';
+    }
+  }
+
+  // 底数按钮
+  for (var b = 2; b <= 9; b++){
+    (function(bb){
+      var btn = document.createElement('button');
+      btn.textContent = String(bb);
+      btn.setAttribute('data-b', String(bb));
+      if (bb === S.base) btn.className = 'on';
+      btn.addEventListener('click', function(){
+        S.base = bb;
+        S.n = 1;
+        nEl.value = 1;
+        var all = basesEl.querySelectorAll('button');
+        for (var i = 0; i < all.length; i++) all[i].className = '';
+        btn.className = 'on';
+        render();
+      });
+      basesEl.appendChild(btn);
+    })(b);
+  }
+
+  nEl.addEventListener('input', function(){
+    S.n = parseInt(nEl.value, 10);
+    render();
+  });
+
+  document.getElementById('big').addEventListener('click', function(){
+    S.n = 2024;
+    nEl.value = 40;          // 滑块到顶，数值由内部 n 决定
+    render();
+  });
+
+  document.getElementById('reset').addEventListener('click', function(){
+    S.n = 1; nEl.value = 1; render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

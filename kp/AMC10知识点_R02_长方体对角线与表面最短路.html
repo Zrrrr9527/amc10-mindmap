@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AMC10知识点_R02_长方体对角线与表面最短路</title>
+<style>
+:root{
+  --bg1:#0a182e; --ink:#eaf2ff; --ink2:#9fb3cf; --ink3:#6a7f9c;
+  --sky:#7dd3fc; --amber:#f59e0b; --green:#22c55e; --blue:#3b82f6; --red:#ef4444;
+  --line:#22405f; --card:rgba(255,255,255,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  background:radial-gradient(1100px 760px at 50% -8%, #16375c 0%, var(--bg1) 62%);
+  background-attachment:fixed; color:var(--ink); min-height:100vh;
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; padding:18px 14px 40px;
+  display:flex; justify-content:center;
+}
+.app{width:100%;max-width:780px;display:flex;flex-direction:column;gap:13px}
+
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chip{background:#3a5484;color:#d6e6fc;font-size:12.5px;font-weight:700;
+  padding:6px 13px;border-radius:999px;white-space:nowrap}
+.hint{margin-left:auto;font-size:12px;color:var(--ink3)}
+h1{font-size:22px;font-weight:800;letter-spacing:.03em;line-height:1.35}
+h1 em{font-style:normal;color:var(--sky)}
+
+/* 3D 舞台 */
+.stage{position:relative;border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg, rgba(125,211,252,.06), rgba(10,24,46,.2));
+  border:1.5px solid var(--line)}
+canvas{display:block;width:100%;height:auto;cursor:grab;touch-action:none}
+canvas.drag{cursor:grabbing}
+.rota{position:absolute;right:12px;bottom:10px;font-size:11px;color:var(--ink3);
+  background:rgba(10,24,46,.7);padding:4px 9px;border-radius:7px;pointer-events:none}
+
+/* 控制 */
+.ctrl{background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:13px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.row .lab{font-size:13px;color:var(--ink2);min-width:22px;font-weight:700}
+input[type=range]{flex:1;min-width:100px;-webkit-appearance:none;height:6px;
+  border-radius:3px;background:#2b4a6e;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+  border-radius:50%;background:var(--sky);cursor:pointer;box-shadow:0 2px 8px rgba(125,211,252,.4)}
+.row output{font-size:13px;font-weight:700;color:var(--sky);min-width:26px;text-align:right;
+  font-variant-numeric:tabular-nums}
+
+/* 展开方式切换 */
+.seg{display:flex;gap:6px;background:#16263f;padding:4px;border-radius:10px;flex-wrap:wrap}
+.seg button{font-family:inherit;font-size:12.5px;font-weight:700;padding:8px 13px;
+  border-radius:7px;border:none;background:transparent;color:var(--ink2);cursor:pointer;
+  transition:.15s;flex:1;min-width:88px}
+.seg button.on{background:var(--sky);color:#08243c}
+.seg button .sub{display:block;font-size:10px;font-weight:600;opacity:.75;margin-top:2px}
+
+/* 展开图 */
+.flatWrap{background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:12px 14px 8px}
+.flatWrap .fh{font-size:12.5px;color:var(--ink2);font-weight:700;margin-bottom:8px;
+  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.flatWrap .fh .ln{margin-left:auto;font-size:13px;color:var(--amber);font-weight:800;
+  font-variant-numeric:tabular-nums}
+svg#flat{display:block;width:100%;height:auto}
+
+/* 对比表 */
+.cmp{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:13px}
+.cmp h2{font-size:13px;font-weight:800;color:var(--ink2);margin-bottom:10px;letter-spacing:.03em}
+.cr{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid rgba(34,64,95,.55);
+  font-size:13px}
+.cr:last-child{border-bottom:none}
+.cr .cn{color:var(--ink2);min-width:96px}
+.cr .cf{color:var(--ink3);font-size:11.5px;flex:1;font-variant-numeric:tabular-nums}
+.cr .cv{font-weight:800;font-variant-numeric:tabular-nums;min-width:58px;text-align:right}
+.cr.best .cv{color:var(--green)}
+.cr.diag .cv{color:var(--red)}
+.cr .tag2{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:4px}
+.best .tag2{background:rgba(34,197,94,.16);color:#4ade80}
+.diag .tag2{background:rgba(239,68,68,.16);color:#f87171}
+
+.conc{background:rgba(245,158,11,.11);border:1.5px solid rgba(245,158,11,.3);
+  border-radius:14px;padding:13px 16px;font-size:13.5px;line-height:1.75;color:#fbd38d}
+.conc b{color:#fbbf24}
+.conc .eq{font-size:16px;font-weight:800;color:#fbbf24;letter-spacing:.03em;
+  font-variant-numeric:tabular-nums}
+
+@media(max-width:560px){
+  h1{font-size:19px}
+  .cr .cn{min-width:74px;font-size:12.5px}
+  .cr .cf{display:none}
+  .seg button{min-width:0;font-size:11.5px;padding:7px 8px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="top">
+    <span class="chip">AMC10 · 立体几何 · R02</span>
+    <span class="hint">拖动画面可旋转</span>
+  </div>
+  <h1>穿内部 13，<em>沿表面却要 13.9</em></h1>
+
+  <div class="stage">
+    <canvas id="cv"></canvas>
+    <div class="rota">灰虚线＝空间对角线（穿内部，不能走）</div>
+  </div>
+
+  <div class="ctrl">
+    <div class="row"><span class="lab">a</span>
+      <input id="ra" type="range" min="1" max="12" step="1" value="3">
+      <output id="oa">3</output></div>
+    <div class="row"><span class="lab">b</span>
+      <input id="rb" type="range" min="1" max="12" step="1" value="4">
+      <output id="ob">4</output></div>
+    <div class="row"><span class="lab">c</span>
+      <input id="rc" type="range" min="1" max="12" step="1" value="12">
+      <output id="oc">12</output></div>
+  </div>
+
+  <div class="seg" id="modes">
+    <button class="on" data-m="0">前面 + 右面<span class="sub">(a+b) 与 c</span></button>
+    <button data-m="1">底面 + 右面<span class="sub">(a+c) 与 b</span></button>
+    <button data-m="2">底面 + 后面<span class="sub">a 与 (b+c)</span></button>
+  </div>
+
+  <div class="flatWrap">
+    <div class="fh">
+      <span id="flatTitle">展开图：两个面摊平成一个矩形</span>
+      <span class="ln" id="flatLen">√((a+b)² + c²)</span>
+    </div>
+    <svg id="flat" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="cmp">
+    <h2>三种展开方式，都算一遍再比较</h2>
+    <div class="cr" id="r0"><span class="cn">前面 + 右面</span>
+      <span class="cf" id="f0">√((a+b)²+c²)</span>
+      <span class="cv" id="v0">—</span></div>
+    <div class="cr" id="r1"><span class="cn">底面 + 右面</span>
+      <span class="cf" id="f1">√((a+c)²+b²)</span>
+      <span class="cv" id="v1">—</span></div>
+    <div class="cr" id="r2"><span class="cn">底面 + 后面</span>
+      <span class="cf" id="f2">√(a²+(b+c)²)</span>
+      <span class="cv" id="v2">—</span></div>
+    <div class="cr diag"><span class="cn">空间对角线</span>
+      <span class="cf" id="f3">√(a²+b²+c²)　穿内部，不能走</span>
+      <span class="cv" id="v3">—</span></div>
+  </div>
+
+  <div class="conc" id="conc"></div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var S = { a: 3, b: 4, c: 12, mode: 0, yaw: -0.38, pitch: 0.26 };
+
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d');
+  var CW = 0, CH = 0, DPR = 1;
+
+  // ---------------- 3D 核心（正交投影） ----------------
+  function rotPt(p){
+    var cy = Math.cos(S.yaw), sy = Math.sin(S.yaw);
+    var x1 = p[0]*cy + p[2]*sy;
+    var z1 = -p[0]*sy + p[2]*cy;
+    var cp = Math.cos(S.pitch), sp = Math.sin(S.pitch);
+    // 绕 x 轴转「-pitch」才是俯视（相机在上方）。写成 +pitch 会变成仰视，
+    // 圆柱对称看不出来，立方体一眼就能看出顶面消失。
+    var y1 = p[1]*cp + z1*sp;
+    var z2 = -p[1]*sp + z1*cp;
+    return [x1, y1, z2];
+  }
+
+  var SCALE = 20, CX = 0, CY = 0;
+
+  function toScreen(p){
+    var q = rotPt(p);
+    return [CX + q[0]*SCALE, CY - q[1]*SCALE, q[2]];
+  }
+
+  function normalOf(pts){
+    var a=pts[0], b=pts[1], c=pts[2];
+    var ux=b[0]-a[0], uy=b[1]-a[1], uz=b[2]-a[2];
+    var vx=c[0]-a[0], vy=c[1]-a[1], vz=c[2]-a[2];
+    var nx=uy*vz-uz*vy, ny=uz*vx-ux*vz, nz=ux*vy-uy*vx;
+    var L=Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
+    return [nx/L, ny/L, nz/L];
+  }
+  var LIGHT=(function(){var v=[-0.45,0.80,0.55];var L=Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+    return [v[0]/L,v[1]/L,v[2]/L];})();
+
+  // ---------------- 几何：长方体 ----------------
+  // 世界坐标以长方体中心为原点，便于旋转观察
+  function build(scenes){
+    var a = S.a, b = S.b, c = S.c;
+    var hx = a/2, hy = b/2, hz = c/2;
+    // 八个顶点：底面 z=0 → 世界 y 方向为「高」c
+    // 这里约定：x 对应 a，y 对应 c（竖直），z 对应 b
+    var V = {
+      A:[ -hx, -hz, -hy ],
+      B:[  hx, -hz, -hy ],
+      C:[  hx, -hz,  hy ],
+      D:[ -hx, -hz,  hy ],
+      E:[ -hx,  hz, -hy ],
+      F:[  hx,  hz, -hy ],
+      G:[  hx,  hz,  hy ],
+      H:[ -hx,  hz,  hy ]
+    };
+    return { V: V, hx: hx, hy: hy, hz: hz };
+  }
+
+  // 六个面（顶点顺序 + 基础色）
+  function boxFaces(g){
+    var V = g.V;
+    return [
+      { p:[V.A,V.B,V.C,V.D], rgb:[59,130,246], key:'bottom' },   // 底
+      { p:[V.E,V.F,V.G,V.H], rgb:[59,130,246], key:'top' },      // 顶
+      { p:[V.A,V.B,V.F,V.E], rgb:[59,130,246], key:'front' },    // 前 (z-)
+      { p:[V.D,V.C,V.G,V.H], rgb:[59,130,246], key:'back' },     // 后 (z+)
+      { p:[V.A,V.D,V.H,V.E], rgb:[59,130,246], key:'left' },     // 左 (x-)
+      { p:[V.B,V.C,V.G,V.F], rgb:[59,130,246], key:'right' }     // 右 (x+)
+    ];
+  }
+
+  // 由展开方式算出折点 P（在 3D 空间的位置）
+  // 方式0 前面(z-) → 右面(x+)：折点在棱 x=+hx, z=-hy
+  // 方式1 底面(y-) → 右面(x+)：折点在棱 x=+hx, y=-hz
+  // 方式2 底面(y-) → 后面(z+)：折点在棱 z=+hy, y=-hz
+  function foldPoint(g){
+    var a=S.a, b=S.b, c=S.c;
+    var hx=g.hx, hy=g.hy, hz=g.hz;
+    if (S.mode === 0){
+      // 前面(a×c) + 右面(b×c)，展开宽 a+b 高 c；折点高度 z = a·c/(a+b)
+      var z2 = a*c/(a+b);                  // 从底面量起
+      var py = -hz + z2;                   // 转成世界 y（底面 = -hz）
+      return { pt:[ hx, py, -hy ], start:[ -hx, -hz, -hy ], end:[ hx, hz, hy ] };
+    }
+    if (S.mode === 1){
+      // 底面(a×b) + 右面(b×c)，展开宽 a+c 高 b；折点在 y = a·b/(a+c) 处
+      var z1 = a*b/(a+c);
+      var pz = -hy + z1;
+      return { pt:[ hx, -hz, pz ], start:[ -hx, -hz, -hy ], end:[ hx, hz, hy ] };
+    }
+    // 方法2：底面 + 后面，展开 a × (b+c)
+    var x2 = a*b/(b+c);
+    var px = -hx + x2;
+    return { pt:[ px, -hz, hy ], start:[ -hx, -hz, -hy ], end:[ hx, hz, hy ] };
+  }
+
+  // ---------------- 画布 ----------------
+  function resize(){
+    var box = cv.parentNode.getBoundingClientRect();
+    CW = Math.max(280, Math.round(box.width));
+    CH = Math.round(Math.min(CW * 0.62, 420));
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = CW*DPR; cv.height = CH*DPR;
+    cv.style.height = CH + 'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    CX = CW/2; CY = CH*0.52;
+    // 缩放：最长棱占满画面高度的 82%，同时水平向（旋转后 a、b 有投影）不溢出
+    var mx = Math.max(S.a, S.b, S.c);
+    var wide = (S.a + S.b) * 0.85;
+    SCALE = Math.min(CH * 0.82 / mx, CW * 0.80 / wide);
+  }
+
+  function line3(p, q, style, width, dash){
+    var P1 = toScreen(p), P2 = toScreen(q);
+    ctx.save();
+    ctx.setLineDash(dash || []);
+    ctx.strokeStyle = style;
+    ctx.lineWidth = width;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(P1[0], P1[1]);
+    ctx.lineTo(P2[0], P2[1]);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,CW,CH);
+    var g = build();
+    var faces = boxFaces(g);
+
+    // 半透明面：按深度排序绘制
+    var list = [];
+    for (var i=0;i<faces.length;i++){
+      var f = faces[i], p2=[], zmax=-1e9;
+      for (var j=0;j<f.p.length;j++){
+        var q = toScreen(f.p[j]);
+        p2.push(q); if (q[2]>zmax) zmax=q[2];
+      }
+      list.push({p2:p2, z:zmax, rgb:f.rgb, key:f.key});
+    }
+    list.sort(function(x,y){ return y.z - x.z; });
+
+    for (var k=0;k<list.length;k++){
+      var it = list[k];
+      ctx.beginPath();
+      ctx.moveTo(it.p2[0][0], it.p2[0][1]);
+      for (var m=1;m<it.p2.length;m++) ctx.lineTo(it.p2[m][0], it.p2[m][1]);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(' + it.rgb[0] + ',' + it.rgb[1] + ',' + it.rgb[2] + ',0.16)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(125,211,252,.42)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // 空间对角线（穿内部）—— 灰虚线
+    line3(g.V.A, g.V.G, 'rgba(159,179,207,.75)', 1.8, [6,5]);
+
+    // 表面路径 —— 琥珀实线
+    var fp = foldPoint(g);
+    line3(fp.start, fp.pt, 'rgba(245,158,11,.95)', 3);
+    line3(fp.pt, fp.end, 'rgba(245,158,11,.95)', 3);
+
+    // 折点
+    var pp = toScreen(fp.pt);
+    ctx.beginPath();
+    ctx.arc(pp[0], pp[1], 5, 0, Math.PI*2);
+    ctx.fillStyle = '#fbbf24';
+    ctx.fill();
+    ctx.strokeStyle = '#0a182e';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // A / G 顶点标记
+    [[fp.start,'A'], [fp.end,'G']].forEach(function(pair){
+      var q = toScreen(pair[0]);
+      ctx.beginPath();
+      ctx.arc(q[0], q[1], 4.5, 0, Math.PI*2);
+      ctx.fillStyle = '#7dd3fc';
+      ctx.fill();
+      ctx.fillStyle = '#eaf2ff';
+      ctx.font = '700 13px "PingFang SC",sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(pair[1], q[0] + 13, q[1] - 12);
+    });
+
+    // 图例
+    ctx.font = '600 11.5px "PingFang SC",sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle = 'rgba(245,158,11,.95)'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(14, CH-40); ctx.lineTo(40, CH-40); ctx.stroke();
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillText('沿表面（能走）', 48, CH-40);
+    ctx.save();
+    ctx.setLineDash([5,4]);
+    ctx.strokeStyle = 'rgba(159,179,207,.8)'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(14, CH-20); ctx.lineTo(40, CH-20); ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = 'rgba(159,179,207,.9)';
+    ctx.fillText('空间对角线（穿内部）', 48, CH-20);
+  }
+
+  // ---------------- 2D 展开图 ----------------
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  function svgEl(tag, attrs){
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function drawFlat(){
+    var svg = document.getElementById('flat');
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    var a = S.a, b = S.b, c = S.c;
+    var W, H, foldAxis, Gx, Gy, labels;
+
+    if (S.mode === 0){            // 前面(a×c) + 右面(b×c) → (a+b) × c
+      W = a + b; H = c; foldAxis = 'v'; Gx = a + b; Gy = c;
+      labels = { w: '宽 = a + b', h: '高 = c', foldAt: a };
+    } else if (S.mode === 1){     // 底面(a×b) + 右面 → (a+c) × b
+      W = a + c; H = b; foldAxis = 'v'; Gx = a + c; Gy = b;
+      labels = { w: '宽 = a + c', h: '高 = b', foldAt: a };
+    } else {                      // 底面 + 后面 → a × (b+c)
+      W = a; H = b + c; foldAxis = 'h'; Gx = a; Gy = b + c;
+      labels = { w: '宽 = a', h: '高 = b + c', foldAt: b };
+    }
+
+    var PAD = 34;
+    var vbW = W + PAD*2, vbH = H + PAD*2;
+    // 保持画布比例，横向铺满
+    var ratio = vbW / vbH;
+    svg.setAttribute('viewBox', '0 0 ' + vbW + ' ' + vbH);
+    svg.style.height = Math.max(150, Math.min(300, 640 / ratio)) + 'px';
+
+    // 背景矩形
+    svg.appendChild(svgEl('rect', {
+      x: PAD, y: PAD, width: W, height: H,
+      fill: 'rgba(59,130,246,.10)', stroke: 'rgba(125,211,252,.55)',
+      'stroke-width': 1.6, rx: 2
+    }));
+
+    // 折痕
+    if (foldAxis === 'v'){
+      svg.appendChild(svgEl('line', {
+        x1: PAD + labels.foldAt, y1: PAD, x2: PAD + labels.foldAt, y2: PAD + H,
+        stroke: 'rgba(125,211,252,.55)', 'stroke-width': 1.4, 'stroke-dasharray': '5,4'
+      }));
+    } else {
+      svg.appendChild(svgEl('line', {
+        x1: PAD, y1: PAD + (H - labels.foldAt), x2: PAD + W, y2: PAD + (H - labels.foldAt),
+        stroke: 'rgba(125,211,252,.55)', 'stroke-width': 1.4, 'stroke-dasharray': '5,4'
+      }));
+    }
+
+    // 起终点：A 在左下角，G 在右上角（SVG 的 y 向下，所以左下 = y = PAD+H）
+    var Ax = PAD, Ay = PAD + H;
+    var Bx = PAD + Gx, By = PAD + H - Gy;
+
+    // 直线路径
+    svg.appendChild(svgEl('line', {
+      x1: Ax, y1: Ay, x2: Bx, y2: By,
+      stroke: '#f59e0b', 'stroke-width': 2.6, 'stroke-linecap': 'round'
+    }));
+
+    // 端点
+    [[Ax,Ay,'A',-14],[Bx,By,'G',12]].forEach(function(t){
+      svg.appendChild(svgEl('circle', {
+        cx: t[0], cy: t[1], r: 4.5, fill: '#7dd3fc'
+      }));
+      var tx = svgEl('text', {
+        x: t[0] + t[3], y: t[1] + (t[2] === 'A' ? 16 : -8),
+        fill: '#eaf2ff', 'font-size': 13, 'font-weight': 700,
+        'text-anchor': 'middle', 'font-family': 'PingFang SC,sans-serif'
+      });
+      tx.textContent = t[2];
+      svg.appendChild(tx);
+    });
+
+    // 边长标注
+    var tW = svgEl('text', {
+      x: PAD + W/2, y: PAD + H + 22, fill: '#9fb3cf', 'font-size': 11.5,
+      'text-anchor': 'middle', 'font-family': 'PingFang SC,sans-serif'
+    });
+    tW.textContent = labels.w + ' = ' + W;
+    svg.appendChild(tW);
+
+    var tH = svgEl('text', {
+      x: PAD - 8, y: PAD + H/2, fill: '#9fb3cf', 'font-size': 11.5,
+      'text-anchor': 'middle', 'font-family': 'PingFang SC,sans-serif',
+      transform: 'rotate(-90 ' + (PAD - 8) + ' ' + (PAD + H/2) + ')'
+    });
+    tH.textContent = labels.h + ' = ' + H;
+    svg.appendChild(tH);
+  }
+
+  // ---------------- 数值 ----------------
+  function calc(){
+    var a=S.a, b=S.b, c=S.c;
+    var L = [
+      Math.sqrt((a+b)*(a+b) + c*c),
+      Math.sqrt((a+c)*(a+c) + b*b),
+      Math.sqrt(a*a + (b+c)*(b+c))
+    ];
+    var D = Math.sqrt(a*a + b*b + c*c);
+    return { L: L, D: D, min: Math.min.apply(null, L), argmin: L.indexOf(Math.min.apply(null, L)) };
+  }
+
+  function updateNumbers(){
+    var r = calc();
+    var ids = ['v0','v1','v2'];
+    for (var i=0;i<3;i++){
+      document.getElementById(ids[i]).textContent = r.L[i].toFixed(2);
+      document.getElementById('r'+i).classList.toggle('best', i === r.argmin);
+    }
+    document.getElementById('v3').textContent = r.D.toFixed(2);
+
+    document.getElementById('f0').textContent = '√(' + (S.a+S.b) + '²+' + S.c + '²)';
+    document.getElementById('f1').textContent = '√(' + (S.a+S.c) + '²+' + S.b + '²)';
+    document.getElementById('f2').textContent = '√(' + S.a + '²+' + (S.b+S.c) + '²)';
+    document.getElementById('f3').textContent = '√(' + S.a + '²+' + S.b + '²+' + S.c + '²)　穿内部';
+
+    var names = ['前面 + 右面', '底面 + 右面', '底面 + 后面'];
+    document.getElementById('flatLen').textContent = names[S.mode] + ' = ' + r.L[S.mode].toFixed(2);
+    document.getElementById('flatTitle').textContent = '展开图：' + names[S.mode] + '摊平成矩形';
+
+    var gap = r.min - r.D;
+    document.getElementById('conc').innerHTML =
+      '<b>空间对角线 ' + r.D.toFixed(2) + ' 是最短的，但它穿过了内部 —— 题目说「沿表面」时它是错答案。</b><br>' +
+      '沿表面只有三条候选路，分别是 ' + r.L[0].toFixed(2) + '、' + r.L[1].toFixed(2) + '、' +
+      r.L[2].toFixed(2) + '，最短的是 <b>' + r.min.toFixed(2) + '</b>（' + names[r.argmin] + '）。<br>' +
+      '它比空间对角线长 <b>' + gap.toFixed(2) + '</b>。这个差值就是「不能穿内部」的代价。';
+  }
+
+  function render(){ draw(); updateNumbers(); drawFlat(); }
+
+  // ---------------- 交互 ----------------
+  var dragging=false, lastX=0, lastY=0, raf=0;
+  function schedule(){ if (raf) return; raf = requestAnimationFrame(function(){ raf=0; draw(); }); }
+
+  cv.addEventListener('mousedown', function(e){ dragging=true; cv.classList.add('drag');
+    lastX=e.clientX; lastY=e.clientY; });
+  window.addEventListener('mousemove', function(e){
+    if (!dragging) return;
+    S.yaw += (e.clientX-lastX)*0.008;
+    S.pitch = Math.max(-0.95, Math.min(0.95, S.pitch + (e.clientY-lastY)*0.006));
+    lastX=e.clientX; lastY=e.clientY;
+    schedule();
+  });
+  window.addEventListener('mouseup', function(){ dragging=false; cv.classList.remove('drag'); });
+  cv.addEventListener('touchstart', function(e){ dragging=true;
+    lastX=e.touches[0].clientX; lastY=e.touches[0].clientY; }, {passive:true});
+  cv.addEventListener('touchmove', function(e){
+    if (!dragging) return;
+    var t=e.touches[0];
+    S.yaw += (t.clientX-lastX)*0.008;
+    S.pitch = Math.max(-0.95, Math.min(0.95, S.pitch + (t.clientY-lastY)*0.006));
+    lastX=t.clientX; lastY=t.clientY;
+    if (e.cancelable) e.preventDefault();
+    schedule();
+  }, {passive:false});
+  cv.addEventListener('touchend', function(){ dragging=false; });
+
+  ['a','b','c'].forEach(function(k){
+    var el = document.getElementById('r'+k), out = document.getElementById('o'+k);
+    el.addEventListener('input', function(){
+      S[k] = parseInt(el.value, 10);
+      out.textContent = S[k];
+      resize(); render();
+    });
+  });
+
+  var mBtns = document.querySelectorAll('#modes button');
+  for (var i=0;i<mBtns.length;i++){
+    mBtns[i].addEventListener('click', function(){
+      for (var j=0;j<mBtns.length;j++) mBtns[j].classList.remove('on');
+      this.classList.add('on');
+      S.mode = parseInt(this.getAttribute('data-m'), 10);
+      render();
+    });
+  }
+
+  var rt=0;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){ resize(); render(); }, 120);
+  });
+
+  resize();
+  render();
+})();
+</script>
+</body>
+</html>

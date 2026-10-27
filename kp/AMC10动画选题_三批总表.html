@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AMC10 知识点动画 · 三批选题总表</title>
+<style>
+:root{--paper:#faf8f4;--card:#fff;--ink:#1f2328;--ink2:#4c545e;--ink3:#8a929c;
+ --line:#e8e2d8;--amber:#b8762c;--amber-s:#f6ead8;--teal:#2c7f76;--teal-s:#e2f2f0;
+ --red:#b5493f;--red-s:#fbe9e7;--blue:#33587f;--blue-s:#e8eef6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+ font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+ line-height:1.62;padding:34px 20px 70px;font-size:15px}
+.wrap{max-width:940px;margin:0 auto}
+h1{font-size:26px;letter-spacing:.01em;margin-bottom:8px}
+.sub{color:var(--ink2);font-size:14.5px;margin-bottom:22px}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:13px;
+ padding:16px 18px;margin-bottom:14px}
+.rule h3{font-size:15px;color:var(--amber);margin-bottom:9px;letter-spacing:.03em}
+.rule p{font-size:14px;color:var(--ink2);margin-bottom:8px}
+.rule p:last-child{margin-bottom:0}
+.rule b{color:var(--ink)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.stat{flex:1;min-width:104px;background:var(--card);border:1px solid var(--line);
+ border-radius:12px;padding:12px 14px}
+.stat b{display:block;font-size:23px;line-height:1.2;font-variant-numeric:tabular-nums}
+.stat span{font-size:12.5px;color:var(--ink3)}
+.stat.t b{color:var(--teal)} .stat.m b{color:var(--amber)} .stat.d b{color:var(--blue)}
+.batch{margin-bottom:26px}
+.bh{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--line);
+ padding-bottom:9px;margin-bottom:10px}
+.bh h2{font-size:19px;letter-spacing:.01em}
+.cnt{font-size:13px;color:var(--ink3);margin-left:auto;white-space:nowrap}
+.bd{font-size:13.5px;color:var(--ink2);margin-bottom:11px}
+.list{list-style:none}
+.row{display:grid;grid-template-columns:22px 52px 1fr 44px 128px;
+ gap:9px;align-items:start;padding:10px 10px;border-radius:9px;cursor:pointer;
+ border:1px solid transparent;transition:.14s}
+.row:hover{background:#fff;border-color:var(--line)}
+.row.done{background:#f4f8f4}
+.row.done .nm{opacity:.62}
+.chk{width:17px;height:17px;border:1.6px solid #c9c2b4;border-radius:4px;
+ margin-top:5px;position:relative;background:#fff;transition:.14s}
+.row.done .chk{background:var(--teal);border-color:var(--teal)}
+.row.done .chk::after{content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;
+ border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg)}
+.no{font-size:13px;color:var(--ink3);font-family:ui-monospace,Menlo,monospace;margin-top:4px}
+.nm{font-size:14.6px;font-weight:600;line-height:1.5}
+.nm em{display:block;font-style:normal;font-weight:400;font-size:12.6px;
+ color:var(--ink3);margin-top:3px;line-height:1.5}
+.sp{font-size:11.5px;text-align:center;padding:3px 0;border-radius:5px;margin-top:4px;
+ font-weight:600;letter-spacing:.02em}
+.sp.html{background:var(--teal-s);color:var(--teal)}
+.sp.mp4{background:var(--amber-s);color:var(--amber)}
+.sp.both{background:var(--blue-s);color:var(--blue)}
+.src{font-size:12px;color:var(--ink3);margin-top:5px;line-height:1.45}
+.extra .bh{border-bottom-color:#ddd6c6}
+@media(max-width:640px){
+ .row{grid-template-columns:20px 46px 1fr 42px;grid-template-areas:"c n m s" "c n r r"}
+ .chk{grid-area:c}.no{grid-area:n}.nm{grid-area:m}.sp{grid-area:s}.src{grid-area:r}
+ body{padding:22px 12px 60px}h1{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>AMC10 知识点动画 · 三批选题总表</h1>
+<p class="sub">三批不重复、合起来全覆盖。点任意一行可勾选，进度存在本机浏览器里。</p>
+<p class="sub" style="margin-top:8px">
+  <a href="index.html" style="color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px dashed currentColor">→ 打开「知识点索引」</a>
+  <span style="color:var(--ink3)">（已出货的都在那一页，可直接播放视频、直接打开交互网页）</span>
+</p>
+
+<div class="rule">
+  <h3>批次归属规则（保证不重复）</h3>
+  <p>一集只归一批，按 <b>弱点 → 高频 → 剩余</b> 的顺序认领。佳琪的数论、数列、圆本来就属高频，但先被第一批拿走，第二批就不再列。</p>
+  <p><b>频次口径</b>：2011–2024 年 AMC10 真题 750 题的二级知识点统计。前 10 大知识点合计占 89.2%。</p>
+</div>
+
+<div class="rule">
+  <h3>形态判定（宜 HTML 则 HTML，宜 MP4 则 MP4）</h3>
+  <p>不是二选一：<b>内容只写一份（步骤 + 旁白 + 结论），套两个壳</b>。标「双」的就是两个壳都出。</p>
+  <p>判据看认知动作，不看学科：要<b>看它连续怎么变</b>（极值、轨迹）→ HTML 优先，因为自己拖能造出反例；要<b>听清判断顺序</b>（识别信号、决策树）→ MP4 优先，语速和停顿本身就是教学工具；要<b>反复过</b>（数据、比值）→ HTML 速查卡；要<b>被说服</b>（策略、时间）→ MP4。</p>
+  <p>HTML 壳会内嵌旁白音频并带开关，解决「HTML 没讲解」这个短板——不想要声音就关。</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><b>63</b><span>三批合计（集）</span></div>
+  <div class="stat"><b>63</b><span>已出货</span></div>
+  <div class="stat t"><b>38</b><span>HTML 优先</span></div>
+  <div class="stat m"><b>13</b><span>MP4 优先</span></div>
+  <div class="stat d"><b>12</b><span>双形态</span></div>
+</div>
+
+<section class="batch" id="batchB"><div class="bh"><h2>第一批 · 佳琪薄弱点</h2><span class="cnt">13 集</span></div><p class="bd">按她的真实病灶排：数论最慢、数列慢、圆不熟、概率零课时、跳步、破题第一步需提示。这五类在档案里有连续记录。</p><ul class="list"><li class="row done" data-no="B01"><span class="chk"></span><span class="no">B01</span><span class="nm">数论四把钥匙：整除 / 余数 / 个位 / 周期，该用哪把<em>数论是她最慢的模块（课 11–12 连续暴露），这是总纲</em></span><span class="sp mp4">MP4</span><span class="src">金句 111 · 课 11</span></li>
+<li class="row done" data-no="B02"><span class="chk"></span><span class="no">B02</span><span class="nm">质因数分解 → 因数个数与因数和<em>数论最高频题型，且完全模板化，失分最不该</em></span><span class="sp both">双</span><span class="src">补丁 N3</span></li>
+<li class="row done" data-no="B03"><span class="chk"></span><span class="no">B03</span><span class="nm">幂的个位循环<em>数论里的「免费午餐」，套路固定</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 12</span></li>
+<li class="row done" data-no="B04"><span class="chk"></span><span class="no">B04</span><span class="nm">整除判别：3/9 看数字和，11 看交错和<em>数论基础件，不会就整题卡死</em></span><span class="sp both">双</span><span class="src">补丁 N1</span></li>
+<li class="row done" data-no="B05"><span class="chk"></span><span class="no">B05</span><span class="nm">同余的本质：差是模的倍数<em>数论短板的核心概念，课 11/12 反复用</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 课 11–12</span></li>
+<li class="row done" data-no="B06"><span class="chk"></span><span class="no">B06</span><span class="nm">数列第一步：先做差还是先做比<em>数列慢，第一步判错后面全错（课 6/7）</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 课 7</span></li>
+<li class="row done" data-no="B07"><span class="chk"></span><span class="no">B07</span><span class="nm">求和公式怎么选：首尾配对还是公差式<em>公式选错等于全题白做</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 6</span></li>
+<li class="row done" data-no="B08"><span class="chk"></span><span class="no">B08</span><span class="nm">圆的三个基本量：圆心、半径、连心线<em>课 18 新暴露：圆不如三角形熟练</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 课 4/5</span></li>
+<li class="row done" data-no="B09"><span class="chk"></span><span class="no">B09</span><span class="nm">圆上动点到定点的最值<em>课 18 + 拖动变化最直观，静态图讲不清「为什么」</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 4 —— 已完成</span></li>
+<li class="row done" data-no="B10"><span class="chk"></span><span class="no">B10</span><span class="nm">切线：圆心到切线的距离等于半径<em>课 4/5 的核心钥匙，圆不熟时最容易忘</em></span><span class="sp both">双</span><span class="src">金句 · 课 4</span></li>
+<li class="row done" data-no="B11"><span class="chk"></span><span class="no">B11</span><span class="nm">概率入门：有利 ÷ 总数，和它的补集<em>概率至今 0 课时，纯空白</em></span><span class="sp both">双</span><span class="src">备用库 5.6</span></li>
+<li class="row done" data-no="B12"><span class="chk"></span><span class="no">B12</span><span class="nm">独立 vs 互斥，以及期望是什么<em>同上，且是两个最常混的概念</em></span><span class="sp mp4">MP4</span><span class="src">补丁 C15 · 备用库 5.6</span></li>
+<li class="row done" data-no="B13"><span class="chk"></span><span class="no">B13</span><span class="nm">计数题怎么把步骤写全（不重不漏）<em>跳步是她的头号病灶，这集讲的是元技能不是知识点</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 课 13/14</span></li></ul></section>
+<section class="batch" id="batchW"><div class="bh"><h2>第二批 · 真题高频考点</h2><span class="cnt">25 集</span></div><p class="bd">按 2011–2024 年 750 题统计的二级知识点排序认领，已被第一批拿走的不再重复。</p><ul class="list"><li class="row done" data-no="W01"><span class="chk"></span><span class="no">W01</span><span class="nm">应用题 · 速度：相遇看速度和，追及看速度差<em>应用题 18.9%，第一大类别；靠看图不靠听讲</em></span><span class="sp html">HTML</span><span class="src">定制交互动画</span></li>
+<li class="row done" data-no="W02"><span class="chk"></span><span class="no">W02</span><span class="nm">应用题 · 工程：总量设为 1，效率相加<em>同类别主力题型；靠看图不靠听讲</em></span><span class="sp html">HTML</span><span class="src">定制交互动画</span></li>
+<li class="row done" data-no="W03"><span class="chk"></span><span class="no">W03</span><span class="nm">应用题 · 比例与百分比：先统一单位找不变量<em>同类别，且题干长易读错；靠看图</em></span><span class="sp html">HTML</span><span class="src">定制交互动画</span></li>
+<li class="row done" data-no="W04"><span class="chk"></span><span class="no">W04</span><span class="nm">应用题 · 平均与加权平均<em>同类别，加权是常见陷阱；靠看图</em></span><span class="sp html">HTML</span><span class="src">定制交互动画</span></li>
+<li class="row done" data-no="W05"><span class="chk"></span><span class="no">W05</span><span class="nm">代数式化简：先看结构再动笔，别为展开而展开<em>代数运算 12.0%</em></span><span class="sp both">双</span><span class="src">金句 15 / 补丁 A8</span></li>
+<li class="row done" data-no="W06"><span class="chk"></span><span class="no">W06</span><span class="nm">指数与根式：同底才合并，根式先化最简<em>代数运算的下半块</em></span><span class="sp html">HTML</span><span class="src">金句 · 代数 A3</span></li>
+<li class="row done" data-no="W07"><span class="chk"></span><span class="no">W07</span><span class="nm">计数 · 加乘原理：「要么」用加，「先再」用乘<em>计数 11.5% 的地基</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 课 13</span></li>
+<li class="row done" data-no="W08"><span class="chk"></span><span class="no">W08</span><span class="nm">排列还是组合：换顺序算不算同一种<em>计数分水岭，她步骤说不清的根源</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 课 13</span></li>
+<li class="row done" data-no="W09"><span class="chk"></span><span class="no">W09</span><span class="nm">限制排列：相邻捆绑，不相邻插空<em>出现率极高的两把钥匙</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 14</span></li>
+<li class="row done" data-no="W10"><span class="chk"></span><span class="no">W10</span><span class="nm">至少 / 至多 → 走补集，以及容斥三层<em>策略型，学会就提分</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 14 · 备用 5.5</span></li>
+<li class="row done" data-no="W11"><span class="chk"></span><span class="no">W11</span><span class="nm">圆排列与等大分组去重<em>圆排列除以 n，分组除以阶乘</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 14</span></li>
+<li class="row done" data-no="W12"><span class="chk"></span><span class="no">W12</span><span class="nm">面积 · 三角形与四边形：底高、等积变换、S=rs<em>面积 10.9%，排第 4</em></span><span class="sp both">双</span><span class="src">补丁 G6</span></li>
+<li class="row done" data-no="W13"><span class="chk"></span><span class="no">W13</span><span class="nm">面积 · 圆与扇形、弧长（别把弧长当弦长）<em>考纲 P0 缺口，原本零覆盖</em></span><span class="sp html">HTML</span><span class="src">补丁 G11</span></li>
+<li class="row done" data-no="W14"><span class="chk"></span><span class="no">W14</span><span class="nm">面积 · 组合图形：割补与等积变换<em>同类别最难的一档</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 9</span></li>
+<li class="row done" data-no="W15"><span class="chk"></span><span class="no">W15</span><span class="nm">勾股、勾股数与特殊直角三角形边比<em>角度勾股 9.1%，几何基本盘</em></span><span class="sp html">HTML</span><span class="src">补丁 · 速查表</span></li>
+<li class="row done" data-no="W16"><span class="chk"></span><span class="no">W16</span><span class="nm">相似三角形：A 字、8 字、母子模型<em>几乎每年必考，且是圆内线段的通用工具</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 8</span></li>
+<li class="row done" data-no="W17"><span class="chk"></span><span class="no">W17</span><span class="nm">多边形内角外角，与正六边形的三个长度<em>必背，考到就省三分钟</em></span><span class="sp html">HTML</span><span class="src">补丁 G10</span></li>
+<li class="row done" data-no="W18"><span class="chk"></span><span class="no">W18</span><span class="nm">韦达定理与根的对称式求值<em>高次韦达几乎年年考</em></span><span class="sp both">双</span><span class="src">备用库 5.1</span></li>
+<li class="row done" data-no="W19"><span class="chk"></span><span class="no">W19</span><span class="nm">二次函数：对称轴、顶点、区间最值<em>中档题常客</em></span><span class="sp html">HTML</span><span class="src">备用库 5.1</span></li>
+<li class="row done" data-no="W20"><span class="chk"></span><span class="no">W20</span><span class="nm">绝对值方程与分段讨论<em>乘负数变号是高频错点</em></span><span class="sp html">HTML</span><span class="src">补丁 A14 · 金句 · 课 2</span></li>
+<li class="row done" data-no="W21"><span class="chk"></span><span class="no">W21</span><span class="nm">AM-GM 与最值：和定积最大<em>求最值的首选工具</em></span><span class="sp both">双</span><span class="src">金句 · 备用 5.9</span></li>
+<li class="row done" data-no="W22"><span class="chk"></span><span class="no">W22</span><span class="nm">递推数列与周期数列<em>数列 5.7% 的进阶一半</em></span><span class="sp html">HTML</span><span class="src">备用库 5.3</span></li>
+<li class="row done" data-no="W23"><span class="chk"></span><span class="no">W23</span><span class="nm">GCD 与 LCM：gcd·lcm=|ab|，辗转相除<em>质因数 9.3% 的另一半</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 课 11</span></li>
+<li class="row done" data-no="W24"><span class="chk"></span><span class="no">W24</span><span class="nm">同余方程与剩余类计数<em>模运算热度近五年持续走高</em></span><span class="sp both">双</span><span class="src">金句 · 课 12</span></li>
+<li class="row done" data-no="W25"><span class="chk"></span><span class="no">W25</span><span class="nm">丢番图方程：ax+by 能凑出哪些数<em>丢番图 4.5%</em></span><span class="sp html">HTML</span><span class="src">补丁 N11</span></li></ul></section>
+<section class="batch" id="batchR"><div class="bh"><h2>第三批 · 大纲剩余知识点</h2><span class="cnt">25 集</span></div><p class="bd">前两批没覆盖、但确实在 AMC10 考纲内的部分。做完这三批，考纲内的方法单元全覆盖。</p><ul class="list"><li class="row done" data-no="R01"><span class="chk"></span><span class="no">R01</span><span class="nm">立体几何：柱、锥、球的体积与表面积<em>考纲 P0 六缺口之首，原本零覆盖</em></span><span class="sp html">HTML</span><span class="src">补丁 G16</span></li>
+<li class="row done" data-no="R02"><span class="chk"></span><span class="no">R02</span><span class="nm">立体几何：长方体对角线，与表面最短路径<em>展开成平面再连直线</em></span><span class="sp html">HTML</span><span class="src">补丁 G16</span></li>
+<li class="row done" data-no="R03"><span class="chk"></span><span class="no">R03</span><span class="nm">立体几何：展开图与截面<em>中低难度，但没见过就不会</em></span><span class="sp html">HTML</span><span class="src">补丁 G16</span></li>
+<li class="row done" data-no="R04"><span class="chk"></span><span class="no">R04</span><span class="nm">格点路径计数：向右 a 步、向上 b 步<em>考纲 P0 缺口</em></span><span class="sp html">HTML</span><span class="src">补丁 C10</span></li>
+<li class="row done" data-no="R05"><span class="chk"></span><span class="no">R05</span><span class="nm">插板法：可空与每人至少一个<em>条件不对公式就不能套</em></span><span class="sp html">HTML</span><span class="src">补丁 C6</span></li>
+<li class="row done" data-no="R06"><span class="chk"></span><span class="no">R06</span><span class="nm">子集数 2ⁿ 与组合恒等式<em>选与不选，二元视角</em></span><span class="sp html">HTML</span><span class="src">补丁 C3</span></li>
+<li class="row done" data-no="R07"><span class="chk"></span><span class="no">R07</span><span class="nm">平方数余数指纹：mod 4/3/5 只能取哪几个值<em>只能否定不能肯定的边界要说清</em></span><span class="sp html">HTML</span><span class="src">补丁 N9</span></li>
+<li class="row done" data-no="R08"><span class="chk"></span><span class="no">R08</span><span class="nm">不定方程凑不出的大数 ab−a−b<em>考到就是一道送分</em></span><span class="sp html">HTML</span><span class="src">补丁 N11</span></li>
+<li class="row done" data-no="R09"><span class="chk"></span><span class="no">R09</span><span class="nm">SFFT：补一个常数凑成两个括号<em>xy 带两个一次项时唯一入口</em></span><span class="sp both">双</span><span class="src">补丁 N10</span></li>
+<li class="row done" data-no="R10"><span class="chk"></span><span class="no">R10</span><span class="nm">角平分线分对边成比例，重心把中线分成 2:1<em>几何常用结论</em></span><span class="sp html">HTML</span><span class="src">补丁 G8</span></li>
+<li class="row done" data-no="R11"><span class="chk"></span><span class="no">R11</span><span class="nm">三角形不等式与最短路径翻折<em>最值几何的另一条路</em></span><span class="sp html">HTML</span><span class="src">补丁 G9</span></li>
+<li class="row done" data-no="R12"><span class="chk"></span><span class="no">R12</span><span class="nm">立方和差与分组分解<em>第二个括号是 ab 不是 2ab</em></span><span class="sp html">HTML</span><span class="src">补丁 A3</span></li>
+<li class="row done" data-no="R13"><span class="chk"></span><span class="no">R13</span><span class="nm">分母有理化：乘共轭<em>两步就能化简</em></span><span class="sp html">HTML</span><span class="src">补丁 A5</span></li>
+<li class="row done" data-no="R14"><span class="chk"></span><span class="no">R14</span><span class="nm">解析几何 · 斜率与直线的平行垂直<em>坐标法是最稳的解题底牌</em></span><span class="sp both">双</span><span class="src">金句 · 课 2</span></li>
+<li class="row done" data-no="R15"><span class="chk"></span><span class="no">R15</span><span class="nm">解析几何 · 距离、中点与定比分点<em>权重在对端，别配反</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 3</span></li>
+<li class="row done" data-no="R16"><span class="chk"></span><span class="no">R16</span><span class="nm">解析几何 · 圆的方程与直线圆位置关系<em>先配方再读图形信息</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 4</span></li>
+<li class="row done" data-no="R17"><span class="chk"></span><span class="no">R17</span><span class="nm">进制、数字和与回文数<em>数论冷门但有固定套路</em></span><span class="sp mp4">MP4</span><span class="src">补丁 N1</span></li>
+<li class="row done" data-no="R18"><span class="chk"></span><span class="no">R18</span><span class="nm">鸽巢原理：东西比盒子多<em>离散数学最高频的一条</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 备用 5.8</span></li>
+<li class="row done" data-no="R19"><span class="chk"></span><span class="no">R19</span><span class="nm">奇偶性与不变量：每一步改变什么，什么永远不变<em>操作题与染色题的通用钥匙</em></span><span class="sp both">双</span><span class="src">金句 · 备用 5.8</span></li>
+<li class="row done" data-no="R20"><span class="chk"></span><span class="no">R20</span><span class="nm">极端情况先检查：最小、最大、全相同、全不同<em>构造题的突破口</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 备用 5.8</span></li>
+<li class="row done" data-no="R21"><span class="chk"></span><span class="no">R21</span><span class="nm">统计：平均数变化、中位数取中间两数的平均<em>题干长但送分</em></span><span class="sp html">HTML</span><span class="src">补丁 A19</span></li>
+<li class="row done" data-no="R22"><span class="chk"></span><span class="no">R22</span><span class="nm">四边形：梯形只有一组对边平行<em>别和平行四边形搞混</em></span><span class="sp html">HTML</span><span class="src">金句 · 课 9</span></li>
+<li class="row done" data-no="R23"><span class="chk"></span><span class="no">R23</span><span class="nm">圆内接四边形与四点共圆判断<em>角度追踪的收口</em></span><span class="sp html">HTML</span><span class="src">金句 · 备用 5.2</span></li>
+<li class="row done" data-no="R24"><span class="chk"></span><span class="no">R24</span><span class="nm">几何概率：好区域 ÷ 总区域<em>连续情形，与古典概型不同</em></span><span class="sp html">HTML</span><span class="src">补丁 C16</span></li>
+<li class="row done" data-no="R25"><span class="chk"></span><span class="no">R25</span><span class="nm">逻辑推理与真假话<em>离散数学的另一半</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 备用 5.8</span></li></ul></section>
+<section class="batch extra" id="batchS"><div class="bh"><h2>附 · 考场策略（不计入三批）</h2><span class="cnt">5 集</span></div><p class="bd">这五集讲的不是知识点，是怎么用知识。她的完成率问题主要落在这里，但它不占考纲覆盖额度，所以单列。</p><ul class="list"><li class="row" data-no="S01"><span class="chk"></span><span class="no">S01</span><span class="nm">25 题 75 分钟怎么分配<em>完成率只有 50%，这是最贵的那个问题</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 模块十</span></li>
+<li class="row" data-no="S02"><span class="chk"></span><span class="no">S02</span><span class="nm">能排除就不硬算，能代入就不空推<em>选择题的核心策略</em></span><span class="sp mp4">MP4</span><span class="src">补丁 S2</span></li>
+<li class="row" data-no="S03"><span class="chk"></span><span class="no">S03</span><span class="nm">算出答案不等于做完：单位、范围、问法核对<em>她正确率高但会漏问法</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 模块十</span></li>
+<li class="row" data-no="S04"><span class="chk"></span><span class="no">S04</span><span class="nm">错题复盘只记一件事：该在哪个信号出现时想到这招<em>与自检卡同源</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 模块十</span></li>
+<li class="row" data-no="S05"><span class="chk"></span><span class="no">S05</span><span class="nm">卡住时不重复同一种尝试<em>考场时间黑洞</em></span><span class="sp mp4">MP4</span><span class="src">金句 · 模块十</span></li></ul></section>
+
+</div>
+<script>
+(function(){
+  var KEY = "amc10_kp_plan_v1";
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ done = {}; }
+  var rows = document.querySelectorAll(".row");
+  function paint(el, on){
+    el.classList.toggle("done", !!on);
+  }
+  for (var i=0;i<rows.length;i++){
+    var no = rows[i].getAttribute("data-no");
+    if (done[no]) paint(rows[i], true);
+    rows[i].addEventListener("click", function(){
+      var k = this.getAttribute("data-no");
+      var now = !this.classList.contains("done");
+      paint(this, now);
+      if (now) done[k] = 1; else delete done[k];
+      try { localStorage.setItem(KEY, JSON.stringify(done)); } catch(e){}
+    });
+  }
+})();
+</script>
+</body>
+</html>

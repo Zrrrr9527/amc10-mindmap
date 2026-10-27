@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>百分比 · 涨了再跌，为什么回不去</title>
+<style>
+:root{--bg:#0b1220;--card:#121a2b;--card2:#0e1626;--ink:#e8eefc;--ink2:#93a3bd;
+ --ink3:#5d6d88;--cool:#4fd1c5;--hi:#ffd166;--warm:#ff5b5b;--line:#22314b}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1200px 760px at 50% -12%,#17253f 0%,var(--bg) 62%);
+ background-attachment:fixed;color:var(--ink);min-height:100vh;
+ font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+ display:flex;justify-content:center;padding:20px 14px 32px;-webkit-font-smoothing:antialiased}
+.app{width:100%;max-width:560px;display:flex;flex-direction:column;gap:13px}
+header{padding:2px 2px 0}
+.kicker{display:inline-block;font-size:12.5px;letter-spacing:.08em;color:#9db4d8;
+ background:rgba(79,209,197,.10);border:1px solid rgba(79,209,197,.28);
+ padding:4px 11px;border-radius:999px;margin-bottom:10px}
+h1{font-size:21px;line-height:1.42;font-weight:700}
+h1 em{font-style:normal;color:var(--cool)}
+h1 .sub{display:block;font-size:14.5px;font-weight:400;color:var(--ink2);margin-top:6px}
+.stage{background:linear-gradient(180deg,#101a2c,#0c1424);border:1px solid var(--line);
+ border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+svg{display:block;width:100%;height:auto}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;
+ padding:14px;display:flex;flex-direction:column;gap:10px}
+.slider{display:flex;align-items:center;gap:9px}
+.slider span{font-size:12.5px;color:var(--ink2);white-space:nowrap;min-width:88px}
+.slider output{font-size:13.5px;color:var(--hi);font-weight:700;min-width:52px;
+ text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:3px;
+ background:linear-gradient(90deg,rgba(79,209,197,.55),rgba(79,209,197,.12));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+ border-radius:50%;background:var(--cool);border:2px solid #0b1220;cursor:pointer;
+ box-shadow:0 0 0 3px rgba(79,209,197,.22)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;
+ background:var(--cool);border:2px solid #0b1220;cursor:pointer}
+.readout{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 15px}
+.readout .line{font-size:14px;line-height:1.95;color:#cdd8ea}
+.readout .line b{color:var(--hi);font-variant-numeric:tabular-nums}
+.readout .big{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(79,209,197,.3);
+ display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.readout .big .lbl{font-size:13px;color:var(--ink2)}
+.readout .big .v{font-size:26px;font-weight:800;color:var(--warm);font-variant-numeric:tabular-nums}
+.readout .big .v.ok{color:#5fd08a}
+.readout .big .v small{font-size:13px;font-weight:400;color:var(--ink3);margin-left:3px}
+.note{font-size:13px;color:var(--ink3);line-height:1.68;padding:0 3px}
+.note b{color:var(--ink2)}
+@media(max-width:400px){h1{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="kicker">AMC10 · 应用题 · W03</div>
+    <h1>涨了再跌，<em>为什么回不到原值</em>
+      <span class="sub">因为第二次算百分比时，基数已经变了</span>
+    </h1>
+  </header>
+
+  <section class="stage">
+    <svg id="cv" viewBox="0 0 560 340" aria-label="百分比变化示意">
+      <!-- 原值基准虚线 -->
+      <line id="base" x1="150" y1="40" x2="150" y2="290"
+            stroke="#5d6d88" stroke-width="1.6" stroke-dasharray="5 5"/>
+      <text x="150" y="26" fill="#93a3bd" font-size="12" text-anchor="middle">原值 100</text>
+
+      <text x="20" y="72" fill="#93a3bd" font-size="13" font-weight="700">起点</text>
+      <rect id="r0" x="150" y="52" height="30" rx="6" fill="#4fd1c5" width="160"/>
+      <text id="t0" x="322" y="73" fill="#a8f0e8" font-size="14" font-weight="700">100</text>
+
+      <text x="20" y="152" fill="#93a3bd" font-size="13" font-weight="700">涨后</text>
+      <rect id="r1" x="150" y="132" height="30" rx="6" fill="#ffd166" width="192"/>
+      <text id="t1" x="354" y="153" fill="#fbc96b" font-size="14" font-weight="700">120</text>
+
+      <text x="20" y="232" fill="#93a3bd" font-size="13" font-weight="700">再跌后</text>
+      <rect id="r2" x="150" y="212" height="30" rx="6" fill="#f472b6" width="153"/>
+      <text id="t2" x="315" y="233" fill="#ff9dc0" font-size="14" font-weight="700">96</text>
+
+      <!-- 差额标注 -->
+      <line id="gap" x1="150" y1="270" x2="150" y2="270"
+            stroke="#ff5b5b" stroke-width="2"/>
+      <text id="gapT" x="150" y="292" fill="#ff5b5b" font-size="13"
+            text-anchor="middle" font-weight="700"></text>
+    </svg>
+  </section>
+
+  <section class="panel">
+    <label class="slider">
+      <span>先涨 a%</span>
+      <input id="a" type="range" min="0" max="60" step="1" value="20">
+      <output id="ao">20%</output>
+    </label>
+    <label class="slider">
+      <span>再跌 b%</span>
+      <input id="b" type="range" min="0" max="60" step="1" value="20">
+      <output id="bo">20%</output>
+    </label>
+  </section>
+
+  <div class="readout">
+    <div class="line" id="f1"></div>
+    <div class="line" id="f2"></div>
+    <div class="big">
+      <span class="lbl">最后相对原值</span>
+      <span class="v" id="ans">96<small>（少 4）</small></span>
+    </div>
+  </div>
+
+  <p class="note" id="note"></p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var S = { a: 20, b: 20 };
+  var $ = function(id){ return document.getElementById(id); };
+  var X0 = 150, PX = 1.6;   // 100 对应 160px
+
+  function fmt(x, d){
+    d = (d === undefined) ? 2 : d;
+    var r = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
+    return (Math.abs(r - Math.round(r)) < 1e-9) ? String(Math.round(r)) : r.toFixed(d);
+  }
+
+  function draw(){
+    var a = S.a, b = S.b;
+    var v0 = 100;
+    var v1 = 100 * (1 + a / 100);
+    var v2 = v1 * (1 - b / 100);
+
+    var vals = [v0, v1, v2];
+    var ids = ['r0', 'r1', 'r2'];
+    for (var i = 0; i < 3; i++){
+      var w = Math.max(2, vals[i] * PX);
+      $(ids[i]).setAttribute('width', w.toFixed(1));
+    }
+    $('t0').setAttribute('x', (X0 + v0 * PX + 8).toFixed(1));
+    $('t0').textContent = fmt(v0, 0);
+    $('t1').setAttribute('x', (X0 + v1 * PX + 8).toFixed(1));
+    $('t1').textContent = fmt(v1);
+    $('t2').setAttribute('x', (X0 + v2 * PX + 8).toFixed(1));
+    $('t2').textContent = fmt(v2);
+
+    $('f1').innerHTML = '涨 ' + a + '% 后 = 100 × (1 + ' + a + '/100) = <b>' + fmt(v1) + '</b>';
+    $('f2').innerHTML = '再跌 ' + b + '% 后 = ' + fmt(v1) + ' × (1 − ' + b + '/100) = <b>' + fmt(v2) + '</b>';
+
+    var diff = v2 - 100;
+    var el = $('ans');
+    if (Math.abs(diff) < 0.005){
+      el.className = 'v ok';
+      el.innerHTML = '100<small>（正好回到原值）</small>';
+    } else {
+      el.className = 'v';
+      el.innerHTML = fmt(v2) + '<small>（' + (diff > 0 ? '多 ' : '少 ') + fmt(Math.abs(diff)) + '）</small>';
+    }
+
+    // 差额标注
+    var g = $('gap');
+    var x2 = X0 + v2 * PX;
+    if (Math.abs(diff) < 0.005){
+      g.setAttribute('x1', X0); g.setAttribute('x2', X0);
+      $('gapT').textContent = '';
+    } else if (diff > 0){
+      g.setAttribute('x1', X0); g.setAttribute('x2', x2);
+      $('gapT').textContent = '+' + fmt(diff);
+    } else {
+      g.setAttribute('x1', x2); g.setAttribute('x2', X0);
+      $('gapT').textContent = '−' + fmt(Math.abs(diff));
+    }
+    $('gapT').setAttribute('x', ((X0 + x2) / 2).toFixed(1));
+
+    // 需要跌多少才能回去
+    var need = 100 * a / (100 + a);
+    var noteEl = $('note');
+    if (Math.abs(b - need) < 0.05 && a > 0){
+      noteEl.innerHTML = '<b>这一次正好回到 100。</b>因为要抵消涨 ' + a + '%，需要跌的是 ' +
+        fmt(need) + '% —— 不是 ' + a + '%。';
+    } else {
+      noteEl.innerHTML = '<b>想回到 100，b 必须等于 ' + fmt(need) + '%</b>（= 100a ÷ (100+a)），' +
+        '而不是 ' + a + '%。基数从 100 变成了 ' + fmt(v1) + '，涨跌同一个百分数，绝对值并不相等。';
+    }
+  }
+
+  function bind(id, key, outId, suffix){
+    var el = $(id);
+    el.addEventListener('input', function(){
+      S[key] = parseInt(el.value, 10);
+      $(outId).textContent = el.value + suffix;
+      draw();
+    });
+  }
+  bind('a', 'a', 'ao', '%'); bind('b', 'b', 'bo', '%');
+
+  draw();
+})();
+</script>
+</body>
+</html>

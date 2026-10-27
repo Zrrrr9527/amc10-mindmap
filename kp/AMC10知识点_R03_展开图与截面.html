@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AMC10知识点_R03_展开图与截面</title>
+<style>
+:root{
+  --bg1:#0a182e; --ink:#eaf2ff; --ink2:#9fb3cf; --ink3:#6a7f9c;
+  --sky:#7dd3fc; --amber:#f59e0b; --green:#22c55e; --blue:#3b82f6; --red:#ef4444;
+  --line:#22405f; --card:rgba(255,255,255,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  background:radial-gradient(1100px 760px at 50% -8%, #16375c 0%, var(--bg1) 62%);
+  background-attachment:fixed; color:var(--ink); min-height:100vh;
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; padding:18px 14px 40px;
+  display:flex; justify-content:center;
+}
+.app{width:100%;max-width:780px;display:flex;flex-direction:column;gap:13px}
+
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chip{background:#3a5484;color:#d6e6fc;font-size:12.5px;font-weight:700;
+  padding:6px 13px;border-radius:999px;white-space:nowrap}
+.hint{margin-left:auto;font-size:12px;color:var(--ink3)}
+h1{font-size:22px;font-weight:800;letter-spacing:.03em;line-height:1.35}
+h1 em{font-style:normal;color:var(--sky)}
+
+/* 大 tab */
+.tabs{display:flex;gap:7px;background:#16263f;padding:5px;border-radius:12px}
+.tabs button{flex:1;font-family:inherit;font-size:13.5px;font-weight:800;padding:11px 8px;
+  border-radius:9px;border:none;background:transparent;color:var(--ink2);cursor:pointer;
+  transition:.15s;display:flex;flex-direction:column;gap:2px;align-items:center}
+.tabs button .s{font-size:10.5px;font-weight:600;opacity:.7}
+.tabs button.on{background:var(--sky);color:#08243c}
+.tabs button.on .s{opacity:.85}
+
+.stage{position:relative;border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg, rgba(125,211,252,.06), rgba(10,24,46,.2));
+  border:1.5px solid var(--line)}
+canvas{display:block;width:100%;height:auto;cursor:grab;touch-action:none}
+canvas.drag{cursor:grabbing}
+.rota{position:absolute;right:12px;bottom:10px;font-size:11px;color:var(--ink3);
+  background:rgba(10,24,46,.7);padding:4px 9px;border-radius:7px;pointer-events:none}
+
+.ctrl{background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:13px;display:flex;flex-direction:column;gap:11px}
+.row{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.row .lab{font-size:13px;color:var(--ink2);min-width:70px;font-weight:700}
+input[type=range]{flex:1;min-width:120px;-webkit-appearance:none;height:6px;
+  border-radius:3px;background:#2b4a6e;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;
+  border-radius:50%;background:var(--sky);cursor:pointer;box-shadow:0 2px 8px rgba(125,211,252,.4)}
+.row output{font-size:13px;font-weight:700;color:var(--sky);min-width:56px;text-align:right;
+  font-variant-numeric:tabular-nums}
+.seg{display:flex;gap:6px;background:#16263f;padding:4px;border-radius:10px;flex-wrap:wrap}
+.seg button{font-family:inherit;font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:7px;
+  border:none;background:transparent;color:var(--ink2);cursor:pointer;transition:.15s;flex:1;min-width:74px}
+.seg button.on{background:var(--sky);color:#08243c}
+
+/* 截面的 2D 形状窗 */
+.shape{background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:12px 14px 8px}
+.shape .sh{font-size:12.5px;color:var(--ink2);font-weight:700;margin-bottom:6px;
+  display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.shape .sh b{margin-left:auto;font-size:15px;font-weight:800;color:var(--amber);
+  font-variant-numeric:tabular-nums}
+svg#shapeSvg{display:block;width:100%;height:auto}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.st{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+.st .k{font-size:11.5px;color:var(--ink3);font-weight:700}
+.st .v{font-size:17px;font-weight:800;margin-top:3px;color:var(--sky);
+  font-variant-numeric:tabular-nums}
+
+.conc{background:rgba(245,158,11,.11);border:1.5px solid rgba(245,158,11,.3);
+  border-radius:14px;padding:13px 16px;font-size:13.5px;line-height:1.75;color:#fbd38d}
+.conc b{color:#fbbf24}
+.conc .eq{font-size:16px;font-weight:800;color:#fbbf24;letter-spacing:.03em}
+
+@media(max-width:560px){
+  h1{font-size:19px}
+  .stats{grid-template-columns:1fr}
+  .st{display:flex;align-items:baseline;gap:9px}
+  .st .v{margin-top:0}
+  .seg button{min-width:0;font-size:11.5px;padding:7px 8px}
+  .row .lab{min-width:58px;font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="top">
+    <span class="chip">AMC10 · 立体几何 · R03</span>
+    <span class="hint">拖动画面可旋转</span>
+  </div>
+  <h1>折起来，<em>再截一刀</em></h1>
+
+  <div class="tabs" id="tabs">
+    <button class="on" data-t="fold">① 折起来<span class="s">6 个面合成一个立方体</span></button>
+    <button data-t="cut">② 截一刀<span class="s">截面最多几条边</span></button>
+  </div>
+
+  <div class="stage">
+    <canvas id="cv"></canvas>
+    <div class="rota" id="rotaTip">拖动滑块，看它慢慢合起来</div>
+  </div>
+
+  <!-- 折叠控制 -->
+  <div class="ctrl" id="ctrlFold">
+    <div class="row">
+      <span class="lab">折叠进度</span>
+      <input id="rngT" type="range" min="0" max="100" step="1" value="0">
+      <output id="outT">0%</output>
+    </div>
+    <div class="row">
+      <span class="lab" style="min-width:0;font-weight:600;font-size:12px;color:var(--ink3)">
+        六个面折到 100% 会正好闭合 —— 因为正方体就是六个面
+      </span>
+    </div>
+  </div>
+
+  <!-- 截面控制 -->
+  <div class="ctrl" id="ctrlCut" style="display:none">
+    <div class="row">
+      <span class="lab">平面位置</span>
+      <input id="rngD" type="range" min="-150" max="150" step="1" value="0">
+      <output id="outD">0.00</output>
+    </div>
+    <div class="row">
+      <span class="lab" style="min-width:0">切法</span>
+      <div class="seg" id="normModes">
+        <button class="on" data-n="111">斜着切 (1,1,1)</button>
+        <button data-n="001">水平切 (0,0,1)</button>
+        <button data-n="112">斜着切 (1,1,2)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="shape" id="shapeBox" style="display:none">
+    <div class="sh">
+      <span>截面本身的形状（摊平看）</span>
+      <b id="shapeName">六边形</b>
+    </div>
+    <svg id="shapeSvg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="stats" id="statsBox" style="display:none">
+    <div class="st"><div class="k">截面边数</div><div class="v" id="stSides">6</div></div>
+    <div class="st"><div class="k">被截到的面</div><div class="v" id="stFaces">6</div></div>
+    <div class="st"><div class="k">可能是正五边形吗</div><div class="v" id="stPenta" style="color:#f87171">不可能</div></div>
+  </div>
+
+  <div class="conc" id="conc"></div>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var S = { tab:'fold', t:0, d:0, nrm:[1,1,1], yaw:-0.55, pitch:0.30 };
+
+  var cv = document.getElementById('cv');
+  var ctx = cv.getContext('2d');
+  var CW=0, CH=0, DPR=1, SCALE=100, CX=0, CY=0;
+
+  // ---------------- 3D 核心 ----------------
+  function rotPt(p){
+    var cy=Math.cos(S.yaw), sy=Math.sin(S.yaw);
+    var x1 = p[0]*cy + p[2]*sy;
+    var z1 = -p[0]*sy + p[2]*cy;
+    var cp=Math.cos(S.pitch), sp=Math.sin(S.pitch);
+    var y1 = p[1]*cp + z1*sp;
+    var z2 = -p[1]*sp + z1*cp;
+    return [x1, y1, z2];
+  }
+  var CENTER = [0, 0, 0];
+
+  function toScreen(p){
+    var q = rotPt([p[0]-CENTER[0], p[1]-CENTER[1], p[2]-CENTER[2]]);
+    return [CX + q[0]*SCALE, CY - q[1]*SCALE, q[2]];
+  }
+
+  // 自适应取景：折叠过程中形状中心会移动、外轮廓会甩出去，
+  // 所以先按实测投影包围盒算缩放，而不是按「几格」估算。
+  function prepareView(faces){
+    var cx=0, cy=0, cz=0, n=0;
+    for (var i=0;i<faces.length;i++)
+      for (var j=0;j<faces[i].pts.length;j++){
+        var p = faces[i].pts[j];
+        cx+=p[0]; cy+=p[1]; cz+=p[2]; n++;
+      }
+    if (!n) return;
+    CENTER = [cx/n, cy/n, cz/n];
+
+    var keep = SCALE;
+    SCALE = 1;
+    var xs = [], ys = [];
+    for (var a=0;a<faces.length;a++)
+      for (var b=0;b<faces[a].pts.length;b++){
+        var q = toScreen(faces[a].pts[b]);
+        xs.push(q[0]-CX); ys.push(q[1]-CY);
+      }
+    SCALE = keep;
+    var w = Math.max.apply(null, xs) - Math.min.apply(null, xs);
+    var h = Math.max.apply(null, ys) - Math.min.apply(null, ys);
+    SCALE = Math.min(CW*0.86/Math.max(w, 1e-6), CH*0.82/Math.max(h, 1e-6));
+  }
+  function rotY(p, ang, px, pz){
+    pz = pz || 0;
+    var dx=p[0]-px, dz=p[2]-pz;
+    var c=Math.cos(ang), s=Math.sin(ang);
+    return [px + dx*c - dz*s, p[1], pz + dx*s + dz*c];
+  }
+  function rotX(p, ang, py, pz){
+    pz = pz || 0;
+    var dy=p[1]-py, dz=p[2]-pz;
+    var c=Math.cos(ang), s=Math.sin(ang);
+    return [p[0], py + dy*c - dz*s, pz + dy*s + dz*c];
+  }
+
+  // ---------------- ① 折叠 ----------------
+  // 十字展开图：3 在前（基准），1 上 6 下 2 左 4 右 5 后（连在 4 的右边）
+  var FLAT = {
+    '3': { c:[0,0],   rgb:[59,130,246],  name:'前' },
+    '4': { c:[1,0],   rgb:[245,158,11],  name:'右' },
+    '5': { c:[2,0],   rgb:[236,72,153],  name:'后' },
+    '2': { c:[-1,0],  rgb:[168,85,247],  name:'左' },
+    '1': { c:[0,1],   rgb:[34,211,238],  name:'上' },
+    '6': { c:[0,-1],  rgb:[34,197,94],   name:'下' }
+  };
+  var FACE_ORDER = ['3','4','5','2','1','6'];
+
+  function foldVerts(id, t){
+    var a = t * Math.PI/2;
+    var c = FLAT[id].c;
+    var base = [[-0.5,-0.5],[0.5,-0.5],[0.5,0.5],[-0.5,0.5]].map(function(d){
+      return [c[0]+d[0], c[1]+d[1], 0];
+    });
+    if (id === '3') return base;
+    if (id === '4') return base.map(function(p){ return rotY(p, -a, 0.5); });
+    if (id === '2') return base.map(function(p){ return rotY(p,  a, -0.5); });
+    if (id === '1') return base.map(function(p){ return rotX(p, -a, 0.5); });
+    if (id === '6') return base.map(function(p){ return rotX(p,  a, -0.5); });
+    // '5'：先绕与 4 的公共棱，再随 4 一起绕 3-4 棱
+    return base.map(function(p){
+      return rotY(rotY(p, -a, 1.5), -a, 0.5);
+    });
+  }
+
+  // 折叠场景的所有面（含中心用于排序）
+  function collectFold(){
+    var out = [];
+    for (var i=0;i<FACE_ORDER.length;i++){
+      var id = FACE_ORDER[i];
+      var pts = foldVerts(id, S.t);
+      out.push({ pts: pts, rgb: FLAT[id].rgb, id: id });
+    }
+    return out;
+  }
+
+  // ---------------- ② 截面 ----------------
+  var CUBE_V = [];
+  for (var xi=0; xi<2; xi++)
+    for (var yi=0; yi<2; yi++)
+      for (var zi=0; zi<2; zi++)
+        CUBE_V.push([xi?0.5:-0.5, yi?0.5:-0.5, zi?0.5:-0.5]);
+  function vidx(x,y,z){
+    return ((x>0)?1:0)*4 + ((y>0)?1:0)*2 + ((z>0)?1:0);
+  }
+  var CUBE_E = [];
+  [1,-1].forEach(function(sx){ [1,-1].forEach(function(sy){
+    CUBE_E.push([vidx(sx,sy,-1), vidx(sx,sy,1)]); }); });
+  [1,-1].forEach(function(sx){ [1,-1].forEach(function(sz){
+    CUBE_E.push([vidx(sx,-1,sz), vidx(sx,1,sz)]); }); });
+  [1,-1].forEach(function(sy){ [1,-1].forEach(function(sz){
+    CUBE_E.push([vidx(-1,sy,sz), vidx(1,sy,sz)]); }); });
+
+  function dot3(a,b){ return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
+  function sub3(a,b){ return [a[0]-b[0],a[1]-b[1],a[2]-b[2]]; }
+  function cross3(a,b){ return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
+  function norm3(a){ var L=Math.hypot(a[0],a[1],a[2])||1; return [a[0]/L,a[1]/L,a[2]/L]; }
+
+  // 统一插值：不在「顶点恰在平面上」时走特殊分支，避免边界情形漏点
+  function cutPolygon(n, d){
+    var pts = [];
+    for (var i=0;i<CUBE_E.length;i++){
+      var p = CUBE_V[CUBE_E[i][0]], q = CUBE_V[CUBE_E[i][1]];
+      var dp = dot3(n,p) - d, dq = dot3(n,q) - d;
+      if (Math.abs(dq - dp) < 1e-12){
+        if (Math.abs(dp) < 1e-9){ pts.push(p); pts.push(q); }   // 整条棱躺在平面上
+        continue;
+      }
+      var t = -dp / (dq - dp);
+      if (t >= -1e-9 && t <= 1 + 1e-9){
+        var tc = Math.max(0, Math.min(1, t));
+        pts.push([p[0]+(q[0]-p[0])*tc, p[1]+(q[1]-p[1])*tc, p[2]+(q[2]-p[2])*tc]);
+      }
+    }
+    // 去重
+    var uniq = [];
+    for (var a=0;a<pts.length;a++){
+      var dup = false;
+      for (var b=0;b<uniq.length;b++){
+        if (Math.abs(pts[a][0]-uniq[b][0])<1e-6 &&
+            Math.abs(pts[a][1]-uniq[b][1])<1e-6 &&
+            Math.abs(pts[a][2]-uniq[b][2])<1e-6){ dup = true; break; }
+      }
+      if (!dup) uniq.push(pts[a]);
+    }
+    if (uniq.length < 3) return uniq;
+    // 按平面内极角排序
+    var ctr = [0,0,0];
+    uniq.forEach(function(p){ ctr[0]+=p[0]; ctr[1]+=p[1]; ctr[2]+=p[2]; });
+    ctr = ctr.map(function(v){ return v/uniq.length; });
+    var nn = norm3(n);
+    var up = Math.abs(nn[1]) < 0.9 ? [0,1,0] : [1,0,0];
+    var uu = norm3(cross3(nn, up));
+    var vv = cross3(nn, uu);
+    uniq.sort(function(P,Q){
+      var a1 = Math.atan2(dot3(sub3(P,ctr),vv), dot3(sub3(P,ctr),uu));
+      var a2 = Math.atan2(dot3(sub3(Q,ctr),vv), dot3(sub3(Q,ctr),uu));
+      return a1 - a2;
+    });
+    return uniq;
+  }
+
+  function sortFacesByDepth(faces){
+    var list = [];
+    for (var i=0;i<faces.length;i++){
+      var f = faces[i], p2 = [], zmax = -1e9;
+      for (var j=0;j<f.pts.length;j++){
+        var q = toScreen(f.pts[j]);
+        p2.push(q); if (q[2] > zmax) zmax = q[2];
+      }
+      list.push({ p2:p2, z:zmax, rgb:f.rgb, id:f.id });
+    }
+    list.sort(function(a,b){ return b.z - a.z; });
+    return list;
+  }
+
+  // ---------------- 画布 ----------------
+  function resize(){
+    var box = cv.parentNode.getBoundingClientRect();
+    CW = Math.max(280, Math.round(box.width));
+    CH = Math.round(Math.min(CW*0.66, 430));
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = CW*DPR; cv.height = CH*DPR;
+    cv.style.height = CH + 'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    CX = CW/2; CY = CH*0.52;
+    // 具体缩放由 prepareView() 按实测投影包围盒计算
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,CW,CH);
+    if (S.tab === 'fold') drawFold(); else drawCut();
+  }
+
+  function drawFold(){
+    var faces = collectFold();
+    prepareView(faces);
+    var list = sortFacesByDepth(faces);
+    for (var k=0;k<list.length;k++){
+      var it = list[k];
+      ctx.beginPath();
+      ctx.moveTo(it.p2[0][0], it.p2[0][1]);
+      for (var m=1;m<it.p2.length;m++) ctx.lineTo(it.p2[m][0], it.p2[m][1]);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(' + it.rgb[0] + ',' + it.rgb[1] + ',' + it.rgb[2] + ',0.62)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(234,242,255,.85)';
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+    }
+    // 面名
+    ctx.font = '700 13px "PingFang SC",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (var i=0;i<list.length;i++){
+      var it = list[i];
+      var cx0=0, cy0=0;
+      for (var j=0;j<it.p2.length;j++){ cx0+=it.p2[j][0]; cy0+=it.p2[j][1]; }
+      cx0/=it.p2.length; cy0/=it.p2.length;
+      ctx.fillStyle = 'rgba(10,24,46,.85)';
+      ctx.fillText(FLAT[it.id].name, cx0, cy0);
+      ctx.fillStyle = '#eaf2ff';
+      ctx.fillText(FLAT[it.id].name, cx0, cy0-0.6);
+    }
+    // 提示
+    ctx.font = '600 12px "PingFang SC",sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(159,179,207,.85)';
+    ctx.fillText(S.t < 0.02 ? '平铺：这就是展开图' :
+                 (S.t > 0.98 ? '闭合：六个面刚好围成一个立方体' : '折叠中…'),
+                 14, CH-18);
+  }
+
+  function drawCut(){
+    var n = S.nrm, d = S.d;
+    // 立方体线框（半透明面）
+    var cubeFaces = [
+      [[-0.5,-0.5,-0.5],[0.5,-0.5,-0.5],[0.5,0.5,-0.5],[-0.5,0.5,-0.5]],
+      [[-0.5,-0.5,0.5],[0.5,-0.5,0.5],[0.5,0.5,0.5],[-0.5,0.5,0.5]],
+      [[-0.5,-0.5,-0.5],[0.5,-0.5,-0.5],[0.5,-0.5,0.5],[-0.5,-0.5,0.5]],
+      [[-0.5,0.5,-0.5],[0.5,0.5,-0.5],[0.5,0.5,0.5],[-0.5,0.5,0.5]],
+      [[-0.5,-0.5,-0.5],[-0.5,0.5,-0.5],[-0.5,0.5,0.5],[-0.5,-0.5,0.5]],
+      [[0.5,-0.5,-0.5],[0.5,0.5,-0.5],[0.5,0.5,0.5],[0.5,-0.5,0.5]]
+    ];
+    var cf = cubeFaces.map(function(f){ return {pts:f, rgb:[59,130,246]}; });
+    prepareView(cf);
+    var list = sortFacesByDepth(cf);
+    for (var k=0;k<list.length;k++){
+      var it = list[k];
+      ctx.beginPath();
+      ctx.moveTo(it.p2[0][0], it.p2[0][1]);
+      for (var m=1;m<it.p2.length;m++) ctx.lineTo(it.p2[m][0], it.p2[m][1]);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(59,130,246,.07)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(125,211,252,.42)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // 截面多边形
+    var poly = cutPolygon(n, d);
+    if (poly.length >= 3){
+      // 先画一个偏移的影子，让截面从立方体里"透出来"
+      var p2 = poly.map(toScreen);
+      ctx.beginPath();
+      ctx.moveTo(p2[0][0], p2[0][1]);
+      for (var j=1;j<p2.length;j++) ctx.lineTo(p2[j][0], p2[j][1]);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(245,158,11,.42)';
+      ctx.fill();
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 2.6;
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      // 顶点
+      for (var v=0;v<p2.length;v++){
+        ctx.beginPath();
+        ctx.arc(p2[v][0], p2[v][1], 3.6, 0, Math.PI*2);
+        ctx.fillStyle = '#fde68a';
+        ctx.fill();
+      }
+    }
+
+    ctx.font = '700 12.5px "PingFang SC",sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(251,191,36,.95)';
+    ctx.fillText('截面：' + (poly.length>=3 ? poly.length + ' 条边' : '退化为点'), 14, CH-18);
+  }
+
+  // ---------------- 截面形状 2D 视图 ----------------
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function svgEl(tag, attrs){
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function drawShape(poly, n){
+    var svg = document.getElementById('shapeSvg');
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    if (poly.length < 3){
+      var t = svgEl('text', {x:150, y:105, fill:'#6a7f9c', 'font-size':13,
+        'text-anchor':'middle', 'font-family':'PingFang SC,sans-serif'});
+      t.textContent = '平面已经移出立方体';
+      svg.appendChild(t);
+      return;
+    }
+    // 投到平面坐标
+    var nn = norm3(n);
+    var up = Math.abs(nn[1]) < 0.9 ? [0,1,0] : [1,0,0];
+    var uu = norm3(cross3(nn, up));
+    var vv = cross3(nn, uu);
+    var ctr = [0,0,0];
+    poly.forEach(function(p){ ctr[0]+=p[0]; ctr[1]+=p[1]; ctr[2]+=p[2]; });
+    ctr = ctr.map(function(v){ return v/poly.length; });
+    var pts = poly.map(function(p){
+      var q = sub3(p, ctr);
+      return [dot3(q, uu), dot3(q, vv)];
+    });
+    var mx = 0;
+    pts.forEach(function(p){ mx = Math.max(mx, Math.abs(p[0]), Math.abs(p[1])); });
+    var R = 78 / (mx || 1);
+    var mapped = pts.map(function(p){ return [150 + p[0]*R, 100 - p[1]*R]; });
+
+    svg.appendChild(svgEl('polygon', {
+      points: mapped.map(function(p){ return p[0].toFixed(1)+','+p[1].toFixed(1); }).join(' '),
+      fill: 'rgba(245,158,11,.22)', stroke: '#fbbf24', 'stroke-width': 2,
+      'stroke-linejoin': 'round'
+    }));
+    mapped.forEach(function(p){
+      svg.appendChild(svgEl('circle', {cx:p[0], cy:p[1], r:3.4, fill:'#fde68a'}));
+    });
+  }
+
+  // ---------------- 更新 UI ----------------
+  function sideName(k){
+    return ['','','','三角形','四边形','五边形','六边形'][k] || (k + ' 边形');
+  }
+
+  function updateNumbers(){
+    if (S.tab === 'fold'){
+      document.getElementById('conc').innerHTML =
+        '<b>六个正方形，折起来正好围成一颗立方体 —— 不多不少。</b><br>' +
+        '这不只是巧合：正方体恰好有 6 个面，所以展开图也必须有 6 个方格。' +
+        '反过来，看到「展开图缺一格」「多一格」的选项，直接排除。<br>' +
+        '常用的判断法：<b>同一条线上隔一个的两个面是相对面</b>；<b>「Z」字形两端是相对面</b>。';
+      return;
+    }
+    var poly = cutPolygon(S.nrm, S.d);
+    var k = poly.length >= 3 ? poly.length : 0;
+    document.getElementById('shapeName').textContent = k ? sideName(k) : '—';
+    document.getElementById('stSides').textContent = k ? k + ' 条' : '0';
+    document.getElementById('stFaces').textContent = k ? k + ' 个' : '0';
+    drawShape(poly, S.nrm);
+
+    var isPenta = (k === 5);
+    var el = document.getElementById('stPenta');
+    if (isPenta){
+      el.textContent = '五边形可以，但不正';
+      el.style.color = '#fbbf24';
+    } else {
+      el.textContent = '这一刀不出五边形';
+      el.style.color = '#9fb3cf';
+    }
+
+    var name = S.nrm[0] === 0 ? '水平切' : ('斜切 (' + S.nrm.join(',') + ')');
+    document.getElementById('conc').innerHTML =
+      '<b>截面的边数 = 它截到的面的个数。</b>正方体只有 6 个面，所以 ' +
+      '<span class="eq">截面最多 6 条边</span>。<br>' +
+      '当前「' + name + '」截出 <b>' + (k || '无') + '</b> 条边。' +
+      (S.nrm[0] === 1 && S.nrm[1] === 1 && S.nrm[2] === 1 && Math.abs(S.d) < 0.02
+        ? '　这一刀正好过六条棱的中点 —— 得到的是<b>正六边形</b>。'
+        : '') + '<br>' +
+      '<b>正五边形为什么不可能？</b>截出五边形要截到 5 个面，可正方体的 6 个面是「三对平行面」——' +
+      '取 5 个面必然取到某一对的两个，被同一平面截得的这两条边一定平行。' +
+      '而正五边形的五条边里没有任何两条平行，矛盾。';
+  }
+
+  function render(){ draw(); updateNumbers(); }
+
+  // ---------------- 交互 ----------------
+  var dragging=false, lastX=0, lastY=0, raf=0;
+  function schedule(){ if (raf) return; raf = requestAnimationFrame(function(){ raf=0; draw(); }); }
+  cv.addEventListener('mousedown', function(e){ dragging=true; cv.classList.add('drag');
+    lastX=e.clientX; lastY=e.clientY; });
+  window.addEventListener('mousemove', function(e){
+    if (!dragging) return;
+    S.yaw += (e.clientX-lastX)*0.008;
+    S.pitch = Math.max(-1.0, Math.min(1.0, S.pitch + (e.clientY-lastY)*0.006));
+    lastX=e.clientX; lastY=e.clientY;
+    schedule();
+  });
+  window.addEventListener('mouseup', function(){ dragging=false; cv.classList.remove('drag'); });
+  cv.addEventListener('touchstart', function(e){ dragging=true;
+    lastX=e.touches[0].clientX; lastY=e.touches[0].clientY; }, {passive:true});
+  cv.addEventListener('touchmove', function(e){
+    if (!dragging) return;
+    var t=e.touches[0];
+    S.yaw += (t.clientX-lastX)*0.008;
+    S.pitch = Math.max(-1.0, Math.min(1.0, S.pitch + (t.clientY-lastY)*0.006));
+    lastX=t.clientX; lastY=t.clientY;
+    if (e.cancelable) e.preventDefault();
+    schedule();
+  }, {passive:false});
+  cv.addEventListener('touchend', function(){ dragging=false; });
+
+  // tab 切换
+  var tabBtns = document.querySelectorAll('#tabs button');
+  for (var i=0;i<tabBtns.length;i++){
+    tabBtns[i].addEventListener('click', function(){
+      for (var j=0;j<tabBtns.length;j++) tabBtns[j].classList.remove('on');
+      this.classList.add('on');
+      S.tab = this.getAttribute('data-t');
+      var isFold = (S.tab === 'fold');
+      document.getElementById('ctrlFold').style.display = isFold ? '' : 'none';
+      document.getElementById('ctrlCut').style.display = isFold ? 'none' : '';
+      document.getElementById('shapeBox').style.display = isFold ? 'none' : '';
+      document.getElementById('statsBox').style.display = isFold ? 'none' : '';
+      document.getElementById('rotaTip').textContent =
+        isFold ? '拖动滑块，看它慢慢合起来' : '拖动画面转视角，滑块移动平面';
+      resize(); render();
+    });
+  }
+
+  // 折叠滑块
+  var rngT = document.getElementById('rngT'), outT = document.getElementById('outT');
+  rngT.addEventListener('input', function(){
+    S.t = parseInt(rngT.value, 10) / 100;
+    outT.textContent = rngT.value + '%';
+    resize(); render();
+  });
+
+  // 截面滑块
+  var rngD = document.getElementById('rngD'), outD = document.getElementById('outD');
+  rngD.addEventListener('input', function(){
+    S.d = parseInt(rngD.value, 10) / 100;
+    outD.textContent = S.d.toFixed(2);
+    render();
+  });
+
+  // 法向量
+  var nModes = document.querySelectorAll('#normModes button');
+  for (var m=0;m<nModes.length;m++){
+    nModes[m].addEventListener('click', function(){
+      for (var j=0;j<nModes.length;j++) nModes[j].classList.remove('on');
+      this.classList.add('on');
+      var v = this.getAttribute('data-n');
+      S.nrm = [parseInt(v[0],10), parseInt(v[1],10), parseInt(v[2],10)];
+      render();
+    });
+  }
+
+  var rt=0;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){ resize(); render(); }, 120);
+  });
+
+  // 只读调试出口：供自动化测试直接校验几何，不参与页面功能
+  window.__R03 = {
+    foldVerts: foldVerts,
+    cutPolygon: cutPolygon,
+    norm3: norm3,
+    S: S,
+    CUBE_V: CUBE_V,
+    CUBE_E: CUBE_E
+  };
+
+  resize();
+  render();
+})();
+</script>
+</body>
+</html>

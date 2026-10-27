@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AMC10 知识点 · 索引</title>
+<style>
+:root{
+  --bg1:#0a182e; --bg2:#0d2a4a; --ink:#eaf2ff; --ink2:#9fb3cf; --ink3:#6a7f9c;
+  --sky:#7dd3fc; --amber:#f59e0b; --line:#22405f; --card:rgba(255,255,255,.045);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  background:radial-gradient(1100px 720px at 50% -10%, #16375c 0%, var(--bg1) 62%);
+  background-attachment:fixed; color:var(--ink); min-height:100vh;
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; padding:22px 16px 60px; display:flex; justify-content:center;
+}
+.wrap{width:100%;max-width:1020px}
+
+/* 头部 */
+header{margin-bottom:26px}
+h1{font-size:26px;font-weight:800;letter-spacing:.04em;line-height:1.3}
+h1 em{font-style:normal;color:var(--sky)}
+.sum{margin-top:9px;font-size:13px;color:var(--ink2);line-height:1.7}
+.sum b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* 搜索 */
+.sbar{margin-top:18px;position:relative}
+.sbar input{
+  width:100%;padding:14px 46px 14px 44px;border-radius:14px;border:1.5px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--ink);font-size:15.5px;outline:none;
+  font-family:inherit;transition:border-color .18s, background .18s;
+}
+.sbar input::placeholder{color:var(--ink3)}
+.sbar input:focus{border-color:var(--sky);background:rgba(125,211,252,.08)}
+.sbar .ic{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--ink3);font-size:16px}
+.sbar .kbd{position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  font-size:11px;color:var(--ink3);border:1px solid var(--line);border-radius:5px;padding:2px 6px}
+
+/* 过滤 */
+.filters{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.filters button{
+  font-family:inherit;font-size:13px;padding:7px 15px;border-radius:999px;cursor:pointer;
+  border:1.5px solid var(--line);background:transparent;color:var(--ink2);transition:.16s;
+}
+.filters button:hover{border-color:#3a5f85;color:var(--ink)}
+.filters button.on{background:var(--sky);border-color:var(--sky);color:#08243c;font-weight:700}
+
+/* 分组 */
+.grp{margin-top:30px}
+.grp h2{
+  font-size:15.5px;font-weight:800;letter-spacing:.05em;display:flex;align-items:baseline;
+  gap:10px;flex-wrap:wrap;padding-bottom:9px;border-bottom:1px solid var(--line);
+}
+.grp h2 .freq{font-size:11.5px;font-weight:600;color:var(--ink3);letter-spacing:0}
+.grp h2 .cnt{margin-left:auto;font-size:11.5px;color:var(--ink3);font-weight:600;
+  font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+
+/* 卡片 */
+.card{
+  display:flex;gap:12px;padding:13px 14px;border-radius:14px;
+  background:var(--card);border:1.5px solid var(--line);transition:.16s;
+}
+.card:hover{background:rgba(125,211,252,.075);border-color:#33587f}
+.card .no{
+  flex:0 0 auto;font-size:11.5px;font-weight:800;letter-spacing:.03em;
+  color:var(--sky);font-variant-numeric:tabular-nums;padding-top:3px;min-width:29px;
+}
+.card .bd{flex:1;min-width:0}
+.card h3{font-size:15px;font-weight:700;line-height:1.35;display:flex;align-items:center;
+  gap:7px;flex-wrap:wrap}
+.card p{font-size:12.5px;color:var(--ink2);line-height:1.6;margin-top:5px}
+.tg{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.04em}
+.tg.both{background:rgba(245,158,11,.16);color:#fbbf24}
+.tg.h{background:rgba(125,211,252,.15);color:var(--sky)}
+.acts{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.btn{
+  font-family:inherit;font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:9px;
+  border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;
+  gap:5px;transition:.15s;font-variant-numeric:tabular-nums;
+}
+.btn.v{background:rgba(245,158,11,.92);color:#2a1a00}
+.btn.v:hover{background:#fbbf24}
+.btn.h{background:rgba(125,211,252,.15);color:var(--sky);border:1.5px solid rgba(125,211,252,.32)}
+.btn.h:hover{background:rgba(125,211,252,.26)}
+
+/* 空态 */
+.empty{display:none;text-align:center;padding:56px 20px;color:var(--ink3);font-size:14px}
+.empty.on{display:block}
+
+/* 播放弹层 */
+.modal{
+  position:fixed;inset:0;background:rgba(4,12,24,.94);backdrop-filter:blur(7px);
+  display:none;align-items:center;justify-content:center;padding:18px;z-index:99;
+}
+.modal.on{display:flex}
+.modal .box{position:relative;display:flex;flex-direction:column;align-items:center;gap:11px;
+  max-height:100%;width:100%;max-width:430px}
+.modal video{
+  width:100%;max-height:calc(100vh - 108px);border-radius:14px;background:#000;
+  box-shadow:0 22px 64px rgba(0,0,0,.65);display:block;
+}
+.modal .mh{display:flex;align-items:center;gap:12px;width:100%;justify-content:space-between}
+.modal .mh .t{font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.modal .close{
+  font-family:inherit;font-size:13px;font-weight:700;padding:8px 16px;border-radius:9px;
+  border:1.5px solid var(--line);background:rgba(255,255,255,.07);color:var(--ink);cursor:pointer;
+}
+.modal .close:hover{background:rgba(255,255,255,.15)}
+
+/* 页脚 */
+footer{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);
+  font-size:11.5px;color:var(--ink3);line-height:1.9}
+footer b{color:var(--ink2)}
+footer .lnk{color:var(--sky);text-decoration:none;border-bottom:1px dashed currentColor;font-weight:700}
+footer .lnk2{color:var(--ink3);margin-left:7px}
+@media(max-width:520px){h1{font-size:22px}body{padding:18px 13px 50px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>AMC10 知识点 <em>索引</em></h1>
+    <p class="sum">
+      共 <b>63</b> 集 ｜ <b>56</b> 个视频（<b>95.4</b> 分钟）｜ <b>18</b> 个可交互网页
+      ｜ 其中 <b>11</b> 集两种形态都有<br>
+      点「▶ 视频」就地播放，点「◱ 动手」新开一页自己拖
+    </p>
+    <div class="sbar">
+      <span class="ic">⌕</span>
+      <input id="q" type="search" placeholder="搜关键词：圆 / 概率 / 数论 / 韦达 / 容斥" autocomplete="off">
+      <span class="kbd">/</span>
+    </div>
+    <div class="filters">
+      <button class="on" data-f="all">全部</button>
+      <button data-f="v">有视频</button>
+      <button data-f="h">能动手</button>
+      <button data-f="vh">两种都有</button>
+    </div>
+  </header>
+
+  <section class="grp">
+    <h2>应用题<span class="freq">第一大类别 · 真题 18.9%</span><span class="cnt">4 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="w01 相遇与追及 相向看速度和，同向看速度差；方向一变，分母就变 应用题 速度 行程 相遇 追及 跑道" data-t="h">
+        <div class="no">W01</div>
+        <div class="bd">
+          <h3>相遇与追及<span class="tg h">交互</span></h3>
+          <p>相向看速度和，同向看速度差；方向一变，分母就变</p>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W01_相遇与追及.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="w02 工程问题 总量设为 1，效率相加；合作比谁都慢不了 应用题 工程 效率 合作 水管" data-t="h">
+        <div class="no">W02</div>
+        <div class="bd">
+          <h3>工程问题<span class="tg h">交互</span></h3>
+          <p>总量设为 1，效率相加；合作比谁都慢不了</p>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W02_工程问题.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="w03 百分比与增减 涨跌不能直接相抵，先找基准量 应用题 折扣 涨跌 增长率 百分比" data-t="h">
+        <div class="no">W03</div>
+        <div class="bd">
+          <h3>百分比与增减<span class="tg h">交互</span></h3>
+          <p>涨跌不能直接相抵，先找基准量</p>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W03_百分比.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="w04 平均与加权平均 人数多的一边把平均值拉过去 应用题 平均 权重 加权 杠杆" data-t="h">
+        <div class="no">W04</div>
+        <div class="bd">
+          <h3>平均与加权平均<span class="tg h">交互</span></h3>
+          <p>人数多的一边把平均值拉过去</p>
+          <div class="acts"><a class="btn h" href="AMC10知识点_W04_加权平均.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>数论<span class="freq">质因数 9.3% + 丢番图 4.5%</span><span class="cnt">11 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="b01 数论四把钥匙 问整除、问余数、问个位、问最大公约数，各归哪把 数论 整除 余数 个位 最大公约数 总纲" data-t="vh">
+        <div class="no">B01</div>
+        <div class="bd">
+          <h3>数论四把钥匙<span class="tg both">双形态</span></h3>
+          <p>问整除、问余数、问个位、问最大公约数，各归哪把</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B01_数论四把钥匙.mp4" data-no="B01">▶ 视频 2:08</button><a class="btn h" href="AMC10知识点_B01_数论四把钥匙.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="b02 因数个数与因数和 质因数分解后，指数加 1 再相乘 数论 约数 因数 因数和 质因数分解" data-t="vh">
+        <div class="no">B02</div>
+        <div class="bd">
+          <h3>因数个数与因数和<span class="tg both">双形态</span></h3>
+          <p>质因数分解后，指数加 1 再相乘</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B02_因数个数.mp4" data-no="B02">▶ 视频 1:40</button><a class="btn h" href="AMC10知识点_B02_因数个数.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="b03 幂的个位循环 个位数字随指数循环，先找周期再定位 数论 个位 末位 尾数 循环 周期 指数" data-t="h">
+        <div class="no">B03</div>
+        <div class="bd">
+          <h3>幂的个位循环<span class="tg h">交互</span></h3>
+          <p>个位数字随指数循环，先找周期再定位</p>
+          <div class="acts"><a class="btn h" href="AMC10知识点_B03_幂的个位循环.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="b04 整除判别 3 和 9 看数字和，11 看交错和 数论 3 9 11 判别 数字和 交错和" data-t="vh">
+        <div class="no">B04</div>
+        <div class="bd">
+          <h3>整除判别<span class="tg both">双形态</span></h3>
+          <p>3 和 9 看数字和，11 看交错和</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B04_整除判别.mp4" data-no="B04">▶ 视频 1:51</button><a class="btn h" href="AMC10知识点_B04_整除判别.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="b05 同余的本质 同余就是「差是模的倍数」，不是一种新运算 数论 模 取余 余数 mod" data-t="v">
+        <div class="no">B05</div>
+        <div class="bd">
+          <h3>同余的本质</h3>
+          <p>同余就是「差是模的倍数」，不是一种新运算</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B05_同余的本质.mp4" data-no="B05">▶ 视频 1:22</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w23 最大公约与最小公倍 gcd × lcm = 两数之积；辗转相除怎么除 数论 gcd lcm 最大公约数 最小公倍数 辗转相除" data-t="v">
+        <div class="no">W23</div>
+        <div class="bd">
+          <h3>最大公约与最小公倍</h3>
+          <p>gcd × lcm = 两数之积；辗转相除怎么除</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W23_最大公约与最小公倍.mp4" data-no="W23">▶ 视频 1:47</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w24 同余方程与剩余类计数 在某个模下，满足条件的数有几个 数论 同余 余数 剩余类 模" data-t="v">
+        <div class="no">W24</div>
+        <div class="bd">
+          <h3>同余方程与剩余类计数</h3>
+          <p>在某个模下，满足条件的数有几个</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W24_同余计数.mp4" data-no="W24">▶ 视频 1:42</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w25 丢番图方程 ax + by 能凑出哪些数，凑不出的有几个 数论 不定方程 整数解 凑数 硬币" data-t="v">
+        <div class="no">W25</div>
+        <div class="bd">
+          <h3>丢番图方程</h3>
+          <p>ax + by 能凑出哪些数，凑不出的有几个</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W25_丢番图方程.mp4" data-no="W25">▶ 视频 1:41</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r08 凑不出的大数 互质两数，最大缺口是 a·b − a − b 数论 凑数 硬币 互质 最大 付款 frobenius" data-t="v">
+        <div class="no">R08</div>
+        <div class="bd">
+          <h3>凑不出的大数</h3>
+          <p>互质两数，最大缺口是 a·b − a − b</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R08_凑不出的大数.mp4" data-no="R08">▶ 视频 1:50</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r07 平方数的余数指纹 mod 4 只能是 0 或 1；能否定，不能肯定 数论 平方数 余数 指纹 模 排除 完全平方" data-t="v">
+        <div class="no">R07</div>
+        <div class="bd">
+          <h3>平方数的余数指纹</h3>
+          <p>mod 4 只能是 0 或 1；能否定，不能肯定</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R07_平方数余数指纹.mp4" data-no="R07">▶ 视频 1:43</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r17 进制与回文数 位值展开、数字和；四位数回文必被 11 整除 数论 进制 回文 数字和 位数 位值" data-t="v">
+        <div class="no">R17</div>
+        <div class="bd">
+          <h3>进制与回文数</h3>
+          <p>位值展开、数字和；四位数回文必被 11 整除</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R17_进制与回文数.mp4" data-no="R17">▶ 视频 1:45</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>代数<span class="freq">运算 12.0%</span><span class="cnt">9 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="w05 代数式化简 先看结构再动笔，别为展开而展开 代数 化简 因式分解 展开 配方" data-t="v">
+        <div class="no">W05</div>
+        <div class="bd">
+          <h3>代数式化简</h3>
+          <p>先看结构再动笔，别为展开而展开</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W05_代数式化简.mp4" data-no="W05">▶ 视频 1:28</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w06 指数与根式 同底才能合并，根式先化最简 代数 根号 指数 幂 化简" data-t="v">
+        <div class="no">W06</div>
+        <div class="bd">
+          <h3>指数与根式</h3>
+          <p>同底才能合并，根式先化最简</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W06_指数与根式.mp4" data-no="W06">▶ 视频 1:31</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w18 韦达定理 两根之和、之积，以及根的对称式求值 代数 两根之和 两根之积 对称式 二次方程" data-t="v">
+        <div class="no">W18</div>
+        <div class="bd">
+          <h3>韦达定理</h3>
+          <p>两根之和、之积，以及根的对称式求值</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W18_韦达定理.mp4" data-no="W18">▶ 视频 1:28</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w19 二次函数 对称轴、顶点、区间最值三件套 代数 抛物线 顶点 对称轴 区间最值" data-t="v">
+        <div class="no">W19</div>
+        <div class="bd">
+          <h3>二次函数</h3>
+          <p>对称轴、顶点、区间最值三件套</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W19_二次函数.mp4" data-no="W19">▶ 视频 1:47</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w20 绝对值与分段讨论 分情况去绝对值，乘负数要变号 代数 " data-t="v">
+        <div class="no">W20</div>
+        <div class="bd">
+          <h3>绝对值与分段讨论</h3>
+          <p>分情况去绝对值，乘负数要变号</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W20_绝对值与分段.mp4" data-no="W20">▶ 视频 1:46</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w21 am-gm 与最值 和定积最大，取等条件不能忘 代数 均值 不等式 最值 取等 amgm" data-t="v">
+        <div class="no">W21</div>
+        <div class="bd">
+          <h3>AM-GM 与最值</h3>
+          <p>和定积最大，取等条件不能忘</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W21_均值不等式.mp4" data-no="W21">▶ 视频 1:37</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r09 凑成两个括号（sfft） xy 带两个一次项时，补常数凑成括号相乘 代数 sfft 因式分解 凑 括号 整数解 xy" data-t="vh">
+        <div class="no">R09</div>
+        <div class="bd">
+          <h3>凑成两个括号（SFFT）<span class="tg both">双形态</span></h3>
+          <p>xy 带两个一次项时，补常数凑成括号相乘</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R09_SFFT凑因式.mp4" data-no="R09">▶ 视频 1:50</button><a class="btn h" href="AMC10知识点_R09_SFFT凑因式.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="r12 立方和差与分组 第二个括号是一次项乘积，没有系数 2 代数 立方 和差 分组 因式分解 三次" data-t="v">
+        <div class="no">R12</div>
+        <div class="bd">
+          <h3>立方和差与分组</h3>
+          <p>第二个括号是一次项乘积，没有系数 2</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R12_立方和差与分组.mp4" data-no="R12">▶ 视频 1:46</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r13 分母有理化 乘共轭造平方差，还能裂项求和 代数 有理化 共轭 分母 根号 裂项" data-t="v">
+        <div class="no">R13</div>
+        <div class="bd">
+          <h3>分母有理化</h3>
+          <p>乘共轭造平方差，还能裂项求和</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R13_分母有理化.mp4" data-no="R13">▶ 视频 1:53</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>计数<span class="freq">真题 11.5%</span><span class="cnt">9 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="b13 把步骤写全 分步写清楚，保证不重不漏 计数 步骤 不重不漏 枚举" data-t="v">
+        <div class="no">B13</div>
+        <div class="bd">
+          <h3>把步骤写全</h3>
+          <p>分步写清楚，保证不重不漏</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B13_把步骤写全.mp4" data-no="B13">▶ 视频 1:46</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w07 加乘原理 「要么」用加，「先再」用乘 计数 " data-t="v">
+        <div class="no">W07</div>
+        <div class="bd">
+          <h3>加乘原理</h3>
+          <p>「要么」用加，「先再」用乘</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W07_加乘原理.mp4" data-no="W07">▶ 视频 1:30</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w08 排列还是组合 换顺序算不算同一种，这是分水岭 计数 排列 组合 顺序 阶乘" data-t="v">
+        <div class="no">W08</div>
+        <div class="bd">
+          <h3>排列还是组合</h3>
+          <p>换顺序算不算同一种，这是分水岭</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W08_排列与组合.mp4" data-no="W08">▶ 视频 1:37</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w09 捆绑与插空 相邻捆一起，不相邻先排后插 计数 相邻 不相邻 捆绑 插空" data-t="v">
+        <div class="no">W09</div>
+        <div class="bd">
+          <h3>捆绑与插空</h3>
+          <p>相邻捆一起，不相邻先排后插</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W09_捆绑与插空.mp4" data-no="W09">▶ 视频 1:41</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w10 容斥与补集 「至少一个」转成「一个都没有」 计数 容斥 补集 至少 至多" data-t="v">
+        <div class="no">W10</div>
+        <div class="bd">
+          <h3>容斥与补集</h3>
+          <p>「至少一个」转成「一个都没有」</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W10_容斥与补集.mp4" data-no="W10">▶ 视频 1:34</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w11 圆排列与分组去重 圆排列除以 n，等大分组除以阶乘 计数 圆桌 环形 分组 去重" data-t="v">
+        <div class="no">W11</div>
+        <div class="bd">
+          <h3>圆排列与分组去重</h3>
+          <p>圆排列除以 n，等大分组除以阶乘</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W11_圆排列与分组.mp4" data-no="W11">▶ 视频 1:42</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r04 格点路径计数 总步数里选一个方向的步数 计数 格点 路径 网格 走路 组合" data-t="v">
+        <div class="no">R04</div>
+        <div class="bd">
+          <h3>格点路径计数</h3>
+          <p>总步数里选一个方向的步数</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R04_格点路径计数.mp4" data-no="R04">▶ 视频 1:29</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r05 插板法 「每人至少一个」与「可空」是两套公式 计数 插板 分配 至少一个 可空 分糖" data-t="v">
+        <div class="no">R05</div>
+        <div class="bd">
+          <h3>插板法</h3>
+          <p>「每人至少一个」与「可空」是两套公式</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R05_插板法.mp4" data-no="R05">▶ 视频 1:39</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r06 子集数与组合恒等式 每个元素选或不选，所以是 2 的 n 次方 计数 子集 2的n次方 组合恒等式 真子集" data-t="v">
+        <div class="no">R06</div>
+        <div class="bd">
+          <h3>子集数与组合恒等式</h3>
+          <p>每个元素选或不选，所以是 2 的 n 次方</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R06_子集数与组合恒等式.mp4" data-no="R06">▶ 视频 1:39</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>面积<span class="freq">真题 10.9%，排第四</span><span class="cnt">3 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="w12 三角形与四边形面积 底高公式、等积变换、s = rs 面积 " data-t="v">
+        <div class="no">W12</div>
+        <div class="bd">
+          <h3>三角形与四边形面积</h3>
+          <p>底高公式、等积变换、S = rs</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W12_面积与等积.mp4" data-no="W12">▶ 视频 1:29</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w13 圆与扇形、弧长 弧长不等于弦长，扇形是圆的一部分 面积 扇形 弧长 圆心角 弧度" data-t="v">
+        <div class="no">W13</div>
+        <div class="bd">
+          <h3>圆与扇形、弧长</h3>
+          <p>弧长不等于弦长，扇形是圆的一部分</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W13_扇形与弧长.mp4" data-no="W13">▶ 视频 1:40</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w14 组合图形与割补法 把不规则图形切补成规则图形 面积 " data-t="v">
+        <div class="no">W14</div>
+        <div class="bd">
+          <h3>组合图形与割补法</h3>
+          <p>把不规则图形切补成规则图形</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W14_割补法.mp4" data-no="W14">▶ 视频 1:21</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>立体几何<span class="freq">低频，但零覆盖时必失分</span><span class="cnt">3 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="r01 柱锥球体积与表面积 锥永远带一个除以 3；侧面积用母线 立体几何 圆柱 圆锥 球 体积 表面积 母线" data-t="vh">
+        <div class="no">R01</div>
+        <div class="bd">
+          <h3>柱锥球体积与表面积<span class="tg both">双形态</span></h3>
+          <p>锥永远带一个除以 3；侧面积用母线</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R01_柱锥球体积与表面积.mp4" data-no="R01">▶ 视频 1:35</button><a class="btn h" href="AMC10知识点_R01_柱锥球体积与表面积.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="r02 长方体对角线与表面最短路 穿内部用平方和，贴表面要展开 立体几何 对角线 展开 最短路径 长方体" data-t="vh">
+        <div class="no">R02</div>
+        <div class="bd">
+          <h3>长方体对角线与表面最短路<span class="tg both">双形态</span></h3>
+          <p>穿内部用平方和，贴表面要展开</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R02_长方体对角线与表面最短路.mp4" data-no="R02">▶ 视频 1:45</button><a class="btn h" href="AMC10知识点_R02_长方体对角线与表面最短路.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="r03 展开图与截面 六个面，截面最多六条边 立体几何 展开图 截面 正方体 六边形" data-t="vh">
+        <div class="no">R03</div>
+        <div class="bd">
+          <h3>展开图与截面<span class="tg both">双形态</span></h3>
+          <p>六个面，截面最多六条边</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R03_展开图与截面.mp4" data-no="R03">▶ 视频 1:38</button><a class="btn h" href="AMC10知识点_R03_展开图与截面.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>解析几何<span class="freq">坐标法是最稳的底牌</span><span class="cnt">3 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="r14 斜率与平行垂直 垂直看乘积等于 −1，不是取负 解析几何 斜率 平行 垂直 坐标" data-t="vh">
+        <div class="no">R14</div>
+        <div class="bd">
+          <h3>斜率与平行垂直<span class="tg both">双形态</span></h3>
+          <p>垂直看乘积等于 −1，不是取负</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R14_斜率与平行垂直.mp4" data-no="R14">▶ 视频 1:49</button><a class="btn h" href="AMC10知识点_R14_斜率与平行垂直.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="r15 距离、中点与定比分点 权重配在对端：靠近谁，谁系数小 解析几何 距离 中点 定比 分点 坐标" data-t="v">
+        <div class="no">R15</div>
+        <div class="bd">
+          <h3>距离、中点与定比分点</h3>
+          <p>权重配在对端：靠近谁，谁系数小</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R15_距离中点与定比分点.mp4" data-no="R15">▶ 视频 1:42</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r16 圆的方程与位置关系 先配方读出圆心，再比圆心到直线的距离 解析几何 圆 方程 配方 相切 相交 弦" data-t="v">
+        <div class="no">R16</div>
+        <div class="bd">
+          <h3>圆的方程与位置关系</h3>
+          <p>先配方读出圆心，再比圆心到直线的距离</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R16_圆的方程与位置关系.mp4" data-no="R16">▶ 视频 1:56</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>圆<span class="freq">几何板块</span><span class="cnt">4 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="b08 圆的三个基本量 圆心、半径、连心线；求弦长得先作垂径 圆 半径 弦 垂径 连心线 圆心" data-t="v">
+        <div class="no">B08</div>
+        <div class="bd">
+          <h3>圆的三个基本量</h3>
+          <p>圆心、半径、连心线；求弦长得先作垂径</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B08_圆的三个基本量.mp4" data-no="B08">▶ 视频 1:59</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="b09 圆上动点到定点的最值 最值必在连心线上 —— 三角形不等式 圆 最值 极值 动点 距离 最大值 最小值" data-t="h">
+        <div class="no">B09</div>
+        <div class="bd">
+          <h3>圆上动点到定点的最值<span class="tg h">交互</span></h3>
+          <p>最值必在连心线上 —— 三角形不等式</p>
+          <div class="acts"><a class="btn h" href="AMC10知识点_B09_圆上动点最值.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="b10 切线 圆心到切线的距离等于半径；半径此时是直角边 圆 切点 半径 垂直 相切" data-t="vh">
+        <div class="no">B10</div>
+        <div class="bd">
+          <h3>切线<span class="tg both">双形态</span></h3>
+          <p>圆心到切线的距离等于半径；半径此时是直角边</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B10_切线.mp4" data-no="B10">▶ 视频 1:41</button><a class="btn h" href="AMC10知识点_B10_切线.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="r23 圆内接四边形 对角互补；反过来可判四点共圆 圆 圆内接 共圆 对角 互补 托勒密" data-t="v">
+        <div class="no">R23</div>
+        <div class="bd">
+          <h3>圆内接四边形</h3>
+          <p>对角互补；反过来可判四点共圆</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R23_圆内接四边形.mp4" data-no="R23">▶ 视频 1:47</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>三角形与多边形<span class="freq">角度勾股 9.1%</span><span class="cnt">6 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="w15 勾股定理与特殊三角形 30-60-90 与 45-45-90 的边长比 三角形与多边形 勾股 直角三角形 30度 45度 斜边" data-t="v">
+        <div class="no">W15</div>
+        <div class="bd">
+          <h3>勾股定理与特殊三角形</h3>
+          <p>30-60-90 与 45-45-90 的边长比</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W15_勾股与特殊三角形.mp4" data-no="W15">▶ 视频 1:44</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w16 相似三角形三种模型 a 字、8 字、母子；比例式怎么写 三角形与多边形 相似 比例 面积比 对应边" data-t="v">
+        <div class="no">W16</div>
+        <div class="bd">
+          <h3>相似三角形三种模型</h3>
+          <p>A 字、8 字、母子；比例式怎么写</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W16_相似三角形.mp4" data-no="W16">▶ 视频 1:42</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="w17 多边形内角外角与正六边形 内外角公式，正六边形的三个常用长度 三角形与多边形 " data-t="v">
+        <div class="no">W17</div>
+        <div class="bd">
+          <h3>多边形内角外角与正六边形</h3>
+          <p>内外角公式，正六边形的三个常用长度</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W17_多边形与正六边形.mp4" data-no="W17">▶ 视频 1:35</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r10 角平分线与重心 分对边看邻边；中线被分成 2 比 1 三角形与多边形 角平分线 重心 中线 比例" data-t="v">
+        <div class="no">R10</div>
+        <div class="bd">
+          <h3>角平分线与重心</h3>
+          <p>分对边看邻边；中线被分成 2 比 1</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R10_角平分线与重心.mp4" data-no="R10">▶ 视频 1:41</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r11 三角形不等式与翻折 翻折把折线拉成直线，三点共线取等号 三角形与多边形 三角形不等式 翻折 对称 最短 距离和" data-t="v">
+        <div class="no">R11</div>
+        <div class="bd">
+          <h3>三角形不等式与翻折</h3>
+          <p>翻折把折线拉成直线，三点共线取等号</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R11_三角形不等式与翻折.mp4" data-no="R11">▶ 视频 2:00</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r22 梯形 只有一组对边平行；面积与中位线 三角形与多边形 梯形 四边形 中位线 面积" data-t="v">
+        <div class="no">R22</div>
+        <div class="bd">
+          <h3>梯形</h3>
+          <p>只有一组对边平行；面积与中位线</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R22_梯形.mp4" data-no="R22">▶ 视频 1:36</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>数列<span class="freq">真题 5.7%</span><span class="cnt">3 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="b06 数列第一步 先做差还是先做比，第一步定方向 数列 等差 等比 做差 做比 判断" data-t="v">
+        <div class="no">B06</div>
+        <div class="bd">
+          <h3>数列第一步</h3>
+          <p>先做差还是先做比，第一步定方向</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B06_数列第一步.mp4" data-no="B06">▶ 视频 1:46</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="b07 求和公式怎么选 首尾配对与公差式，两个公式本是同一个数 数列 求和 首尾配对 公差 等差数列" data-t="h">
+        <div class="no">B07</div>
+        <div class="bd">
+          <h3>求和公式怎么选<span class="tg h">交互</span></h3>
+          <p>首尾配对与公差式，两个公式本是同一个数</p>
+          <div class="acts"><a class="btn h" href="AMC10知识点_B07_求和公式.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="w22 递推与周期数列 递推式写几项就会现出周期 数列 递推 周期 通项" data-t="v">
+        <div class="no">W22</div>
+        <div class="bd">
+          <h3>递推与周期数列</h3>
+          <p>递推式写几项就会现出周期</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_W22_递推与周期.mp4" data-no="W22">▶ 视频 1:33</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>概率<span class="freq">真题 4.9%</span><span class="cnt">3 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="b11 概率入门 有利数除以总数，以及「至少」走补集 概率 概率 可能性 补集 至少" data-t="vh">
+        <div class="no">B11</div>
+        <div class="bd">
+          <h3>概率入门<span class="tg both">双形态</span></h3>
+          <p>有利数除以总数，以及「至少」走补集</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B11_概率入门.mp4" data-no="B11">▶ 视频 1:43</button><a class="btn h" href="AMC10知识点_B11_概率入门.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="b12 独立与互斥 两件事能不能同时发生；期望是什么 概率 概率 独立 互斥 期望 同时发生" data-t="v">
+        <div class="no">B12</div>
+        <div class="bd">
+          <h3>独立与互斥</h3>
+          <p>两件事能不能同时发生；期望是什么</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_B12_独立与互斥.mp4" data-no="B12">▶ 视频 1:58</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r24 几何概率 点有无穷多个时，量面积而不数个数 概率 几何概率 面积 随机 连续" data-t="v">
+        <div class="no">R24</div>
+        <div class="bd">
+          <h3>几何概率</h3>
+          <p>点有无穷多个时，量面积而不数个数</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R24_几何概率.mp4" data-no="R24">▶ 视频 1:45</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>统计<span class="freq">低频，题干长但送分</span><span class="cnt">1 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="r21 平均数与中位数 回到「总和 ÷ 个数」；偶数个取中间两个平均 统计 平均数 中位数 统计 平均" data-t="v">
+        <div class="no">R21</div>
+        <div class="bd">
+          <h3>平均数与中位数</h3>
+          <p>回到「总和 ÷ 个数」；偶数个取中间两个平均</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R21_平均数与中位数.mp4" data-no="R21">▶ 视频 1:37</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="grp">
+    <h2>离散与逻辑<span class="freq">鸽巢 · 不变量 · 真假话</span><span class="cnt">4 集</span></h2>
+    <div class="grid">
+      <article class="card" data-k="r18 鸽巢原理 东西比盒子多；难在怎么造盒子 离散与逻辑 鸽巢 抽屉 至少 重复 盒子" data-t="v">
+        <div class="no">R18</div>
+        <div class="bd">
+          <h3>鸽巢原理</h3>
+          <p>东西比盒子多；难在怎么造盒子</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R18_鸽巢原理.mp4" data-no="R18">▶ 视频 1:53</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r19 奇偶性与不变量 找那个每次操作都不变的东西 离散与逻辑 奇偶 不变量 染色 操作" data-t="vh">
+        <div class="no">R19</div>
+        <div class="bd">
+          <h3>奇偶性与不变量<span class="tg both">双形态</span></h3>
+          <p>找那个每次操作都不变的东西</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R19_奇偶与不变量.mp4" data-no="R19">▶ 视频 1:45</button><a class="btn h" href="AMC10知识点_R19_奇偶与不变量.html" target="_blank" rel="noopener">◱ 动手</a></div>
+        </div>
+      </article>
+      <article class="card" data-k="r20 极端情况先检查 求「至少」先去求「最多不满足」 离散与逻辑 极端 最值 构造 反例 至少" data-t="v">
+        <div class="no">R20</div>
+        <div class="bd">
+          <h3>极端情况先检查</h3>
+          <p>求「至少」先去求「最多不满足」</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R20_极端情况先检查.mp4" data-no="R20">▶ 视频 1:44</button></div>
+        </div>
+      </article>
+      <article class="card" data-k="r25 逻辑推理与真假话 假设，推到矛盾，换下一个 离散与逻辑 逻辑 真假话 推理 假设 说谎" data-t="v">
+        <div class="no">R25</div>
+        <div class="bd">
+          <h3>逻辑推理与真假话</h3>
+          <p>假设，推到矛盾，换下一个</p>
+          <div class="acts"><button class="btn v" data-src="AMC10知识点_R25_逻辑推理与真假话.mp4" data-no="R25">▶ 视频 1:49</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="empty" id="empty"></div>
+
+  <footer>
+    <b>说明</b>：时长取自视频实测，非估算。网页版与视频版内容同源，一个可回退细看、一个可拖动验证。<br>
+    <b>形态选择</b>：需要「看着它连续怎么变」的知识点做成可交互网页；需要「听清判断顺序」的做成视频。<br>
+    <b>覆盖</b>：三批全部完成：第一批（薄弱点）13 集 + 第二批（高频考点）25 集 + 第三批（大纲补齐）25 集，共 63 集。<br>
+    <a href="AMC10动画选题_三批总表.html" class="lnk">→ 看三批选题总表</a><span class="lnk2">（含未做的第三批与勾选进度）</span>
+  </footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <div class="mh">
+      <span class="t" id="vtitle"></span>
+      <button class="close" id="mclose">关闭 ✕</button>
+    </div>
+    <div id="vbox"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var q = document.getElementById('q');
+  var cards = [].slice.call(document.querySelectorAll('.card'));
+  var grps = [].slice.call(document.querySelectorAll('.grp'));
+  var empty = document.getElementById('empty');
+  var mode = 'all';
+
+  function apply(){
+    var t = q.value.trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function(c){
+      var hitT = !t || c.getAttribute('data-k').indexOf(t) >= 0;
+      var hitF = mode === 'all' || c.getAttribute('data-t').indexOf(mode) >= 0;
+      var on = hitT && hitF;
+      c.style.display = on ? '' : 'none';
+      if (on) shown++;
+    });
+    grps.forEach(function(g){
+      var any = g.querySelectorAll('.card:not([style*="none"])').length > 0;
+      g.style.display = any ? '' : 'none';
+    });
+    empty.classList.toggle('on', shown === 0);
+    empty.textContent = shown === 0 ? ('没有匹配「' + q.value.trim() + '」的条目') : '';
+  }
+
+  q.addEventListener('input', apply);
+  document.querySelectorAll('.filters button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.filters button').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      mode = b.getAttribute('data-f');
+      apply();
+    });
+  });
+
+  // 键盘：/ 或 Ctrl+K 聚焦搜索，Esc 清空/关闭
+  document.addEventListener('keydown', function(e){
+    if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')){
+      e.preventDefault(); q.focus(); q.select();
+    }
+  });
+
+  // ---------- 视频弹层 ----------
+  var modal = document.getElementById('modal');
+  var vbox = document.getElementById('vbox');
+  var vtitle = document.getElementById('vtitle');
+  var video = null;
+
+  function openVideo(src, no){
+    closeVideo();
+    video = document.createElement('video');
+    video.controls = true; video.autoplay = true; video.playsInline = true;
+    video.preload = 'auto'; video.src = src;
+    vbox.appendChild(video);
+    vtitle.textContent = no + ' · 逐幕讲解';
+    modal.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    var p = video.play();
+    if (p && p.catch) p.catch(function(){});
+  }
+
+  function closeVideo(){
+    modal.classList.remove('on');
+    document.body.style.overflow = '';
+    if (video){
+      try { video.pause(); } catch(e){}
+      video.removeAttribute('src');
+      video.load();          // 释放解码器，避免多集连看内存堆积
+      video.remove();
+      video = null;
+    }
+  }
+
+  document.querySelectorAll('.btn.v').forEach(function(b){
+    b.addEventListener('click', function(){ openVideo(b.getAttribute('data-src'), b.getAttribute('data-no')); });
+  });
+  document.getElementById('mclose').addEventListener('click', closeVideo);
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeVideo(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){
+      if (modal.classList.contains('on')) closeVideo();
+      else if (q.value) { q.value = ''; apply(); }
+    }
+  });
+})();
+</script>
+</body>
+</html>
