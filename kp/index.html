@@ -214,7 +214,6 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
 </head>
 <body>
 <div class="wrap">
-<div class="upd" id="upd"><span>进度已改为云端保存，换手机或换电脑都不会丢。</span><a href="https://amc10-kp.app.workbuddy.host/?sharecode=63GNEIHANS" target="_blank" rel="noopener">打开新版 →</a><button id="updX" aria-label="关闭">✕</button></div>
   <header>
     <h1>AMC10 知识点 <em>索引</em></h1>
     <p class="sum">
@@ -1520,8 +1519,13 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
   });
 
 
-  /* ---------------- 云同步（跨设备共享次数） ---------------- */
-  var CL = null, CLOUD_ON = false, pushTimer = null;
+  /* ---------------- 云同步：经同源中继，网址不变 ---------------- */
+  /* 云数据库按 Origin 精确放行，github.io 直连会 403；
+     这里嵌一个跑在云域上的中继页，由它代发请求（同源），再用 postMessage 把结果传回来。 */
+  var RELAY_ORIGIN = 'https://amc10-kp.app.workbuddy.host';
+  var RELAY_SRC = RELAY_ORIGIN + '/relay.html?sharecode=63GNEIHANS';
+  var relayFrame = null, relayUp = false, relaySeq = 0, relayPend = {};
+  var pushTimer = null, relayStarted = false;
 
   function cset(state, text){
     var el = document.getElementById('cstat'), t = document.getElementById('cstxt');
@@ -1530,101 +1534,104 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
     if (t) t.textContent = text;
   }
 
-  function initCloud(){
-    var cfg = window.KP_CLOUD;
-    if (!cfg || !window.WorkBuddyCloud || !window.WorkBuddyCloud.createWorkBuddyCloud){
-      cset('off', '仅本机');
-      return;
-    }
-    try {
-      CL = WorkBuddyCloud.createWorkBuddyCloud({
-        endpoint: cfg.endpoint,
-        oauthRelayBaseUrl: cfg.oauthRelayBaseUrl,
-        publishableKey: cfg.publishableKey
-      });
-      CLOUD_ON = true;
-      cset('ok', '连接中…');
-      pullCloud(true);
-      setInterval(function(){ if (!document.hidden) pullCloud(false); }, 20000);
-      document.addEventListener('visibilitychange', function(){
-        if (!document.hidden) pullCloud(false);
-      });
-    } catch(e){
-      CLOUD_ON = false;
-      cset('err', '同步未启动');
-    }
+  function relayCall(method, qs, body, cb){
+    var w = relayFrame && relayFrame.contentWindow;
+    if (!relayUp || !w){ if (cb) cb({ ok: false, err: 'no-relay' }); return; }
+    var id = 'q' + (++relaySeq);
+    relayPend[id] = cb;
+    setTimeout(function(){
+      if (relayPend[id]){ delete relayPend[id]; if (cb) cb({ ok: false, err: 'timeout' }); }
+    }, 9000);
+    w.postMessage({ t: 'kp', id: id, method: method, qs: qs || '', body: body || '' }, RELAY_ORIGIN);
+  }
+
+  function onRelayMsg(e){
+    if (e.origin !== RELAY_ORIGIN) return;
+    var d = e.data || {};
+    if (d.t !== 'kp') return;
+    if (d.ready){ relayUp = true; cset('ok', '连接中…'); pullCloud(true); return; }
+    var cb = relayPend[d.id];
+    if (cb){ delete relayPend[d.id]; cb(d); }
+  }
+
+  function startRelay(){
+    if (relayStarted) return;
+    relayStarted = true;
+    window.addEventListener('message', onRelayMsg);
+    var f = document.createElement('iframe');
+    f.src = RELAY_SRC;
+    f.setAttribute('aria-hidden', 'true');
+    f.setAttribute('tabindex', '-1');
+    f.style.cssText = 'position:absolute;width:1px;height:1px;border:0;left:-9999px;top:-9999px';
+    document.body.appendChild(f);
+    relayFrame = f;
+    setInterval(function(){ if (!document.hidden) pullCloud(false); }, 20000);
+    document.addEventListener('visibilitychange', function(){
+      if (!document.hidden) pullCloud(false);
+    });
+    setTimeout(function(){ if (!relayUp) cset('off', '仅本机'); }, 12000);
   }
 
   function pullCloud(first){
-    if (!CLOUD_ON || !CL) return;
-    CL.database.from('kp_seen').select('no,n').then(function(res){
-      if (res && res.error){ cset('err', '同步失败'); return; }
-      var rows = (res && res.data) || [];
+    if (!relayUp) return;
+    relayCall('GET', '?select=no,n', '', function(res){
+      if (!res || !res.ok){ cset('err', '同步失败'); return; }
+      var rows = [];
+      try { rows = JSON.parse(res.body) || []; } catch(e){ cset('err', '同步失败'); return; }
       var changed = false;
       rows.forEach(function(r){
         var no = r.no, n = r.n | 0;
         if (!no || n <= 0) return;
         if (cnt(no) < n){
           if (!seen[no]) seen[no] = { n: n, t: 0 };
-          else seen[no].n = n;        // 云端更全，只补次数，不覆盖本机时间
+          else seen[no].n = n;         // 云端更全，只补次数，不覆盖本机时间
           changed = true;
         }
       });
       if (changed){ save(); paint(); apply(); }
       cset('ok', '已同步 ' + rows.length + ' 集');
-      if (first) syncAllCloud();      // 本机可能比云端多，推一次
-    }).catch(function(){ cset('err', '同步失败'); });
+      if (first) syncAllCloud();       // 本机可能比云端多，推一次
+    });
   }
 
   function pushOne(no){
-    if (!CLOUD_ON || !CL) return;
+    if (!relayUp) return;
     clearTimeout(pushTimer);
     pushTimer = setTimeout(function(){
       var n = cnt(no);
       if (n > 0){
-        CL.database.from('kp_seen').upsert([{ no: no, n: n }], { onConflict: 'no' })
-          .then(function(res){
-            cset((res && res.error) ? 'err' : 'ok', (res && res.error) ? '同步失败' : '已同步');
-          }).catch(function(){ cset('err', '同步失败'); });
+        relayCall('POST', '', JSON.stringify([{ no: no, n: n }]), function(res){
+          cset((res && res.ok) ? 'ok' : 'err', (res && res.ok) ? '已同步' : '同步失败');
+        });
       } else {
-        CL.database.from('kp_seen').delete().eq('no', no)
-          .then(function(){ cset('ok', '已同步'); }).catch(function(){});
+        relayCall('DELETE', '?no=eq.' + encodeURIComponent(no), '', function(res){
+          cset((res && res.ok) ? 'ok' : 'err', (res && res.ok) ? '已同步' : '同步失败');
+        });
       }
     }, 600);
   }
 
   function syncAllCloud(){
-    if (!CLOUD_ON || !CL) return;
+    if (!relayUp) return;
     var rows = Object.keys(seen).map(function(k){ return { no: k, n: cnt(k) }; })
                       .filter(function(r){ return r.n > 0; });
     if (!rows.length) return;
-    CL.database.from('kp_seen').upsert(rows, { onConflict: 'no' })
-      .then(function(res){
-        cset((res && res.error) ? 'err' : 'ok',
-             (res && res.error) ? '同步失败' : ('已同步 ' + rows.length + ' 集'));
-      }).catch(function(){ cset('err', '同步失败'); });
+    relayCall('POST', '', JSON.stringify(rows), function(res){
+      cset((res && res.ok) ? 'ok' : 'err',
+           (res && res.ok) ? ('已同步 ' + rows.length + ' 集') : '同步失败');
+    });
   }
 
   function clearCloud(){
-    if (!CLOUD_ON || !CL) return;
-    CL.database.from('kp_seen').delete().neq('no', '')
-      .then(function(){ cset('ok', '云端已清空'); })
-      .catch(function(){ cset('err', '云端清空失败'); });
-  }
-
-  var upd = document.getElementById('upd');
-  if (upd){
-    try { if (localStorage.getItem('amc10_upd_off') === '1') upd.classList.add('gone'); } catch(e){}
-    var ux = document.getElementById('updX');
-    if (ux) ux.addEventListener('click', function(){
-      upd.classList.add('gone');
-      try { localStorage.setItem('amc10_upd_off', '1'); } catch(e){}
+    if (!relayUp) return;
+    relayCall('DELETE', '?no=not.is.null', '', function(res){
+      cset((res && res.ok) ? 'ok' : 'err', (res && res.ok) ? '云端已清空' : '云端清空失败');
     });
   }
 
   paint();
   apply();
-  initCloud();
+  startRelay();
 
   // 键盘：/ 或 Ctrl+K 聚焦搜索，Esc 清空/关闭
   document.addEventListener('keydown', function(e){
