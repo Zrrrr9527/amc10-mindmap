@@ -523,22 +523,22 @@ window.__EP = (function(){
     var a2 = Math.atan2(nx[1]-v[1], nx[0]-v[0]);
     var lo = Math.min(a1, a2), hi = Math.max(a1, a2);
     if (hi - lo > Math.PI){ var t2 = lo; lo = hi; hi = t2 + 2*Math.PI; }
-    S.arc(v[0], v[1], 0.30, lo, hi, {c:'#fbbf24', w:2.4});
+    S.arc(v[0], v[1], 0.24, lo, hi, {c:'#fbbf24', w:2.4});
     var inner = 180 * (n - 2) / n;
-    S.label(v[0] + 0.46 * Math.cos((lo+hi)/2), v[1] + 0.46 * Math.sin((lo+hi)/2),
+    S.label(v[0] + 0.40 * Math.cos((lo+hi)/2), v[1] + 0.40 * Math.sin((lo+hi)/2),
             inner.toFixed(0) + '°', {c:'#fbbf24', size:13, bold:true});
 
     // 外角：延长前一条边，画出转角
-    var extra = 0.34;
+    var extra = 0.50;
     var ux = (v[0]-pr[0]) / Math.hypot(v[0]-pr[0], v[1]-pr[1]);
     var uy = (v[1]-pr[1]) / Math.hypot(v[0]-pr[0], v[1]-pr[1]);
-    S.line(v[0], v[1], v[0] + ux*extra, v[1] + uy*extra, {c:'#34d399', w:2, dash:[5,4]});
+    S.line(v[0], v[1], v[0] + ux*extra, v[1] + uy*extra, {c:'rgba(52,211,153,.75)', w:1.8, dash:[6,4]});
     var a3 = Math.atan2(uy, ux);
     var l2 = Math.min(a3, a2), h2 = Math.max(a3, a2);
     if (h2 - l2 > Math.PI){ var t3 = l2; l2 = h2; h2 = t3 + 2*Math.PI; }
-    S.arc(v[0], v[1], 0.52, l2, h2, {c:'#34d399', w:1.8});
-    S.label(v[0] + 0.70 * Math.cos((l2+h2)/2), v[1] + 0.70 * Math.sin((l2+h2)/2),
-            (360/n).toFixed(0) + '°', {c:'#34d399', size:12});
+    S.arc(v[0], v[1], 0.34, l2, h2, {c:'#34d399', w:1.8});
+    S.label(v[0] + 0.56 * Math.cos((l2+h2)/2), v[1] + 0.56 * Math.sin((l2+h2)/2),
+            '外 ' + (360/n).toFixed(0) + '°', {c:'#34d399', size:12});
 
     // 圆心到每顶点的半径，帮助看出「分成 n 个等腰三角形」
     if (n <= 8){
