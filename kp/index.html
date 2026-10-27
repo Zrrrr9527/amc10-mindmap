@@ -60,6 +60,21 @@ h1 em{font-style:normal;color:var(--sky)}
 .pnum b{color:var(--ink)}
 .pnum .r{color:#fbbf24}
 .pnum .l{color:var(--sky);cursor:pointer;border-bottom:1px dashed rgba(125,211,252,.45);font-weight:700}
+.cstat{display:inline-flex;align-items:center;gap:5px;margin-left:11px;font-size:11px;
+  color:var(--ink3);font-weight:600;font-style:normal;vertical-align:1px}
+.cstat i{width:7px;height:7px;border-radius:50%;background:#5a6f8a;display:inline-block;flex:0 0 auto}
+.cstat.ok i{background:#4fd1c5;box-shadow:0 0 0 3px rgba(79,209,197,.16)}
+.cstat.err i{background:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,.16)}
+.cstat.on{color:var(--ink2)}
+
+/* 旧版顶部「去新版」提示条（仅非云版出现，措辞按学生视角写） */
+.upd{display:flex;align-items:center;gap:10px;margin-bottom:15px;padding:10px 13px;
+  border-radius:11px;background:rgba(79,209,197,.09);border:1px solid rgba(79,209,197,.26);
+  font-size:12.5px;color:#8ee9dd;line-height:1.55}
+.upd a{color:#5eead4;font-weight:700;text-decoration:none;border-bottom:1px dashed currentColor;white-space:nowrap}
+.upd button{margin-left:auto;background:none;border:none;color:var(--ink3);font-size:15px;
+  cursor:pointer;padding:0 2px;font-family:inherit;flex:0 0 auto}
+.upd.gone{display:none}
 
 /* 工具栏 */
 .tools{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
@@ -199,6 +214,7 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
 </head>
 <body>
 <div class="wrap">
+<div class="upd" id="upd"><span>进度已改为云端保存，换手机或换电脑都不会丢。</span><a href="https://amc10-kp.app.workbuddy.host/?sharecode=63GNEIHANS" target="_blank" rel="noopener">打开新版 →</a><button id="updX" aria-label="关闭">✕</button></div>
   <header>
     <h1>AMC10 知识点 <em>索引</em></h1>
     <p class="sum">
@@ -211,6 +227,7 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
       <p class="pnum">
         已看 <b id="pdone">0</b> / 63 集 ｜ 待看 <span class="l" id="pnone">63 集</span>
         ｜ 看过两遍以上 <b class="r" id="prep">0</b>
+        <span class="cstat off" id="cstat"><i></i><span id="cstxt">仅本机</span></span>
       </p>
     </div>
 
@@ -1264,6 +1281,7 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
     else { seen[no] = { n: n, t: d > 0 ? Date.now() : tms(no) }; }
     save(); paint(); apply();
     if (d > 0) flash(no);
+    pushOne(no);
   }
 
   function flash(no){
@@ -1335,7 +1353,14 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
     var m = sortby ? sortby.value : 'no';
     if (m === 'last'){
       var a = cards.map(function(c, i){ return { c: c, t: tms(c.getAttribute('data-no')), i: i }; });
-      a.sort(function(x, y){ return (y.t - x.t) || (x.i - y.i); });
+      var anyT = false;
+      a.forEach(function(o){ if (o.t > 0) anyT = true; });
+      // 云端只存次数不存时间：别的设备上拉不到时间是正常的，退化成「看得多的在前」
+      a.sort(anyT
+        ? function(x, y){ return (y.t - x.t) || (x.i - y.i); }
+        : function(x, y){
+            return (cnt(y.c.getAttribute('data-no')) - cnt(x.c.getAttribute('data-no'))) || (x.i - y.i);
+          });
       a.forEach(function(o, r){ o.c.style.order = r; });
     } else if (m === 'gap'){
       cards.forEach(function(c, i){
@@ -1484,18 +1509,122 @@ footer .lnk2{color:var(--ink3);margin-left:7px}
       else if (v && typeof v === 'object'){ c = v.n | 0; t = v.t | 0; }
       if (c > 0){ seen[k] = { n: c, t: t || Date.now() }; n++; }
     });
-    save(); paint(); apply();
+    save(); paint(); apply(); syncAllCloud();
     msg('导入 ' + n + ' 条');
   });
 
   var btnClr = document.getElementById('btnClr');
   if (btnClr) btnClr.addEventListener('click', function(){
     if (!window.confirm('把全部计数清空？这一步不能撤销。')) return;
-    seen = {}; save(); paint(); apply(); msg('已清零');
+    seen = {}; save(); paint(); apply(); clearCloud(); msg('已清零');
   });
+
+
+  /* ---------------- 云同步（跨设备共享次数） ---------------- */
+  var CL = null, CLOUD_ON = false, pushTimer = null;
+
+  function cset(state, text){
+    var el = document.getElementById('cstat'), t = document.getElementById('cstxt');
+    if (!el) return;
+    el.className = 'cstat ' + state;
+    if (t) t.textContent = text;
+  }
+
+  function initCloud(){
+    var cfg = window.KP_CLOUD;
+    if (!cfg || !window.WorkBuddyCloud || !window.WorkBuddyCloud.createWorkBuddyCloud){
+      cset('off', '仅本机');
+      return;
+    }
+    try {
+      CL = WorkBuddyCloud.createWorkBuddyCloud({
+        endpoint: cfg.endpoint,
+        oauthRelayBaseUrl: cfg.oauthRelayBaseUrl,
+        publishableKey: cfg.publishableKey
+      });
+      CLOUD_ON = true;
+      cset('ok', '连接中…');
+      pullCloud(true);
+      setInterval(function(){ if (!document.hidden) pullCloud(false); }, 20000);
+      document.addEventListener('visibilitychange', function(){
+        if (!document.hidden) pullCloud(false);
+      });
+    } catch(e){
+      CLOUD_ON = false;
+      cset('err', '同步未启动');
+    }
+  }
+
+  function pullCloud(first){
+    if (!CLOUD_ON || !CL) return;
+    CL.database.from('kp_seen').select('no,n').then(function(res){
+      if (res && res.error){ cset('err', '同步失败'); return; }
+      var rows = (res && res.data) || [];
+      var changed = false;
+      rows.forEach(function(r){
+        var no = r.no, n = r.n | 0;
+        if (!no || n <= 0) return;
+        if (cnt(no) < n){
+          if (!seen[no]) seen[no] = { n: n, t: 0 };
+          else seen[no].n = n;        // 云端更全，只补次数，不覆盖本机时间
+          changed = true;
+        }
+      });
+      if (changed){ save(); paint(); apply(); }
+      cset('ok', '已同步 ' + rows.length + ' 集');
+      if (first) syncAllCloud();      // 本机可能比云端多，推一次
+    }).catch(function(){ cset('err', '同步失败'); });
+  }
+
+  function pushOne(no){
+    if (!CLOUD_ON || !CL) return;
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(function(){
+      var n = cnt(no);
+      if (n > 0){
+        CL.database.from('kp_seen').upsert([{ no: no, n: n }], { onConflict: 'no' })
+          .then(function(res){
+            cset((res && res.error) ? 'err' : 'ok', (res && res.error) ? '同步失败' : '已同步');
+          }).catch(function(){ cset('err', '同步失败'); });
+      } else {
+        CL.database.from('kp_seen').delete().eq('no', no)
+          .then(function(){ cset('ok', '已同步'); }).catch(function(){});
+      }
+    }, 600);
+  }
+
+  function syncAllCloud(){
+    if (!CLOUD_ON || !CL) return;
+    var rows = Object.keys(seen).map(function(k){ return { no: k, n: cnt(k) }; })
+                      .filter(function(r){ return r.n > 0; });
+    if (!rows.length) return;
+    CL.database.from('kp_seen').upsert(rows, { onConflict: 'no' })
+      .then(function(res){
+        cset((res && res.error) ? 'err' : 'ok',
+             (res && res.error) ? '同步失败' : ('已同步 ' + rows.length + ' 集'));
+      }).catch(function(){ cset('err', '同步失败'); });
+  }
+
+  function clearCloud(){
+    if (!CLOUD_ON || !CL) return;
+    CL.database.from('kp_seen').delete().neq('no', '')
+      .then(function(){ cset('ok', '云端已清空'); })
+      .catch(function(){ cset('err', '云端清空失败'); });
+  }
+
+  var upd = document.getElementById('upd');
+  if (upd){
+    try { if (localStorage.getItem('amc10_upd_off') === '1') upd.classList.add('gone'); } catch(e){}
+    var ux = document.getElementById('updX');
+    if (ux) ux.addEventListener('click', function(){
+      upd.classList.add('gone');
+      try { localStorage.setItem('amc10_upd_off', '1'); } catch(e){}
+    });
+  }
 
   paint();
   apply();
+  initCloud();
 
   // 键盘：/ 或 Ctrl+K 聚焦搜索，Esc 清空/关闭
   document.addEventListener('keydown', function(e){
