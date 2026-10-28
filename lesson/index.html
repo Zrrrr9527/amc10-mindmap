@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f9fc">
+<title>AMC10 回顾视频 · 每课一支</title>
+<style>
+  :root{
+    --ink:#0f172a; --sub:#64748b; --line:#e2e8f0; --bg:#f7f9fc; --card:#fff;
+    --brand:#1d4ed8; --ok:#0f9d58; --gold-bg:#3f3116; --gold:#e7c179;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.6;
+    font-family:"PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    padding-bottom:40px}
+  header{padding:20px 16px 14px;background:linear-gradient(165deg,#eef4ff,#f7f9fc 72%);
+    border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{margin:0 0 4px;font-size:19px;letter-spacing:.4px}
+  .sub{color:var(--sub);font-size:12.5px}
+  .bar{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .track{flex:1;height:8px;border-radius:99px;background:#e3eaf5;overflow:hidden}
+  .fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#3b82f6,#0f9d58);transition:width .4s}
+  .pct{font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pct b{color:var(--ink);font-size:14px}
+  .filters{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .filters button{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--sub);
+    padding:5px 13px;border-radius:99px;font-size:12.5px;font-family:inherit;cursor:pointer}
+  .filters button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  main{max-width:760px;margin:0 auto;padding:14px 16px 0;display:flex;flex-direction:column;gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(15,23,42,.04)}
+  .head{display:flex;gap:10px;padding:12px 14px;cursor:pointer;align-items:flex-start}
+  .no{flex:0 0 auto;font-weight:700;font-size:13px;color:var(--brand);padding-top:1px;white-space:nowrap}
+  .hd{flex:1;min-width:0}
+  .hd h3{margin:0;font-size:14.5px;line-height:1.45;font-weight:600}
+  .meta{margin-top:5px;font-size:11.5px;color:var(--sub);font-variant-numeric:tabular-nums}
+  .meta .sep{margin:0 5px;color:#cbd5e1}
+  .state{flex:0 0 auto;text-align:right;font-size:11.5px;color:var(--sub);white-space:nowrap}
+  .state .n{display:block;font-size:13px;font-weight:600;color:var(--ok)}
+  .state .n.zero{color:#94a3b8;font-weight:400}
+  .chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+  .chip{font-size:10.5px;padding:0 7px;border-radius:99px;border:1px solid;line-height:1.7}
+  .quote{margin:0 14px 12px;padding:8px 11px;border-radius:9px;background:var(--gold-bg);
+    color:var(--gold);font-size:12px;border-left:3px solid #e0a03a}
+  .player{display:none;background:#0b1220}
+  .card.open .player{display:block}
+  .player video{display:block;width:100%;max-height:78vh;background:#000}
+  .hint{padding:0 14px 11px;font-size:11.5px;color:var(--sub)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;
+    background:#0f172a;color:#fff;font-size:13px;padding:9px 18px;border-radius:99px;
+    transition:.25s;pointer-events:none;z-index:80}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  .cstat{font-size:11px;color:var(--sub);margin-top:6px}
+  .cstat.err{color:#c2410c}
+  footer{max-width:760px;margin:18px auto 0;padding:0 16px;color:var(--sub);font-size:11.5px;text-align:center}
+  #reset{margin-top:10px;background:none;border:1px solid var(--line);color:var(--sub);
+    border-radius:8px;padding:5px 12px;font-size:11.5px;font-family:inherit;cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>AMC10 回顾视频 · 每课一支</h1>
+    <div class="sub">竖屏 1080×1920 ｜ 知识点展开 + 金句 ｜ 看完一段自动记一次</div>
+    <div class="bar">
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <div class="pct"><b id="done">0</b> / 18 已看 ｜ 共 <span id="times">0</span> 次</div>
+    </div>
+    <div class="filters" id="filters"><button data-f="" class="on">全部</button><button data-f="代数" class="">代数</button><button data-f="几何" class="">几何</button><button data-f="数列" class="">数列</button><button data-f="数论" class="">数论</button><button data-f="计数" class="">计数</button></div>
+    <div class="cstat" id="cstat">连接中…</div>
+  </div>
+</header>
+
+<main id="list">
+<article class="card" data-no="1" data-mod="代数" data-src="video/L01.mp4">
+  <div class="head">
+    <div class="no">第 1 课</div>
+    <div class="hd">
+      <h3>因式分解第二讲</h3>
+      <div class="meta">2026-07-15<span class="sep">·</span>3:50<span class="sep">·</span>上次作业 —</div>
+      <div class="chips"><span class="chip" style="color:#2563eb;border-color:#2563eb55">代数</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">起点：准确率 / 第一步 / 速度，三条待盯</div>
+  <blockquote class="quote">多项式除法不只为求商：余数定理常能把复杂计算变成一次代入。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L01.jpg"></video></div>
+</article>
+<article class="card" data-no="2" data-mod="代数" data-src="video/L02.mp4">
+  <div class="head">
+    <div class="no">第 2 课</div>
+    <div class="hd">
+      <h3>坐标系与函数第一讲</h3>
+      <div class="meta">2026-07-28<span class="sep">·</span>3:36<span class="sep">·</span>上次作业 —</div>
+      <div class="chips"><span class="chip" style="color:#2563eb;border-color:#2563eb55">代数</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">练的是把文字条件翻译成数学关系</div>
+  <blockquote class="quote">几何条件写成方程，方程再反过来解释几何；两边来回翻译，才是坐标法的优势。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L02.jpg"></video></div>
+</article>
+<article class="card" data-no="3" data-mod="代数" data-src="video/L03.mp4">
+  <div class="head">
+    <div class="no">第 3 课</div>
+    <div class="hd">
+      <h3>中点 · 对称点 · 直线 · 定比分点</h3>
+      <div class="meta">2026-07-30<span class="sep">·</span>3:14<span class="sep">·</span>上次作业 —</div>
+      <div class="chips"><span class="chip" style="color:#2563eb;border-color:#2563eb55">代数</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">五步书写法：这一课最值钱的一条</div>
+  <blockquote class="quote">坐标几何第一步：能画图就别只盯着方程，能列式就别只靠目测。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L03.jpg"></video></div>
+</article>
+<article class="card" data-no="4" data-mod="代数 几何" data-src="video/L04.mp4">
+  <div class="head">
+    <div class="no">第 4 课</div>
+    <div class="hd">
+      <h3>直线与圆收尾 · 本轮正式讲圆</h3>
+      <div class="meta">2026-08-06<span class="sep">·</span>3:15<span class="sep">·</span>上次作业 只错 1 题（开课最佳）</div>
+      <div class="chips"><span class="chip" style="color:#2563eb;border-color:#2563eb55">代数</span><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">切线：圆心到直线的距离 = 半径</div>
+  <blockquote class="quote">切线万能钥匙：圆心到切线的距离等于半径。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L04.jpg"></video></div>
+</article>
+<article class="card" data-no="5" data-mod="几何 数列" data-src="video/L05.mp4">
+  <div class="head">
+    <div class="no">第 5 课</div>
+    <div class="hd">
+      <h3>圆与切线巩固 + 数列入门</h3>
+      <div class="meta">2026-08-09<span class="sep">·</span>2:24<span class="sep">·</span>上次作业 —</div>
+      <div class="chips"><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span><span class="chip" style="color:#7c3aed;border-color:#7c3aed55">数列</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">上课时间改到早上，状态没调整过来</div>
+  <blockquote class="quote">拿到数列先问：差是常数，还是比是常数？</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L05.jpg"></video></div>
+</article>
+<article class="card" data-no="6" data-mod="数列" data-src="video/L06.mp4">
+  <div class="head">
+    <div class="no">第 6 课</div>
+    <div class="hd">
+      <h3>等差数列</h3>
+      <div class="meta">2026-08-20<span class="sep">·</span>3:02<span class="sep">·</span>上次作业 作业匆忙（开学日）</div>
+      <div class="chips"><span class="chip" style="color:#7c3aed;border-color:#7c3aed55">数列</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">数列慢，是符号体系不熟，不是理解力</div>
+  <blockquote class="quote">已知首项和公差，用 aₙ = a₁ + (n−1)d；已知首尾，就别绕远路。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L06.jpg"></video></div>
+</article>
+<article class="card" data-no="7" data-mod="数列" data-src="video/L07.mp4">
+  <div class="head">
+    <div class="no">第 7 课</div>
+    <div class="hd">
+      <h3>数列收尾：等差 + 等比</h3>
+      <div class="meta">2026-08-27<span class="sep">·</span>3:38<span class="sep">·</span>上次作业 2 题重做全对</div>
+      <div class="chips"><span class="chip" style="color:#7c3aed;border-color:#7c3aed55">数列</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">「自己能做完」第一次被证实</div>
+  <blockquote class="quote">拿到数列先问：差是常数，还是比是常数？</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L07.jpg"></video></div>
+</article>
+<article class="card" data-no="8" data-mod="几何" data-src="video/L08.mp4">
+  <div class="head">
+    <div class="no">第 8 课</div>
+    <div class="hd">
+      <h3>全等三角形</h3>
+      <div class="meta">2026-09-05<span class="sep">·</span>3:28<span class="sep">·</span>上次作业 63%（19 题 · 错 7）</div>
+      <div class="chips"><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">首次确认：几何是强项</div>
+  <blockquote class="quote">陌生几何题不可怕，没认出熟悉的模型才可怕。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L08.jpg"></video></div>
+</article>
+<article class="card" data-no="9" data-mod="几何" data-src="video/L09.mp4">
+  <div class="head">
+    <div class="no">第 9 课</div>
+    <div class="hd">
+      <h3>四边形收尾 + 真题训练开始</h3>
+      <div class="meta">2026-09-10<span class="sep">·</span>3:07<span class="sep">·</span>上次作业 讲义题基本无错</div>
+      <div class="chips"><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">讲义稳、真题卡 —— 分水岭</div>
+  <blockquote class="quote">四边形证明常连对角线：把复杂图形拆成两个熟悉的三角形。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L09.jpg"></video></div>
+</article>
+<article class="card" data-no="10" data-mod="几何" data-src="video/L10.mp4">
+  <div class="head">
+    <div class="no">第 10 课</div>
+    <div class="hd">
+      <h3>L7 + L8 两讲并一节</h3>
+      <div class="meta">2026-09-17<span class="sep">·</span>3:26<span class="sep">·</span>上次作业 65%（17 题全完成）</div>
+      <div class="chips"><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">做完了，但没做对更多</div>
+  <blockquote class="quote">题目越长，越要先找条件之间的关系；文字多不代表计算多。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L10.jpg"></video></div>
+</article>
+<article class="card" data-no="11" data-mod="数论" data-src="video/L11.mp4">
+  <div class="head">
+    <div class="no">第 11 课</div>
+    <div class="hd">
+      <h3>数论 L9 + L10</h3>
+      <div class="meta">2026-09-24<span class="sep">·</span>4:03<span class="sep">·</span>上次作业 20 题未完成</div>
+      <div class="chips"><span class="chip" style="color:#c2410c;border-color:#c2410c55">数论</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">符号抽象弱项，首次验证</div>
+  <blockquote class="quote">数论先定目标：整除看质因数，余数看同余，个位看模 10，周期看循环。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L11.jpg"></video></div>
+</article>
+<article class="card" data-no="12" data-mod="数论" data-src="video/L12.mp4">
+  <div class="head">
+    <div class="no">第 12 课</div>
+    <div class="hd">
+      <h3>数论习题课</h3>
+      <div class="meta">2026-10-01<span class="sep">·</span>3:11<span class="sep">·</span>上次作业 跨假期仍未补完</div>
+      <div class="chips"><span class="chip" style="color:#c2410c;border-color:#c2410c55">数论</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">「独立确定方向」第一次出现</div>
+  <blockquote class="quote">求整数解先看奇偶性，再看模数，最后才考虑逐个枚举。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L12.jpg"></video></div>
+</article>
+<article class="card" data-no="13" data-mod="计数" data-src="video/L13.mp4">
+  <div class="head">
+    <div class="no">第 13 课</div>
+    <div class="hd">
+      <h3>计数原理（组合开课）</h3>
+      <div class="meta">2026-10-05<span class="sep">·</span>2:58<span class="sep">·</span>上次作业 70%（20 题全完成）</div>
+      <div class="chips"><span class="chip" style="color:#0e7490;border-color:#0e749055">计数</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">三连升；纯讲解易走神</div>
+  <blockquote class="quote">分类必须不重不漏；同一种情况被数了两次，公式再漂亮也没用。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L13.jpg"></video></div>
+</article>
+<article class="card" data-no="14" data-mod="计数" data-src="video/L14.mp4">
+  <div class="head">
+    <div class="no">第 14 课</div>
+    <div class="hd">
+      <h3>计数技巧 + 组合恒等式</h3>
+      <div class="meta">2026-10-12<span class="sep">·</span>3:52<span class="sep">·</span>上次作业 未完成（校内考试）</div>
+      <div class="chips"><span class="chip" style="color:#0e7490;border-color:#0e749055">计数</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">基础 15 讲收口</div>
+  <blockquote class="quote">做题训练的是解题能力，复盘训练的是识别能力；两者缺一不可。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L14.jpg"></video></div>
+</article>
+<article class="card" data-no="15" data-mod="代数" data-src="video/L15.mp4">
+  <div class="head">
+    <div class="no">第 15 课</div>
+    <div class="hd">
+      <h3>代数恒等变形</h3>
+      <div class="meta">2026-10-15<span class="sep">·</span>3:55<span class="sep">·</span>上次作业 60%（交 5 / 10）</div>
+      <div class="chips"><span class="chip" style="color:#2563eb;border-color:#2563eb55">代数</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">状态第一次「一般」→ 归因是负荷</div>
+  <blockquote class="quote">代数变形第一原则：朝目标的样子凑，别为展开而展开。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L15.jpg"></video></div>
+</article>
+<article class="card" data-no="16" data-mod="几何" data-src="video/L16.mp4">
+  <div class="head">
+    <div class="no">第 16 · 17 课</div>
+    <div class="hd">
+      <h3>相似三角形与导角</h3>
+      <div class="meta">2026-10-18 / 19<span class="sep">·</span>3:52<span class="sep">·</span>上次作业 100%（5 题全对）</div>
+      <div class="chips"><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">两天连上，讲的是同一讲</div>
+  <blockquote class="quote">相似三角形的核心不是角相等，而是对应边成比例。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L16.jpg"></video></div>
+</article>
+<article class="card" data-no="18" data-mod="几何" data-src="video/L18.mp4">
+  <div class="head">
+    <div class="no">第 18 课</div>
+    <div class="hd">
+      <h3>相似模型 + 圆</h3>
+      <div class="meta">2026-10-22<span class="sep">·</span>4:02<span class="sep">·</span>上次作业 未上传 → 补交后全对</div>
+      <div class="chips"><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">圆还不熟；一课两讲第 3 次</div>
+  <blockquote class="quote">圆中出现直角、等腰或平行关系时，先寻找直径、半径、弦和圆周角之间的联系。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L18.jpg"></video></div>
+</article>
+<article class="card" data-no="19" data-mod="几何 数论" data-src="video/L19.mp4">
+  <div class="head">
+    <div class="no">第 19 课</div>
+    <div class="hd">
+      <h3>几何收尾 + 数论入门</h3>
+      <div class="meta">2026-10-26<span class="sep">·</span>4:07<span class="sep">·</span>上次作业 已降至 5 题</div>
+      <div class="chips"><span class="chip" style="color:#0f9d58;border-color:#0f9d5855">几何</span><span class="chip" style="color:#c2410c;border-color:#c2410c55">数论</span></div>
+    </div>
+    <div class="state"><span class="n zero">未看</span></div>
+  </div>
+  <div class="hint">几何收口，概率已排上</div>
+  <blockquote class="quote">看到中点，想比例与中位线；看到圆心，想半径与垂直；看到整数，想奇偶与同余。</blockquote>
+  <div class="player"><video controls playsinline preload="none" poster="video/L19.jpg"></video></div>
+</article></main>
+
+<footer>
+  共 18 支 · 家长可用 <code>?view=1</code> 只看不计数<br>
+  进度同时存在本机与云端，换设备也能看到
+  <div><button id="reset">清零（仅 ?view=1 可用）</button></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var RELAY_ORIGIN = 'https://amc10-kp.app.workbuddy.host';
+  var RELAY_SRC    = RELAY_ORIGIN + '/relay.html?sharecode=63GNEIHANS&v=3';
+  var TBL          = 'lesson_seen';
+  var KEY          = 'amc10_lesson_seen_v1';
+  var READONLY     = /[?&]view=1/.test(location.search);
+  var THRESH       = 0.9;              // 播到 90% 算看完一次
+  var counts = {}, byId = {}, relayFrame = null, relayUp = false, seq = 0,
+      pend = {}, started = false, pushT = {}, openId = null;
+
+  document.querySelectorAll('.card').forEach(function(c){ byId[c.dataset.no] = c; });
+  try { counts = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ counts = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(counts)); } catch(e){} }
+  function cnt(id){ return (counts[id] && counts[id].n) || 0; }
+  function pad(x){ return (x < 10 ? '0' : '') + x; }
+  function fmtT(t){
+    if (!t) return '';
+    var d = new Date(t);
+    return (d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+  function toast(s){
+    var el = document.getElementById('toast');
+    el.textContent = s; el.classList.add('on');
+    clearTimeout(el._t); el._t = setTimeout(function(){ el.classList.remove('on'); }, 1800);
+  }
+  function cset(cls, text){
+    var el = document.getElementById('cstat');
+    el.className = 'cstat' + (cls ? ' ' + cls : ''); el.textContent = text;
+  }
+
+  function paint(){
+    var done = 0, times = 0;
+    Object.keys(byId).forEach(function(id){
+      var c = byId[id], n = cnt(id), t = counts[id] && counts[id].t;
+      times += n; if (n > 0) done++;
+      var el = c.querySelector('.state');
+      if (n > 0){
+        el.innerHTML = '<span class="n">已看 ' + n + ' 次</span>' + fmtT(t);
+        c.classList.add('seen');
+      } else {
+        el.innerHTML = '<span class="n zero">未看</span>';
+        c.classList.remove('seen');
+      }
+    });
+    document.getElementById('done').textContent = done;
+    document.getElementById('times').textContent = times;
+    document.querySelector('.fill').style.width = (done / Object.keys(byId).length * 100) + '%';
+  }
+
+  /* ── 记一次 ── */
+  var lastCount = {};
+  function markView(id){
+    if (READONLY) return;
+    var now = Date.now();
+    counts[id] = { n: cnt(id) + 1, t: now };
+    save(); paint(); pushOne(id);
+    toast('记下：' + byId[id].querySelector('h3').textContent + ' 已看 ' + cnt(id) + ' 次');
+  }
+
+  /* ── 播放器：点卡片展开，播到 90% 记一次 ── */
+  document.querySelectorAll('.card').forEach(function(card){
+    card.querySelector('.head').addEventListener('click', function(){
+      var id = card.dataset.no;
+      if (card.classList.contains('open')){
+        card.classList.remove('open');
+        var v0 = card.querySelector('video'); v0.pause();
+        return;
+      }
+      if (openId && openId !== id && byId[openId]){
+        var prev = byId[openId]; prev.classList.remove('open');
+        var pv = prev.querySelector('video'); if (pv) pv.pause();
+      }
+      card.classList.add('open'); openId = id;
+      var v = card.querySelector('video');
+      if (!v.src) v.src = card.dataset.src;
+      if (!READONLY) v.play().catch(function(){});
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    var v = card.querySelector('video'), id = card.dataset.no;
+    var counted = false;
+    v.addEventListener('timeupdate', function(){
+      if (READONLY || !v.duration) return;
+      var p = v.currentTime / v.duration;
+      if (p < 0.25) counted = false;            // 回退到开头 → 允许再记一次
+      if (p >= THRESH && !counted){ counted = true; markView(id); }
+    });
+    v.addEventListener('ended', function(){
+      if (READONLY) return;
+      if (!counted){ counted = true; markView(id); }
+    });
+  });
+
+  /* ── 云同步（经同源中继）── */
+  function relayCall(method, qs, body, cb){
+    var w = relayFrame && relayFrame.contentWindow;
+    if (!relayUp || !w){ if (cb) cb({ ok: false, err: 'no-relay' }); return; }
+    var id = 'l' + (++seq);
+    pend[id] = cb;
+    setTimeout(function(){ if (pend[id]){ delete pend[id]; if (cb) cb({ ok: false, err: 'timeout' }); } }, 9000);
+    w.postMessage({ t: 'kp', tbl: TBL, id: id, method: method, qs: qs || '', body: body || '' }, RELAY_ORIGIN);
+  }
+  function onMsg(e){
+    if (e.origin !== RELAY_ORIGIN) return;
+    var d = e.data || {};
+    if (d.t !== 'kp') return;
+    if (d.ready){ relayUp = true; cset('', '连接中…'); pull(true); return; }
+    var cb = pend[d.id];
+    if (cb){ delete pend[d.id]; cb(d); }
+  }
+  function pull(first){
+    if (!relayUp) return;
+    relayCall('GET', '?select=no,n,t', '', function(res){
+      if (!res || !res.ok){ cset('err', '云端同步失败（本机照常记录）'); return; }
+      var rows = [];
+      try { rows = JSON.parse(res.body) || []; } catch(e){ cset('err', '云端同步失败'); return; }
+      var changed = false;
+      rows.forEach(function(r){
+        var no = r.no, n = r.n | 0, rt = r.t ? Date.parse(r.t) : 0;
+        if (!no || n <= 0 || !byId[no]) return;          // 不认识的编号直接丢
+        var lc = counts[no] || { n: 0, t: 0 };
+        var nn = Math.max(n, lc.n), nt = Math.max(rt || 0, lc.t || 0);
+        if (nn !== lc.n || nt !== lc.t){ counts[no] = { n: nn, t: nt }; changed = true; }
+      });
+      if (changed){ save(); }
+      paint();
+      cset('', '云端 ' + rows.length + ' 条' + (READONLY ? ' · 只看模式' : ''));
+      if (first && !READONLY) syncAll();
+    });
+  }
+  function pushOne(id){
+    if (!relayUp) return;
+    clearTimeout(pushT[id]);
+    pushT[id] = setTimeout(function(){
+      relayCall('POST', '', JSON.stringify([{ no: id, n: cnt(id),
+          t: new Date((counts[id] && counts[id].t) || Date.now()).toISOString() }]),
+        function(res){ cset(res && res.ok ? '' : 'err', res && res.ok ? '已同步' : '同步失败（本机已记）'); });
+    }, 700);
+  }
+  function syncAll(){
+    if (!relayUp) return;
+    var rows = Object.keys(counts).filter(function(k){ return cnt(k) > 0 && byId[k]; })
+      .map(function(k){ return { no: k, n: cnt(k),
+        t: new Date((counts[k] && counts[k].t) || Date.now()).toISOString() }; });
+    if (!rows.length) return;
+    relayCall('POST', '', JSON.stringify(rows), function(res){
+      if (res && res.ok) cset('', '已同步 ' + rows.length + ' 条');
+    });
+  }
+  function startRelay(){
+    if (started) return; started = true;
+    window.addEventListener('message', onMsg);
+    var f = document.createElement('iframe');
+    f.src = RELAY_SRC; f.setAttribute('aria-hidden', 'true'); f.setAttribute('tabindex', '-1');
+    f.style.cssText = 'position:absolute;width:1px;height:1px;border:0;left:-9999px;top:-9999px';
+    document.body.appendChild(f); relayFrame = f;
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) pull(false); });
+    setInterval(function(){ if (!document.hidden) pull(false); }, 30000);
+    setTimeout(function(){ if (!relayUp) cset('err', '云端未连上 —— 本机照常记录'); }, 12000);
+  }
+
+  /* ── 模块筛选 ── */
+  var btns = document.querySelectorAll('.filters button');
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      btns.forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      var f = b.dataset.f;
+      document.querySelectorAll('.card').forEach(function(c){
+        c.style.display = (!f || c.dataset.mod.split(' ').indexOf(f) >= 0) ? '' : 'none';
+      });
+    });
+  });
+
+  /* ── 清零（仅只看模式）── */
+  var rbtn = document.getElementById('reset');
+  if (!READONLY){ rbtn.style.display = 'none'; }
+  rbtn.addEventListener('click', function(){
+    if (!window.confirm('把全部观看记录清零？本机和云端一起清，不能撤销。')) return;
+    relayCall('DELETE', '?no=not.is.null', '', function(){
+      try { localStorage.removeItem(KEY); } catch(e){}
+      counts = {}; save(); paint();
+      toast('已清零');
+    });
+  });
+
+  paint(); startRelay();
+  // 清掉历史遗留的陌生编号
+  var dirty = Object.keys(counts).filter(function(k){ return !byId[k]; });
+  if (dirty.length){ dirty.forEach(function(k){ delete counts[k]; }); save(); }
+})();
+</script>
+</body>
+</html>
