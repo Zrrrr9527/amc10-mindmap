@@ -175,6 +175,8 @@ var UNITS = window.UNITS || [], FIGS = window.FIGS || {};
 var MODS = window.MODS || [];
 var KEY = 'amc_jinju_v1';
 var counts = {}, filter = 'all', modFilter = '';
+// 家长用 ?view=1 打开：只看进度，点开任何一条都不计数
+var READONLY = /[?&]view=1(&|$)/.test(location.search);
 
 /* ── 本地计数 ── */
 function load(){
@@ -237,7 +239,7 @@ function paintStat(){
   document.getElementById('pnum').textContent = done;
   document.getElementById('pbar').style.width = (tot ? done * 100 / tot : 0) + '%';
   document.getElementById('pleft').textContent = done >= tot ? '全部过完了' : ('还剩 ' + (tot - done) + ' 条');
-  document.getElementById('hsub').textContent = '动画 ' + UNITS.filter(function(u){return u.k==='anim'}).length +
+  document.getElementById('hsub').textContent = (READONLY ? '只看模式 · 不计数　' : '') + '动画 ' + UNITS.filter(function(u){return u.k==='anim'}).length +
     ' · 语音 ' + UNITS.filter(function(u){return u.k==='audio'}).length;
   paintLast();
 }
@@ -435,7 +437,7 @@ function buildAudio(u){
 
 /* ── 记一次 ── */
 function markView(id){
-  if (countedThisOpen) return;
+  if (READONLY || countedThisOpen) return;
   countedThisOpen = true;
   counts[id] = { n: cnt(id) + 1, t: Date.now() };
   save();
