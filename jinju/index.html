@@ -37,6 +37,7 @@ svg text{font-family:inherit}
 .chips button{flex:0 0 auto;font-size:12.5px;padding:4px 11px;border-radius:999px;
  border:1px solid var(--line);background:var(--card);color:var(--ink2)}
 .chips button.on{border-color:var(--amber);color:var(--amber);background:var(--amber-s)}
+.chips button.reset{border-color:#d98455;color:#a8532c;background:#fdf0e9}
 .chips button.go{border-color:var(--amber);color:#fff;background:var(--amber)}
 .chips select{flex:0 0 auto;font-size:12.5px;padding:4px 8px;border-radius:999px;
  border:1px solid var(--line);background:var(--card);color:var(--ink2);max-width:150px}
@@ -144,6 +145,7 @@ audio{width:100%;height:38px}
     <button data-f="audio">语音</button>
     <button id="go" class="go">继续没看的 →</button>
     <select id="mod"><option value="">按模块…</option></select>
+    <button id="reset" class="reset" hidden>清零</button>
     <span class="cstat" id="cstat">连接中…</span>
   </div>
 </div></div>
@@ -177,16 +179,18 @@ var KEY = 'amc_jinju_v1';
 var counts = {}, filter = 'all', modFilter = '';
 // 家长用 ?view=1 打开：只看进度，点开任何一条都不计数
 var READONLY = /[?&]view=1(&|$)/.test(location.search);
+var RESET = /[?&]reset=1(&|$)/.test(location.search);   // 清零：本机 + 云端一起清
 
 /* ── 本地计数 ── */
 function load(){
+  if (READONLY){ counts = {}; return; }          // 只看模式：只认云端，不受本机残留影响
   try { counts = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ counts = {}; }
   Object.keys(counts).forEach(function(k){
     var v = counts[k];
     if (typeof v === 'number') counts[k] = { n: v|0, t: 0 };
   });
 }
-function save(){ try { localStorage.setItem(KEY, JSON.stringify(counts)); } catch(e){} }
+function save(){ if (READONLY) return; try { localStorage.setItem(KEY, JSON.stringify(counts)); } catch(e){} }
 function cnt(id){ var v = counts[id]; return v ? (v.n|0) : 0; }
 
 /* ── 渲染 ── */
@@ -488,7 +492,10 @@ function pull(first){
     });
     if (changed){ save(); render(); }
     cset('ok', '云端 ' + rows.length + ' 条');
-    if (first) syncAll();
+    if (first){
+      if (RESET) doReset();
+      else if (!READONLY) syncAll();          // 只看模式不回写，免得把本机残留推上去
+    }
   });
 }
 function pushOne(id){
@@ -510,6 +517,18 @@ function syncAll(){
     cset(res && res.ok ? 'ok' : 'err', res && res.ok ? ('已同步 ' + rows.length + ' 条') : '同步失败');
   });
 }
+var resetting = false;
+function doReset(){
+  if (resetting) return;
+  resetting = true;
+  cset('', '清零中…');
+  relayCall('DELETE', '?no=not.is.null', '', function(res){
+    try { localStorage.removeItem(KEY); } catch(e){}
+    counts = {};
+    var back = READONLY ? '?view=1' : '';
+    setTimeout(function(){ location.replace(location.pathname + back); }, 200);
+  });
+}
 function startRelay(){
   if (started) return; started = true;
   window.addEventListener('message', onMsg);
@@ -527,6 +546,14 @@ load();
 var dirty = Object.keys(counts).filter(function(k){ return !byId[k]; });
 if (dirty.length){ dirty.forEach(function(k){ delete counts[k]; }); save(); }
 render(); startRelay();
+
+var rbtn = document.getElementById('reset');
+if (READONLY){
+  rbtn.hidden = false;
+  rbtn.addEventListener('click', function(){
+    if (window.confirm('把全部计数清零？本机和云端一起清，不能撤销。')) doReset();
+  });
+}
 })();
 </script>
 </body>
