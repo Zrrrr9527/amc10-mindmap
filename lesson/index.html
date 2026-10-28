@@ -412,7 +412,7 @@
       card.classList.add('open'); openId = id;
       var v = card.querySelector('video');
       if (!v.src) v.src = card.dataset.src;
-      if (!READONLY) v.play().catch(function(){});
+      v.play().catch(function(){});     // 只看模式下也允许播放，只是不计数
       card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
