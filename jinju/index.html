@@ -520,7 +520,11 @@ function startRelay(){
   setTimeout(function(){ if (!relayUp) cset('err', '仅本机记录'); }, 12000);
 }
 
-load(); render(); startRelay();
+load();
+// 清掉历史遗留的陌生编号（旧版中继串表时把 kp 的 B08/R01 之类写进了本机）
+var dirty = Object.keys(counts).filter(function(k){ return !byId[k]; });
+if (dirty.length){ dirty.forEach(function(k){ delete counts[k]; }); save(); }
+render(); startRelay();
 })();
 </script>
 </body>
