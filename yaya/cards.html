@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>八押 · 练习卡</title>
+<title>八押 + 补押 · 练习卡</title>
 <style>
 :root{
   --ink:#241a17; --ink2:#6b534a; --ink3:#9a8177;
@@ -86,13 +86,13 @@ sup{font-size:.72em;vertical-align:super;line-height:0}
 <div class="wrap">
   <div class="head">
     <span class="chip">AMC10 · A 卷前 8 天</span>
-    <h1>八押 · 练习卡</h1>
-    <p class="sub">16 道题，对应 8 条命题判断。第 1 步先在纸上自己做，做不出来再看「关键一步」——
+    <h1>八押 + 补押 · 练习卡</h1>
+    <p class="sub">20 道题，对应 10 条命题判断（八押 + 两条补押）。第 1 步先在纸上自己做，做不出来再看「关键一步」——
     只看关键一步，不看整解。勾选会存在本机。</p>
   </div>
   <div class="bar">
     <div class="track"><div class="fill" id="fill"></div></div>
-    <span class="cnt" id="cnt">0 / 16</span>
+    <span class="cnt" id="cnt">0 / 20</span>
     <button class="btn-mini" id="reset">清空</button>
   </div>
   
@@ -288,10 +288,58 @@ sup{font-size:.72em;vertical-align:super;line-height:0}
   <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">先把 25 拆成两个完全平方数之和：0+25、9+16。每拆法再乘以符号的可能数，注意 0 只有一个符号。</div></div>
   <div class="ans">答案：12 对</div>
 </div>
+<div class="sec"><span class="no">补 A</span><h2>补押 A · 构造复用与改造</h2>
+  <span class="tip">视频 补押A · 演示题 A.1</span></div>
+<div class="card" data-id="A-1">
+  <div class="card-hd"><span class="id">例题 A.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">从 <b>1, 2, …, 8</b> 中选出若干个数字，要求任意两个被选数字都不相邻，且<b>必须选中 1</b>。有多少种选法？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">既然选了 1，就不能选 2。剩下只需在 3 到 8 这六个连续整数里选不相邻的数。令 f(n) 表示从连续 n 个数里选不相邻数字的选法数：不选最后一个有 f(n−1) 种，选最后一个则倒数第二个不能选，有 f(n−2) 种，所以 f(n) = f(n−1) + f(n−2)，从 f(0)=1、f(1)=2 起算到 f(6)。</div></div>
+  <div class="ans">答案：21 种</div>
+</div>
+<div class="card" data-id="A-2">
+  <div class="card-hd"><span class="id">例题 A.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">从 <b>1, 2, …, 12</b> 中选出尽可能多的整数，要求任意两个被选整数之差的绝对值<b>至少为 3</b>。最多能选几个？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">分组证上界：把 12 个数按 (1,2,3)(4,5,6)(7,8,9)(10,11,12) 分成四组，同组内任意两数之差都小于 3，所以每组至多选一个，上界是 4。再构造达到它：选 1、4、7、10。</div></div>
+  <div class="ans">答案：4 个</div>
+</div>
+<div class="sec"><span class="no">补 B</span><h2>补押 B · 年份敏感型构造</h2>
+  <span class="tip">视频 补押B · 演示题 B.1</span></div>
+<div class="card" data-id="B-1">
+  <div class="card-hd"><span class="id">例题 B.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">设 n 是正整数，满足 <b>n<sup>2</sup> &lt; 2026 &lt; (n+1)<sup>2</sup></b>。求 n。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">找 2026 两侧最近的平方数。45<sup>2</sup> = 2025，46<sup>2</sup> = 2116，所以 2025 &lt; 2026 &lt; 2116。</div></div>
+  <div class="ans">答案：n = 45</div>
+</div>
+<div class="card" data-id="B-2">
+  <div class="card-hd"><span class="id">例题 B.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">是否存在正整数 x, y，使得 <b>y<sup>2</sup> − x<sup>2</sup> = 2026</b>？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">看模 4。整数平方除以 4 余数只能是 0 或 1，所以两个平方数之差模 4 只能是 0、1、3，永远不可能是 2。而 2026 = 4 × 506 + 2，余数是 2，因此无解。</div></div>
+  <div class="ans">答案：不存在</div>
+</div>
   <div class="foot">
-    题目来自《AMC10-2026 押题》24 道原创题中未被视频演示的 16 道。<br>
+    前 16 题来自《AMC10-2026 押题》24 道原创题中未被视频演示的部分；补押 A、B 各 2 题，为该两条补押的原创例题中未演示的题目。<br>
     勘误：例题 1.2 原答案只给 n = 5，漏了 n = 2（此时两个因子是 −1 和 −2，乘积 2 也是素数）。本页采用订正后的答案。<br>
-    这 16 道不是真题，是命题原型，用来验证判断，不用来估分。
+    这 20 道都不是真题，是命题原型，用来验证判断，不用来估分。
   </div>
 </div>
 <script>
