@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>八押 · 练习卡</title>
+<style>
+:root{
+  --ink:#1c2430; --ink2:#5b6b7f; --ink3:#8a99ab;
+  --line:#e3e9f0; --bg:#f6f8fb; --card:#ffffff;
+  --blue:#2563eb; --blue5:#eef4ff; --green:#0f766e; --green5:#e6f6f3;
+  --amber:#b45309; --amber5:#fdf4e3;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+  -webkit-text-size-adjust:100%;line-height:1.65}
+.wrap{max-width:860px;margin:0 auto;padding:22px 16px 60px}
+
+.head{margin-bottom:18px}
+.chip{display:inline-block;font-size:12px;letter-spacing:.4px;color:var(--blue);
+  background:var(--blue5);border:1px solid #d3e0fb;padding:4px 12px;border-radius:999px}
+h1{font-size:24px;margin:12px 0 6px;letter-spacing:.5px}
+.sub{color:var(--ink2);font-size:13.5px;margin:0}
+
+.bar{position:sticky;top:0;z-index:9;background:rgba(246,248,251,.94);
+  backdrop-filter:blur(6px);padding:12px 0 10px;border-bottom:1px solid var(--line);
+  margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.track{flex:1 1 220px;height:8px;background:#e6ecf4;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#3b82f6,#0f766e);
+  border-radius:99px;transition:width .3s}
+.cnt{font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.btn-mini{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);
+  padding:5px 12px;border-radius:99px;cursor:pointer}
+.btn-mini:hover{border-color:#c6d2e2;color:var(--ink)}
+
+.sec{margin:26px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec .no{font-size:12px;font-weight:700;color:#fff;background:var(--blue);
+  padding:3px 10px;border-radius:7px;letter-spacing:.5px}
+.sec h2{font-size:17px;margin:0;font-weight:600}
+.sec .tip{font-size:12.5px;color:var(--ink3)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:16px 18px 14px;margin:12px 0;box-shadow:0 1px 2px rgba(16,32,64,.04);
+  transition:border-color .2s,box-shadow .2s}
+.card.done{border-color:#bfe3dc;background:#fbfefd}
+.card-hd{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.id{font-size:12.5px;color:var(--ink3);font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.done-tag{font-size:11.5px;color:var(--green);background:var(--green5);
+  padding:2px 8px;border-radius:99px;display:none}
+.card.done .done-tag{display:inline-block}
+.q{font-size:15.5px;margin:2px 0 12px}
+.q b{color:#0b2a5b}
+.acts{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{font-size:13px;padding:7px 15px;border-radius:9px;cursor:pointer;border:1px solid #d3ddea;
+  background:#fff;color:var(--ink2)}
+.btn:hover{border-color:#b9c8dc;color:var(--ink)}
+.btn.on{background:var(--blue5);border-color:#c7dbfb;color:var(--blue)}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink2);
+  cursor:pointer;user-select:none;margin-left:auto}
+.chk input{width:16px;height:16px;accent-color:#0f766e;cursor:pointer}
+
+.rev{display:none;margin-top:12px;border-left:3px solid var(--amber);
+  background:var(--amber5);border-radius:0 10px 10px 0;padding:11px 14px}
+.rev.show{display:block}
+.rev .lb{font-size:11.5px;color:var(--amber);letter-spacing:.6px;margin-bottom:5px}
+.rev .tx{font-size:14.5px;color:#5b4210}
+.ans{display:none;margin-top:9px;font-size:14.5px;color:var(--green);font-weight:600}
+.ans.show{display:block}
+sup{font-size:.72em;vertical-align:super;line-height:0}
+
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--ink3);line-height:1.8}
+.foot a{color:var(--blue);text-decoration:none}
+
+@media print{
+  body{background:#fff}
+  .bar{position:static;border:0;padding:0 0 8px}
+  .btn,.btn-mini,.chk,.fill{display:none!important}
+  .card{break-inside:avoid;page-break-inside:avoid;box-shadow:none;border-color:#cfd8e3}
+  .rev{display:block!important;background:#fafafa;border-left-color:#c9a227}
+  .ans{display:block!important;color:#0b5c53}
+  .sec{break-after:avoid}
+  h1{font-size:20px}
+}
+</style></head><body>
+<div class="wrap">
+  <div class="head">
+    <span class="chip">AMC10 · A 卷前 8 天</span>
+    <h1>八押 · 练习卡</h1>
+    <p class="sub">16 道题，对应 8 条命题判断。第 1 步先在纸上自己做，做不出来再看「关键一步」——
+    只看关键一步，不看整解。勾选会存在本机。</p>
+  </div>
+  <div class="bar">
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <span class="cnt" id="cnt">0 / 16</span>
+    <button class="btn-mini" id="reset">清空</button>
+  </div>
+  
+<div class="sec"><span class="no">押 01</span><h2>先缩小范围，再枚举候选</h2>
+  <span class="tip">视频 01 · 演示题 1.1</span></div>
+<div class="card" data-id="01-1">
+  <div class="card-hd"><span class="id">例题 1.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">正整数 n 满足 <b>n<sup>2</sup> − 7n + 12</b> 是一个正素数。求所有可能的 n。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">先因式分解：n<sup>2</sup> − 7n + 12 = (n−3)(n−4)。乘积要是正素数，两个因子必须同号，且其中一个的绝对值等于 1。然后分别看 n ≥ 5 和 n ≤ 2 两段边界。</div></div>
+  <div class="ans">答案：n = 2 或 5</div>
+</div>
+<div class="card" data-id="01-2">
+  <div class="card-hd"><span class="id">例题 1.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">正整数 a ≤ b ≤ c 满足 <b>a + b + c = 12</b>，<b>abc = 30</b>。求所有三元组 (a, b, c)。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">由 a ≤ b ≤ c 与和为 12，先得 a ≤ 4。于是只需试 a = 1、2、3、4；每个 a 都把三元问题化成「和与积已知」的二次方程。</div></div>
+  <div class="ans">答案：(1, 5, 6)</div>
+</div>
+<div class="sec"><span class="no">押 02</span><h2>利用对称性消除重复</h2>
+  <span class="tip">视频 02 · 演示题 2.1</span></div>
+<div class="card" data-id="02-1">
+  <div class="card-hd"><span class="id">例题 2.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">正六边形有 6 个顶点。任选两个顶点，沿六边形边界的最短距离为 <b>1 条边、2 条边、3 条边</b> 的点对分别有多少个？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">不要列 15 个点对。按距离分类：距离 1 时每个顶点有 2 个，但每对算了两遍，所以 6 × 2 ÷ 2 = 6；距离 2 同理；距离 3 时每个顶点只有一个对顶点，6 ÷ 2 = 3。</div></div>
+  <div class="ans">答案：6、6、3</div>
+</div>
+<div class="card" data-id="02-2">
+  <div class="card-hd"><span class="id">例题 2.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">从网格点 (0,0) 出发，每步只能向右或向上，到达 (3,5)。经过 <b>(1,2)</b> 的最短路径有多少条？经过 <b>(2,3)</b> 的呢？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">分成两段，每段单独数：先到中间点的走法乘上从中点到终点的走法。算完会发现两个答案相同——这不是巧合，整张网格有 180 度的中心对称。</div></div>
+  <div class="ans">答案：都是 30 条</div>
+</div>
+<div class="sec"><span class="no">押 03</span><h2>中段几何优先相似与比例</h2>
+  <span class="tip">视频 03 · 演示题 3.2</span></div>
+<div class="card" data-id="03-1">
+  <div class="card-hd"><span class="id">例题 3.1</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">三角形 ABC 中，D 在 AB 上，E 在 AC 上，DE ∥ BC。已知 AD = 4，DB = 2，AE = 6，求 <b>EC</b>。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">先写相似：AD : AB = AE : AC。AB = AD + DB = 6，所以 4 : 6 = 6 : AC，得 AC = 9，EC = 9 − 6。</div></div>
+  <div class="ans">答案：EC = 3</div>
+</div>
+<div class="card" data-id="03-2">
+  <div class="card-hd"><span class="id">例题 3.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">三角形 ABC 中，D 在 AB 上，AD : DB = 1 : 2。过 D 作 DE ∥ BC，交 AC 于 E。若 AE = 4，求 <b>AC</b>。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">注意比例写的是 AD : DB，不是 AD : AB。先换成 AD : AB = 1 : 3，再由相似得 AE : AC = 1 : 3。</div></div>
+  <div class="ans">答案：AC = 12</div>
+</div>
+<div class="sec"><span class="no">押 04</span><h2>概率优先直接计数或补集</h2>
+  <span class="tip">视频 04 · 演示题 4.1</span></div>
+<div class="card" data-id="04-1">
+  <div class="card-hd"><span class="id">例题 4.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">一枚公平的六面骰子独立掷 3 次。求<b>至少出现一次 6</b> 的概率。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">「至少一次」用反面：「一次都没有」是每次都不出 6，概率六分之五，连乘三次。再用一减。</div></div>
+  <div class="ans">答案：216 分之 91</div>
+</div>
+<div class="card" data-id="04-2">
+  <div class="card-hd"><span class="id">例题 4.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">从 1, 2, …, 10 中等概率选取两个不同的数。求它们的<b>和为偶数</b>的概率。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">和为偶数等价于同奇偶。分别数「两个奇数」和「两个偶数」的组合数，加起来除以全部选法。</div></div>
+  <div class="ans">答案：9 分之 4</div>
+</div>
+<div class="sec"><span class="no">押 05</span><h2>整数题先用余数筛选</h2>
+  <span class="tip">视频 05 · 演示题 5.1</span></div>
+<div class="card" data-id="05-1">
+  <div class="card-hd"><span class="id">例题 5.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q"><b>证明：</b>如果 n 是奇数，那么 n<sup>2</sup> 除以 8 的余数为 1。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">设 n = 2k + 1，则 n<sup>2</sup> − 1 = (n−1)(n+1) = 4k(k+1)。两个相邻整数 k 和 k+1 必有一个是偶数，所以 8 能整除 n<sup>2</sup> − 1。</div></div>
+  <div class="ans">答案：证明题，见关键一步</div>
+</div>
+<div class="card" data-id="05-2">
+  <div class="card-hd"><span class="id">例题 5.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">求同时满足 <b>3 整除 n<sup>2</sup>+2</b> 且 <b>5 整除 n+1</b> 的最小正整数 n。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">先用模 3：平方数模 3 只可能是 0 或 1，要让 n<sup>2</sup>+2 被 3 整除，必须 n<sup>2</sup> 余 1。再用模 5 得 n 余 4，从 4、9、14… 里选，最小的那个往往就够了。</div></div>
+  <div class="ans">答案：n = 4</div>
+</div>
+<div class="sec"><span class="no">押 06</span><h2>计数题主动设计分类</h2>
+  <span class="tip">视频 06 · 演示题 6.1</span></div>
+<div class="card" data-id="06-1">
+  <div class="card-hd"><span class="id">例题 6.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">求非负整数解的数量：<b>x + y + z = 8</b>，且 <b>x ≤ 2</b>。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">限制压在 x 上，就按 x 分类：x 取 0、1、2 各算一次「y + z 等于剩下多少」，再相加。</div></div>
+  <div class="ans">答案：24 组</div>
+</div>
+<div class="card" data-id="06-2">
+  <div class="card-hd"><span class="id">例题 6.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">用数字 1, 2, 3, 4, 5 组成三位偶数，数字不能重复。问有多少个？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">偶数先定个位：只能是 2 或 4。两种情况的百位限制完全一样，各算一次就够。</div></div>
+  <div class="ans">答案：24 个</div>
+</div>
+<div class="sec"><span class="no">押 07</span><h2>极值题先证上界再构造</h2>
+  <span class="tip">视频 07 · 演示题 7.1</span></div>
+<div class="card" data-id="07-1">
+  <div class="card-hd"><span class="id">例题 7.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">从 1, 2, …, 12 中选取若干个数，要求任意两个被选数的差的绝对值<b>至少为 3</b>。最多能选几个？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">两段：第一段把 12 个数切成 4 组，每组内任意两数差至多 2，所以每组最多选一个，得上限 4；第二段构造 1、4、7、10 说明上限能达到。</div></div>
+  <div class="ans">答案：4 个</div>
+</div>
+<div class="card" data-id="07-2">
+  <div class="card-hd"><span class="id">例题 7.3</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">从 1, 2, …, 12 中选取 7 个不同整数。<b>证明</b>其中必有两个数的和为 13，并说明选 6 个数时可以避免。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">把 12 个数配成 6 对，每对和为 13。选 7 个数由抽屉原理必有一对整对；再举例说明 6 个数时不存在这样的对。</div></div>
+  <div class="ans">答案：证明题，见关键一步</div>
+</div>
+<div class="sec"><span class="no">押 08</span><h2>重组熟悉工具，不靠新定义</h2>
+  <span class="tip">视频 08 · 演示题 8.3</span></div>
+<div class="card" data-id="08-1">
+  <div class="card-hd"><span class="id">例题 8.1</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">从 1, 2, 3, 4, 5, 6 中选两个不同的数。问有多少种选法使它们的和<b>能被 3 整除</b>？</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">陌生的条件换成熟悉的：按模 3 的余数把 6 个数分成三组，每组 2 个。和能被 3 整除只有两种搭配，分别数完再相加。</div></div>
+  <div class="ans">答案：5 种</div>
+</div>
+<div class="card" data-id="08-2">
+  <div class="card-hd"><span class="id">例题 8.2</span>
+    <span class="done-tag">已做完</span></div>
+  <div class="q">求满足 <b>x<sup>2</sup> + y<sup>2</sup> = 25</b> 的整数有序数对 (x, y) 的数量。</div>
+  <div class="acts">
+    <button class="btn">看关键一步</button>
+    <label class="chk"><input type="checkbox">做完</label>
+  </div>
+  <div class="rev"><div class="lb">关 键 一 步</div><div class="tx">先把 25 拆成两个完全平方数之和：0+25、9+16。每拆法再乘以符号的可能数，注意 0 只有一个符号。</div></div>
+  <div class="ans">答案：12 对</div>
+</div>
+  <div class="foot">
+    题目来自《AMC10-2026 押题》24 道原创题中未被视频演示的 16 道。<br>
+    勘误：例题 1.2 原答案只给 n = 5，漏了 n = 2（此时两个因子是 −1 和 −2，乘积 2 也是素数）。本页采用订正后的答案。<br>
+    这 16 道不是真题，是命题原型，用来验证判断，不用来估分。
+  </div>
+</div>
+<script>
+const KEY='yaya_cards_v1';
+let st=JSON.parse(localStorage.getItem(KEY)||'{}');
+function save(){localStorage.setItem(KEY,JSON.stringify(st));tick();}
+function tick(){
+  const ids=[...document.querySelectorAll('.card')].map(c=>c.dataset.id);
+  const n=ids.filter(i=>st[i]).length;
+  document.getElementById('cnt').textContent=n+' / '+ids.length;
+  document.getElementById('fill').style.width=(n/ids.length*100)+'%';
+}
+document.querySelectorAll('.card').forEach(c=>{
+  const id=c.dataset.id;
+  const cb=c.querySelector('.chk input');
+  cb.checked=!!st[id];
+  if(st[id])c.classList.add('done');
+  cb.addEventListener('change',()=>{
+    st[id]=cb.checked; if(!cb.checked)delete st[id];
+    c.classList.toggle('done',cb.checked); save();
+  });
+  c.querySelector('.btn').addEventListener('click',e=>{
+    const on=c.querySelector('.rev').classList.toggle('show');
+    c.querySelector('.ans').classList.toggle('show',on);
+    e.target.classList.toggle('on',on);
+    e.target.textContent=on?'收起':'看关键一步';
+  });
+});
+document.getElementById('reset').addEventListener('click',()=>{
+  if(confirm('清空全部勾选？')){st={};localStorage.removeItem(KEY);
+    document.querySelectorAll('.card').forEach(c=>{c.classList.remove('done');
+      c.querySelector('.chk input').checked=false;});
+    tick();}
+});
+tick();
+</script>
+</body></html>
