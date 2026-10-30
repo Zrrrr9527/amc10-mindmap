@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>清理本机观看记录</title>
+<style>
+body{margin:0;background:#0a0a0c;color:#eef0f4;min-height:100vh;
+font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+display:flex;align-items:center;justify-content:center;padding:24px}
+.box{max-width:560px;width:100%}
+h1{font-size:19px;margin:0 0 14px;letter-spacing:.5px}
+p{font-size:13.5px;color:#a8abb4;margin:0 0 10px}
+ul{font-size:13px;color:#8f939d;margin:0 0 16px;padding-left:20px;line-height:2}
+b{color:#fff}
+code{background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px;font-size:12.5px}
+.ok{color:#5fbf8a}
+button{margin-top:6px;font-size:14px;padding:10px 20px;border-radius:8px;cursor:pointer;
+border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-family:inherit}
+button:hover{background:rgba(255,255,255,.15)}
+a{color:#a8acb6}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>清理本机观看记录</h1>
+  <p>只清<b>这台设备</b>的 localStorage，不动云端。云端记录由页面在播放时自动合并（取较大值）。</p>
+  <ul id="state">
+    <li>读取中…</li>
+  </ul>
+  <button id="go">清空本机记录</button>
+  <p style="margin-top:16px">
+    <a href="./">← 回到达标锦囊</a> ·
+    <a href="../yaya/">八押 + 补押</a>
+  </p>
+</div>
+<script>
+(function(){
+  var KEYS = ['amc10_dabiao_seen_v1','amc10_yaya_seen_v1','amc10_lesson_seen_v1'];
+  function read(){
+    return KEYS.map(function(k){
+      var v = null;
+      try { v = localStorage.getItem(k); } catch(e){}
+      var n = 0;
+      if (v){ try { n = Object.keys(JSON.parse(v) || {}).length; } catch(e){} }
+      return { k: k, raw: v, n: n };
+    });
+  }
+  function render(tag){
+    var rows = read();
+    document.getElementById('state').innerHTML = rows.map(function(r){
+      return '<li>' + r.k + '：' +
+        (r.raw ? '<b>' + r.n + ' 条</b> <code>' + r.raw.slice(0, 60) + '</code>' : '<span class="ok">空</span>') +
+        '</li>';
+    }).join('') + (tag ? '<li class="ok">' + tag + '</li>' : '');
+  }
+  document.getElementById('go').addEventListener('click', function(){
+    var before = read().reduce(function(a, r){ return a + r.n; }, 0);
+    KEYS.forEach(function(k){ try { localStorage.removeItem(k); } catch(e){} });
+    var after = read().reduce(function(a, r){ return a + r.n; }, 0);
+    render('已清除 ' + before + ' 条，剩余 ' + after + ' 条。');
+    this.textContent = '再清一次';
+  });
+  render('');
+})();
+</script>
+</body>
+</html>
