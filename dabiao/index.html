@@ -84,11 +84,46 @@ body{background:#fff;color:#000}.v,.calc{box-shadow:none}
 .rev,.ans{display:block!important}
 video{display:none}
 }
+
+.cstat{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);
+margin:0 0 14px;font-variant-numeric:tabular-nums}
+.cstat b{color:var(--ink2);font-weight:600}
+.cstat .dot{width:7px;height:7px;border-radius:50%;background:var(--ink3);flex:none}
+.cstat.ok .dot{background:#5fbf8a}
+.cstat.err .dot{background:#e0603a}
+.cstat button{font-size:11.5px;padding:3px 9px;border-radius:6px;cursor:pointer;
+border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--ink3);
+font-family:inherit}
+.cstat button:hover{color:var(--ink);border-color:rgba(255,255,255,.34)}
+.state{font-size:11.5px;color:var(--ink3);margin:7px 2px 0;font-variant-numeric:tabular-nums}
+.state .n{font-weight:600;color:#5fbf8a;margin-right:7px}
+.state .n.zero{color:var(--ink3);font-weight:400}
+.v.seen{border-color:rgba(95,191,138,.34)}
+.v.seen .state{color:var(--ink2)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;
+pointer-events:none;transition:.22s;background:rgba(18,18,22,.95);color:#fff;
+font-size:13px;padding:10px 18px;border-radius:9px;border:1px solid rgba(255,255,255,.14);
+z-index:99;max-width:86vw}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 </style></head><body><div class="w">
 <span class="chip">AMC10 · A 卷 11-06（五）</span>
 <h1>达 标 锦 囊</h1>
 <p class="sub">目标不是做完 25 题，是拿到 AIME 资格线。所以只押 Q1–20，Q21–25 不设押注。</p>
 <p class="meta">3 条判断 · 3 支片 合计 2:34 · 9 道例题</p>
+
+
+<div class="cstat" id="cstat">
+  <span class="dot"></span>
+  <span class="txt">正在连接云端…</span>
+  <b><span id="done">0</span> / 3 已看</b>
+  <span>·</span>
+  <span><span id="times">0</span> 次播放</span>
+  <button id="sreset">清空本机</button>
+</div>
+<div class="track2" style="height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin:-6px 0 16px">
+  <div id="sfill" style="height:3px;width:0;background:#5fbf8a;border-radius:2px;transition:.3s"></div>
+</div>
+<div class="toast" id="toast"></div>
 
 <div class="calc">
   <h2>先算这一笔账</h2>
@@ -112,7 +147,7 @@ video{display:none}
 
 <p class="secttl">三支判断片</p>
 
-    <article class="v">
+    <article class="v" data-sid="D1">
       <div class="vtop">
         <span class="no">押 1</span>
         <div class="vt"><h3>单陷阱设计 · Q1–10</h3><p>答案在选项里，但不是所问</p></div>
@@ -121,7 +156,7 @@ video{display:none}
       <video preload="metadata" playsinline controls src="video/D1.mp4" poster="video/D1.jpg"></video>
       <p class="ql">「拿分靠不读错，不靠算得快」</p>
     </article>
-    <article class="v">
+    <article class="v" data-sid="D2">
       <div class="vtop">
         <span class="no">押 2</span>
         <div class="vt"><h3>Vieta 对称量 · Q13–17</h3><p>求根被设计成不划算</p></div>
@@ -130,7 +165,7 @@ video{display:none}
       <video preload="metadata" playsinline controls src="video/D2.mp4" poster="video/D2.jpg"></video>
       <p class="ql">「方程给的是和与积，不是两个根」</p>
     </article>
-    <article class="v">
+    <article class="v" data-sid="D3">
       <div class="vtop">
         <span class="no">押 3</span>
         <div class="vt"><h3>短周期与裂项 · Q14–20</h3><p>逐项算被设计得很烦</p></div>
@@ -286,4 +321,171 @@ if(rs) rs.addEventListener('click',function(){
   paint();
 });
 paint();
+</script>
+<script>
+(function(){
+  var RELAY_ORIGIN = 'https://amc10-kp.app.workbuddy.host';
+  var RELAY_SRC    = RELAY_ORIGIN + '/relay.html?sharecode=63GNEIHANS&v=3';
+  var TBL          = 'lesson_seen';        // 复用现有表，用编号前缀区分页面
+  var KEY          = 'amc10_dabiao_seen_v1';
+  var READONLY     = /[?&]view=1/.test(location.search);
+  var THRESH       = 0.9;
+
+  var bySid = {}, cards = [], counts = {}, seq = 0, pend = {}, relayUp = false,
+      relayFrame = null, started = false, pushT = {}, toastT = null;
+
+  document.querySelectorAll('[data-sid]').forEach(function(c){
+    bySid[c.dataset.sid] = c; cards.push(c);
+    var st = document.createElement('p');
+    st.className = 'state'; c.appendChild(st);
+  });
+  if (!cards.length) return;
+
+  try { counts = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ counts = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(counts)); } catch(e){} }
+  function cnt(id){ return (counts[id] && counts[id].n) || 0; }
+  function pad(x){ return (x < 10 ? '0' : '') + x; }
+  function fmtT(t){
+    if (!t) return '';
+    var d = new Date(t);
+    return (d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+  function toast(s){
+    var el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = s; el.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(function(){ el.classList.remove('on'); }, 1800);
+  }
+  function cset(cls, text){
+    var el = document.getElementById('cstat');
+    if (!el) return;
+    el.className = 'cstat' + (cls ? ' ' + cls : '');
+    el.querySelector('.txt').textContent = text;
+  }
+
+  function paint(){
+    var done = 0, times = 0;
+    cards.forEach(function(c){
+      var id = c.dataset.sid, n = cnt(id), t = counts[id] && counts[id].t;
+      times += n; if (n > 0) done++;
+      var el = c.querySelector('.state');
+      if (n > 0){
+        el.innerHTML = '<span class="n">已看 ' + n + ' 次</span>' + fmtT(t);
+        c.classList.add('seen');
+      } else {
+        el.innerHTML = '<span class="n zero">未看</span>';
+        c.classList.remove('seen');
+      }
+    });
+    var d = document.getElementById('done'), tt = document.getElementById('times');
+    if (d) d.textContent = done;
+    if (tt) tt.textContent = times;
+    var f = document.getElementById('sfill');
+    if (f) f.style.width = (done / cards.length * 100) + '%';
+  }
+
+  function markView(id){
+    if (READONLY) return;
+    counts[id] = { n: cnt(id) + 1, t: Date.now() };
+    save(); paint(); pushOne(id);
+    var nm = bySid[id].querySelector('h3');
+    toast('记下：' + (nm ? nm.textContent : id) + ' 已看 ' + cnt(id) + ' 次');
+  }
+
+  cards.forEach(function(card){
+    var v = card.querySelector('video');
+    if (!v) return;
+    var id = card.dataset.sid, counted = false;
+    v.addEventListener('timeupdate', function(){
+      if (READONLY || !v.duration) return;
+      var p = v.currentTime / v.duration;
+      if (p < 0.25) counted = false;
+      if (p >= THRESH && !counted){ counted = true; markView(id); }
+    });
+    v.addEventListener('ended', function(){
+      if (READONLY) return;
+      if (!counted){ counted = true; markView(id); }
+    });
+  });
+
+  /* ── 云同步 ── */
+  function relayCall(method, qs, body, cb){
+    var w = relayFrame && relayFrame.contentWindow;
+    if (!relayUp || !w){ if (cb) cb({ ok:false, err:'no-relay' }); return; }
+    var id = 'y' + (++seq);
+    pend[id] = cb;
+    setTimeout(function(){ if (pend[id]){ delete pend[id]; if (cb) cb({ ok:false, err:'timeout' }); } }, 9000);
+    w.postMessage({ t:'kp', tbl:TBL, id:id, method:method, qs:qs||'', body:body||'' }, RELAY_ORIGIN);
+  }
+  function onMsg(e){
+    if (e.origin !== RELAY_ORIGIN) return;
+    var d = e.data || {};
+    if (d.t !== 'kp') return;
+    if (d.ready){ relayUp = true; cset('', '连接中…'); pull(true); return; }
+    var cb = pend[d.id];
+    if (cb){ delete pend[d.id]; cb(d); }
+  }
+  function pull(first){
+    if (!relayUp) return;
+    relayCall('GET', '?select=no,n,t', '', function(res){
+      if (!res || !res.ok){ cset('err', '云端同步失败（本机照常记录）'); return; }
+      var rows = [];
+      try { rows = JSON.parse(res.body) || []; } catch(e){ cset('err', '云端同步失败'); return; }
+      var changed = false, mine = 0;
+      rows.forEach(function(r){
+        var no = r.no, n = r.n | 0, rt = r.t ? Date.parse(r.t) : 0;
+        if (!no || n <= 0 || !bySid[no]) return;      // 不是本页的编号 → 丢
+        mine++;
+        var lc = counts[no] || { n:0, t:0 };
+        var nn = Math.max(n, lc.n), nt = Math.max(rt || 0, lc.t || 0);
+        if (nn !== lc.n || nt !== lc.t){ counts[no] = { n:nn, t:nt }; changed = true; }
+      });
+      if (changed) save();
+      paint();
+      cset('ok', '云端 ' + mine + ' 条' + (READONLY ? ' · 只看模式' : ''));
+      if (first && !READONLY) syncAll();
+    });
+  }
+  function pushOne(id){
+    if (!relayUp) return;
+    clearTimeout(pushT[id]);
+    pushT[id] = setTimeout(function(){
+      relayCall('POST', '', JSON.stringify([{ no:id, n:cnt(id),
+          t:new Date((counts[id] && counts[id].t) || Date.now()).toISOString() }]),
+        function(res){ cset(res && res.ok ? 'ok' : 'err', res && res.ok ? '已同步' : '同步失败（本机已记）'); });
+    }, 700);
+  }
+  function syncAll(){
+    if (!relayUp) return;
+    var rows = Object.keys(counts).filter(function(k){ return cnt(k) > 0 && bySid[k]; })
+      .map(function(k){ return { no:k, n:cnt(k),
+        t:new Date((counts[k] && counts[k].t) || Date.now()).toISOString() }; });
+    if (!rows.length) return;
+    relayCall('POST', '', JSON.stringify(rows), function(res){
+      if (res && res.ok) cset('ok', '已同步 ' + rows.length + ' 条');
+    });
+  }
+  function startRelay(){
+    if (started) return; started = true;
+    window.addEventListener('message', onMsg);
+    var f = document.createElement('iframe');
+    f.src = RELAY_SRC; f.setAttribute('aria-hidden','true'); f.setAttribute('tabindex','-1');
+    f.style.cssText = 'position:absolute;width:1px;height:1px;border:0;left:-9999px;top:-9999px';
+    document.body.appendChild(f); relayFrame = f;
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) pull(false); });
+    setInterval(function(){ if (!document.hidden) pull(false); }, 30000);
+    setTimeout(function(){ if (!relayUp) cset('err', '云端未连上 —— 本机照常记录'); }, 12000);
+  }
+
+  var rs = document.getElementById('sreset');
+  if (rs) rs.addEventListener('click', function(){
+    if (!confirm('清空本机观看记录？（云端不清）')) return;
+    counts = {};
+    try { localStorage.removeItem(KEY); } catch(e){}
+    paint();
+  });
+
+  paint();
+  startRelay();
+})();
 </script></body></html>

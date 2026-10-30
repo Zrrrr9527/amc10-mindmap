@@ -45,11 +45,47 @@ max-height:70vh;object-fit:contain}
 .foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);
 font-size:12px;color:var(--ink3);line-height:1.9}
 .foot b{color:var(--ink2);font-weight:600}
+
+.cstat{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);
+margin:0 0 14px;font-variant-numeric:tabular-nums}
+.cstat b{color:var(--ink2);font-weight:600}
+.cstat .dot{width:7px;height:7px;border-radius:50%;background:var(--ink3);flex:none}
+.cstat.ok .dot{background:#5fbf8a}
+.cstat.err .dot{background:#e0603a}
+.cstat button{font-size:11.5px;padding:3px 9px;border-radius:6px;cursor:pointer;
+border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--ink3);
+font-family:inherit}
+.cstat button:hover{color:var(--ink);border-color:rgba(255,255,255,.34)}
+.state{font-size:11.5px;color:var(--ink3);margin:7px 2px 0;font-variant-numeric:tabular-nums}
+.state .n{font-weight:600;color:#5fbf8a;margin-right:7px}
+.state .n.zero{color:var(--ink3);font-weight:400}
+.v.seen{border-color:rgba(95,191,138,.34)}
+.v.seen .state{color:var(--ink2)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;
+pointer-events:none;transition:.22s;background:rgba(18,18,22,.95);color:#fff;
+font-size:13px;padding:10px 18px;border-radius:9px;border:1px solid rgba(255,255,255,.14);
+z-index:99;max-width:86vw}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
 </style></head><body><div class="w">
 <span class="chip">AMC10 · A 卷 11-06（五）</span>
 <h1>八押 + 补押</h1>
 <p class="sub">10 条命题判断。判断不是知识点，是考场上的第一反应。</p>
 <p class="meta">8 支八押 合计 8:35 · 补押 2 支 1:47 · 另 20 题在练习卡 · 最下方是考前最后一支</p>
+
+
+<div class="cstat" id="cstat">
+  <span class="dot"></span>
+  <span class="txt">正在连接云端…</span>
+  <b><span id="done">0</span> / 11 已看</b>
+  <span>·</span>
+  <span><span id="times">0</span> 次播放</span>
+  <button id="sreset">清空本机</button>
+</div>
+<div class="track2" style="height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin:-6px 0 16px">
+  <div id="sfill" style="height:3px;width:0;background:#5fbf8a;border-radius:2px;transition:.3s"></div>
+</div>
+<div class="toast" id="toast"></div>
 
 <div class="cta">
   <a class="main" href="cards.html">练习卡 · 16 题</a>
@@ -59,7 +95,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
 <p class="secttl">八押 · 判断片</p>
 
 
-    <article class="v" data-no="01">
+    <article class="v" data-no="01" data-sid="Y01">
       <div class="vtop">
         <span class="no">01</span>
         <div class="vt"><h3>先缩小，再试</h3><p>数论入口 · 落在弱项</p></div>
@@ -69,7 +105,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/Y01.jpg"></video>
       <p class="line">「看到「求整数解」先写模和奇偶，不先列方程」</p>
     </article>
-    <article class="v" data-no="02">
+    <article class="v" data-no="02" data-sid="Y02">
       <div class="vtop">
         <span class="no">02</span>
         <div class="vt"><h3>一样的，只算一次</h3><p>对称去重 · 落在强项</p></div>
@@ -79,7 +115,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/Y02.jpg"></video>
       <p class="line">「题目一提「一样」，先去合并，别急着数」</p>
     </article>
-    <article class="v" data-no="03">
+    <article class="v" data-no="03" data-sid="Y03">
       <div class="vtop">
         <span class="no">03</span>
         <div class="vt"><h3>先找相似，别设坐标</h3><p>中段几何 · 落在最强项</p></div>
@@ -89,7 +125,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/Y03.jpg"></video>
       <p class="line">「中段几何先找相似，不许设坐标」</p>
     </article>
-    <article class="v" data-no="04">
+    <article class="v" data-no="04" data-sid="Y04">
       <div class="vtop">
         <span class="no">04</span>
         <div class="vt"><h3>概率：数得清的那种</h3><p>概率入口 · 新学</p></div>
@@ -99,7 +135,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/Y04.jpg"></video>
       <p class="line">「先数得清，再谈状态；数不清用补集」</p>
     </article>
-    <article class="v" data-no="05">
+    <article class="v" data-no="05" data-sid="Y05">
       <div class="vtop">
         <span class="no">05</span>
         <div class="vt"><h3>整数题的第一刀</h3><p>余数筛选 · 落在弱项</p></div>
@@ -109,7 +145,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/Y05.jpg"></video>
       <p class="line">「先筛，再解；筛不掉的才值得算」</p>
     </article>
-    <article class="v" data-no="06">
+    <article class="v" data-no="06" data-sid="Y06">
       <div class="vtop">
         <span class="no">06</span>
         <div class="vt"><h3>分类：重叠与漏</h3><p>计数分类 · 落在强项</p></div>
@@ -119,7 +155,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/Y06.jpg"></video>
       <p class="line">「分完先检查：有没有重叠，有没有漏」</p>
     </article>
-    <article class="v" data-no="07">
+    <article class="v" data-no="07" data-sid="Y07">
       <div class="vtop">
         <span class="no">07</span>
         <div class="vt"><h3>算出数字不算完</h3><p>极值双段 · 习惯</p></div>
@@ -129,7 +165,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/Y07.jpg"></video>
       <p class="line">「写完答案加一句：能构造吗」</p>
     </article>
-    <article class="v" data-no="08">
+    <article class="v" data-no="08" data-sid="Y08">
       <div class="vtop">
         <span class="no">08</span>
         <div class="vt"><h3>不学新东西</h3><p>命题风格 · 全局</p></div>
@@ -143,7 +179,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
 <p class="secttl">补押 · 后加的两条判断</p>
 
 
-    <article class="v" data-no="补A">
+    <article class="v" data-no="补A" data-sid="YA">
       <div class="vtop">
         <span class="no">补A</span>
         <div class="vt"><h3>旧题加锁</h3><p>构造复用 · 补押</p></div>
@@ -153,7 +189,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
         poster="video/BA.jpg"></video>
       <p class="line">「旧结构改一个条件，答案就换了 —— 背答案没用」</p>
     </article>
-    <article class="v" data-no="补B">
+    <article class="v" data-no="补B" data-sid="YB">
       <div class="vtop">
         <span class="no">补B</span>
         <div class="vt"><h3>年份算进去</h3><p>年份敏感 · 补押</p></div>
@@ -167,7 +203,7 @@ font-size:12px;color:var(--ink3);line-height:1.9}
 <p class="secttl">全部看完，再看这一支</p>
 
 
-    <article class="final" id="final">
+    <article class="final" id="final" data-sid="YJ">
       <div class="ftop">
         <span class="fno">最终锦囊</span>
         <span class="fpill">考前最后一遍 · 1:11</span>
@@ -189,4 +225,170 @@ font-size:12px;color:var(--ink3);line-height:1.9}
 如果只想保 AIME 达标（不追全卷），看 <a href="../dabiao/">达标锦囊</a> —— 3 条判断 + 分数账 + 猜题规则 + 9 道例题。
 这 8 押解决的是「会不会」，不解决「来不来得及」——限时套卷仍要单独做一次。
 </div>
-</div></body></html>
+</div><script>
+(function(){
+  var RELAY_ORIGIN = 'https://amc10-kp.app.workbuddy.host';
+  var RELAY_SRC    = RELAY_ORIGIN + '/relay.html?sharecode=63GNEIHANS&v=3';
+  var TBL          = 'lesson_seen';        // 复用现有表，用编号前缀区分页面
+  var KEY          = 'amc10_yaya_seen_v1';
+  var READONLY     = /[?&]view=1/.test(location.search);
+  var THRESH       = 0.9;
+
+  var bySid = {}, cards = [], counts = {}, seq = 0, pend = {}, relayUp = false,
+      relayFrame = null, started = false, pushT = {}, toastT = null;
+
+  document.querySelectorAll('[data-sid]').forEach(function(c){
+    bySid[c.dataset.sid] = c; cards.push(c);
+    var st = document.createElement('p');
+    st.className = 'state'; c.appendChild(st);
+  });
+  if (!cards.length) return;
+
+  try { counts = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ counts = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(counts)); } catch(e){} }
+  function cnt(id){ return (counts[id] && counts[id].n) || 0; }
+  function pad(x){ return (x < 10 ? '0' : '') + x; }
+  function fmtT(t){
+    if (!t) return '';
+    var d = new Date(t);
+    return (d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+  function toast(s){
+    var el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = s; el.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(function(){ el.classList.remove('on'); }, 1800);
+  }
+  function cset(cls, text){
+    var el = document.getElementById('cstat');
+    if (!el) return;
+    el.className = 'cstat' + (cls ? ' ' + cls : '');
+    el.querySelector('.txt').textContent = text;
+  }
+
+  function paint(){
+    var done = 0, times = 0;
+    cards.forEach(function(c){
+      var id = c.dataset.sid, n = cnt(id), t = counts[id] && counts[id].t;
+      times += n; if (n > 0) done++;
+      var el = c.querySelector('.state');
+      if (n > 0){
+        el.innerHTML = '<span class="n">已看 ' + n + ' 次</span>' + fmtT(t);
+        c.classList.add('seen');
+      } else {
+        el.innerHTML = '<span class="n zero">未看</span>';
+        c.classList.remove('seen');
+      }
+    });
+    var d = document.getElementById('done'), tt = document.getElementById('times');
+    if (d) d.textContent = done;
+    if (tt) tt.textContent = times;
+    var f = document.getElementById('sfill');
+    if (f) f.style.width = (done / cards.length * 100) + '%';
+  }
+
+  function markView(id){
+    if (READONLY) return;
+    counts[id] = { n: cnt(id) + 1, t: Date.now() };
+    save(); paint(); pushOne(id);
+    var nm = bySid[id].querySelector('h3');
+    toast('记下：' + (nm ? nm.textContent : id) + ' 已看 ' + cnt(id) + ' 次');
+  }
+
+  cards.forEach(function(card){
+    var v = card.querySelector('video');
+    if (!v) return;
+    var id = card.dataset.sid, counted = false;
+    v.addEventListener('timeupdate', function(){
+      if (READONLY || !v.duration) return;
+      var p = v.currentTime / v.duration;
+      if (p < 0.25) counted = false;
+      if (p >= THRESH && !counted){ counted = true; markView(id); }
+    });
+    v.addEventListener('ended', function(){
+      if (READONLY) return;
+      if (!counted){ counted = true; markView(id); }
+    });
+  });
+
+  /* ── 云同步 ── */
+  function relayCall(method, qs, body, cb){
+    var w = relayFrame && relayFrame.contentWindow;
+    if (!relayUp || !w){ if (cb) cb({ ok:false, err:'no-relay' }); return; }
+    var id = 'y' + (++seq);
+    pend[id] = cb;
+    setTimeout(function(){ if (pend[id]){ delete pend[id]; if (cb) cb({ ok:false, err:'timeout' }); } }, 9000);
+    w.postMessage({ t:'kp', tbl:TBL, id:id, method:method, qs:qs||'', body:body||'' }, RELAY_ORIGIN);
+  }
+  function onMsg(e){
+    if (e.origin !== RELAY_ORIGIN) return;
+    var d = e.data || {};
+    if (d.t !== 'kp') return;
+    if (d.ready){ relayUp = true; cset('', '连接中…'); pull(true); return; }
+    var cb = pend[d.id];
+    if (cb){ delete pend[d.id]; cb(d); }
+  }
+  function pull(first){
+    if (!relayUp) return;
+    relayCall('GET', '?select=no,n,t', '', function(res){
+      if (!res || !res.ok){ cset('err', '云端同步失败（本机照常记录）'); return; }
+      var rows = [];
+      try { rows = JSON.parse(res.body) || []; } catch(e){ cset('err', '云端同步失败'); return; }
+      var changed = false, mine = 0;
+      rows.forEach(function(r){
+        var no = r.no, n = r.n | 0, rt = r.t ? Date.parse(r.t) : 0;
+        if (!no || n <= 0 || !bySid[no]) return;      // 不是本页的编号 → 丢
+        mine++;
+        var lc = counts[no] || { n:0, t:0 };
+        var nn = Math.max(n, lc.n), nt = Math.max(rt || 0, lc.t || 0);
+        if (nn !== lc.n || nt !== lc.t){ counts[no] = { n:nn, t:nt }; changed = true; }
+      });
+      if (changed) save();
+      paint();
+      cset('ok', '云端 ' + mine + ' 条' + (READONLY ? ' · 只看模式' : ''));
+      if (first && !READONLY) syncAll();
+    });
+  }
+  function pushOne(id){
+    if (!relayUp) return;
+    clearTimeout(pushT[id]);
+    pushT[id] = setTimeout(function(){
+      relayCall('POST', '', JSON.stringify([{ no:id, n:cnt(id),
+          t:new Date((counts[id] && counts[id].t) || Date.now()).toISOString() }]),
+        function(res){ cset(res && res.ok ? 'ok' : 'err', res && res.ok ? '已同步' : '同步失败（本机已记）'); });
+    }, 700);
+  }
+  function syncAll(){
+    if (!relayUp) return;
+    var rows = Object.keys(counts).filter(function(k){ return cnt(k) > 0 && bySid[k]; })
+      .map(function(k){ return { no:k, n:cnt(k),
+        t:new Date((counts[k] && counts[k].t) || Date.now()).toISOString() }; });
+    if (!rows.length) return;
+    relayCall('POST', '', JSON.stringify(rows), function(res){
+      if (res && res.ok) cset('ok', '已同步 ' + rows.length + ' 条');
+    });
+  }
+  function startRelay(){
+    if (started) return; started = true;
+    window.addEventListener('message', onMsg);
+    var f = document.createElement('iframe');
+    f.src = RELAY_SRC; f.setAttribute('aria-hidden','true'); f.setAttribute('tabindex','-1');
+    f.style.cssText = 'position:absolute;width:1px;height:1px;border:0;left:-9999px;top:-9999px';
+    document.body.appendChild(f); relayFrame = f;
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) pull(false); });
+    setInterval(function(){ if (!document.hidden) pull(false); }, 30000);
+    setTimeout(function(){ if (!relayUp) cset('err', '云端未连上 —— 本机照常记录'); }, 12000);
+  }
+
+  var rs = document.getElementById('sreset');
+  if (rs) rs.addEventListener('click', function(){
+    if (!confirm('清空本机观看记录？（云端不清）')) return;
+    counts = {};
+    try { localStorage.removeItem(KEY); } catch(e){}
+    paint();
+  });
+
+  paint();
+  startRelay();
+})();
+</script></body></html>
